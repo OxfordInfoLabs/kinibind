@@ -17,7 +17,7 @@
     </style>
 
 </head>
-<body>
+<body id="my-element">
 
 <h1>AJAX list</h1>
 
@@ -44,7 +44,7 @@
 <script src="../dist/kinibind.js"></script>
 
 <script>
-    kinibind.bind(document.getElementsByTagName("body").item(0), {numbers: ['1', '2', '3']});
+    kinibind.bind(document.getElementById('my-element'));
 </script>
 
 </body>
