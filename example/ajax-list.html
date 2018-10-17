@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kinibind - Ajax List</title>
+
+    <style>
+        .label {
+            background-color: lightgray;
+            padding: 5px;
+            border-radius: 4px
+        }
+
+        li {
+            margin: 20px 0
+        }
+    </style>
+
+</head>
+<body>
+
+<h1>AJAX list</h1>
+
+<div kb-source="https://jsonplaceholder.typicode.com/users" model="users">
+
+    <ul>
+        <li kb-each-user="users">
+            <span class="label">User ID: {user.id}</span>&nbsp;<b>Name: </b>{user.name}
+        </li>
+    </ul>
+
+</div>
+
+<hr>
+
+<h1>Model properties</h1>
+
+<p>
+    <strong>Numbers</strong> <span kb-each-number="numbers">{number} </span>
+</p>
+
+<hr>
+
+<script src="../dist/kinibind.js"></script>
+
+<script>
+    kinibind.bind(document.getElementsByTagName("body").item(0), {numbers: ['1', '2', '3']});
+</script>
+
+</body>
+</html>
