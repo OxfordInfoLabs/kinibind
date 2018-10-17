@@ -1,6 +1,7 @@
 # kinibind
 
-Kinibind is....
+Kinibind is built upon the [tinybind js](http://blikblum.github.io/tinybind/) framework, with the addition of AJAX loading binders.
+These binders are designed to assist in rapid developing and prototyping when working with simple AJAX requests for listing on HTML pages.
 
 
 ## Install
