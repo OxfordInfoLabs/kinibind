@@ -7,13 +7,13 @@ These binders are designed to assist in rapid developing and prototyping when wo
 ## Install
 
 ```bash
-npm install @oxfordinfolabs/kinibind
+npm install kinibind
 ```
 
 Use in a script tag...
 
 ```html
-<script src="../dist/kinibind.js"></script>
+<script src="path/to/kinibind.js"></script>
 ```
 
 ## Usage
