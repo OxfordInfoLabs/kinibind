@@ -351,6 +351,8 @@ const binders = {
             }).then((data) => {
                 if (loadingIndicator) loadingElement.style.display = 'none';
                 this.view.models[modelName] = data;
+                const event = new Event('sourceLoaded');
+                element.dispatchEvent(event);
             });
         }
     }

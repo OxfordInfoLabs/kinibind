@@ -42,10 +42,20 @@
 
 <hr>
 
+<button kb-on-click="customFunction">
+hello world
+</button>
+
 <script src="../dist/kinibind.js"></script>
 
 <script>
     kinibind.bind(document.getElementById('my-element'), {numbers: [1, 2, 3, 4, 5, 6, 7]});
+
+    window.customFunction = function() {
+
+        console.log('hello world');
+
+    };
 </script>
 
 </body>
