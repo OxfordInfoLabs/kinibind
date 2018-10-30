@@ -109,16 +109,13 @@ export function parseDynamicVariablesInString(parseString, models) {
     const modelExpressions = getDynamicStringModelExpressions(parseString);
 
     if (modelExpressions) {
-        modelExpressions.every((item) => {
-            let evaluatedValue = _.get(models, item);
+        _.forEach(modelExpressions, function(expression) {
+            let evaluatedValue = _.get(models, expression);
 
-            if (!evaluatedValue) {
-                parseString = null;
-                return false;
+            if (evaluatedValue) {
+                parseString = parseString.replace('{' + expression + '}', evaluatedValue);
             }
-
-            parseString = parseString.replace('{' + item + '}', evaluatedValue);
-        });
+        })
     }
 
     return parseString;

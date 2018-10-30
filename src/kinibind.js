@@ -1,6 +1,7 @@
 import {EXTENSIONS} from './constants'
 import {parseTemplate, parseType} from './parsers'
 import {parseDynamicVariablesInString} from './parsers'
+import * as _ from 'lodash';
 
 const kinibind = {
     // Global binders.
@@ -48,7 +49,8 @@ const kinibind = {
     // back to using this binder.
     fallbackBinder: function (el, value) {
         if (value != null) {
-            const newValue = parseDynamicVariablesInString(value, this.view. models);
+            const models = Object.assign(this.view.models, this.view.models.$parent);
+            const newValue = parseDynamicVariablesInString(value, models);
             el.setAttribute(this.type, newValue)
         } else {
             el.removeAttribute(this.type)
