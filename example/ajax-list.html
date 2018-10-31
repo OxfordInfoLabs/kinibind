@@ -21,16 +21,21 @@
 
 <h1>AJAX list</h1>
 
-<div kb-source="https://jsonplaceholder.typicode.com/users" model="users">
-
+<div kb-bind source="https://jsonplaceholder.typicode.com/users" model="users" reload-trigger="try-again:click"
+     loading-indicator="loading-users">
     <ul>
         <li kb-each-user="users">
             <span class="label">User ID: {user.id}</span>&nbsp;<b>Name: </b>{user.name}
-            <a kb-href="'/blah/{numbers[0]}/{user.id}'">{user.name}</a>
         </li>
     </ul>
 
+    <p class="loading-users">Loading Users, Please Wait....</p>
+
+    <h4 class="error" kb-show="usersError">There was a problem loading the users. Please try again.</h4>
+
+    <button class="try-again" kb-show="usersError">Reload Users</button>
 </div>
+
 
 <hr>
 
@@ -42,9 +47,15 @@
 
 <hr>
 
-<button kb-on-click="customFunction">
-hello world
+<button kb-action source="https://jsonplaceholder.typicode.com/users/1" model="actionUser" loading-indicator="loading-action">
+    Show Favourite
 </button>
+
+<p>My favourite user is: {actionUser.name}</p>
+
+<p class="loading-action" style="display: none">Loading Action User, Please Wait....</p>
+
+<h4 class="error" kb-show="actionUserError">There was a problem loading the user.</h4>
 
 <script src="../dist/kinibind.js"></script>
 

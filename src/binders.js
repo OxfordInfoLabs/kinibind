@@ -328,34 +328,142 @@ const binders = {
         }
     },
 
-    // Custom binders for NoJS
-    source: function (element, value) {
-        const modelName = element.getAttribute('model') || 'sourceData';
+    bind: {
+        bind: function (element) {
+            this.value = element.getAttribute('source');
+            if (!this.value) {
+                console.error('You must supply a source string to this binding');
+            }
+            this.modelName = element.getAttribute('model') || 'sourceData';
+            this.reloadTrigger = element.getAttribute('reload-trigger');
 
-        const source = parseDynamicVariablesInString(value, this.view.models, {});
-        if (source) {
-
-            const loadingIndicator = element.getAttribute('loading-indicator');
-            let loadingElement;
-
-            if (loadingIndicator) {
-                loadingElement = document.getElementsByClassName(loadingIndicator).item(0);
+            this.loadingIndicator = element.getAttribute('loading-indicator');
+            if (this.loadingIndicator) {
+                this.loadingElement = document.getElementsByClassName(this.loadingIndicator).item(0);
             }
 
-            if (loadingElement) loadingElement.style.display = '';
+            this.options = {
+                method: element.getAttribute('method') || 'GET'
+            };
 
-            const options = {};
+            if (this.reloadTrigger) {
+                const className = this.reloadTrigger.split(':')[0];
+                this.reloadEvent = this.reloadTrigger.split(':')[1];
+                this.eventElement = document.getElementsByClassName(className).item(0);
+                console.log(this.reloadTrigger, className, this.reloadEvent);
 
-            fetch(source, options).then((response) => {
-                return response.json();
-            }).then((data) => {
-                if (loadingIndicator) loadingElement.style.display = 'none';
-                this.view.models[modelName] = data;
-                const event = new Event('sourceLoaded');
-                element.dispatchEvent(event);
-            });
+                if (!this.callback) {
+                    this.callback = () => {
+                        fetchSourceData.call(this, element, this.value);
+                    }
+                }
+
+                if (this.eventElement) {
+                    this.eventElement.addEventListener(this.reloadEvent, this.callback);
+                }
+            }
+        },
+        unbind: function (element) {
+            console.log('unbind');
+            if (this.eventElement) {
+                this.eventElement.removeEventListener(this.reloadEvent, this.callback);
+            }
+        },
+        routine: function (element, value) {
+            fetchSourceData.call(this, element, value);
+        }
+    },
+
+    action: {
+        bind: function(element) {
+            this.value = element.getAttribute('source');
+            if (!this.value) {
+                console.error('You must supply a source string to this binding');
+            }
+            const actionURL = parseDynamicVariablesInString(this.value, this.view.models, {});
+            const method = element.getAttribute('method') || 'GET';
+            const modelName = element.getAttribute('model');
+
+            this.actionEvent = element.getAttribute('event') || 'click';
+
+            if (actionURL) {
+
+                element.addEventListener(this.actionEvent, () => {
+                    const started = new Event('actionStarted');
+                    element.dispatchEvent(started);
+
+                    if (modelName) {
+                        this.view.models[modelName + 'Error'] = undefined;
+                    }
+
+                    const loadingIndicator = element.getAttribute('loading-indicator');
+                    let loadingElement;
+
+                    if (loadingIndicator) {
+                        loadingElement = document.getElementsByClassName(loadingIndicator).item(0);
+                    }
+
+                    if (loadingElement) loadingElement.style.display = '';
+
+                    const options = {
+                        method: method
+                    };
+
+                    fetch(actionURL, options).then((response) => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error(response.statusText);
+                        }
+
+                    }).then((data) => {
+                        if (loadingIndicator) loadingElement.style.display = 'none';
+
+                        if (modelName) {
+                            this.view.models[modelName] = data;
+                        }
+
+                        const completed = new Event('actionCompleted');
+                        element.dispatchEvent(completed);
+                    }).catch(error => {
+                        if (modelName) {
+                            this.view.models[modelName + 'Error'] = error;
+                        }
+                        const failed = new Event('actionFailed');
+                        element.dispatchEvent(failed);
+                    })
+                });
+
+            }
+        },
+        unbind: function(element) {
+            element.removeEventListener(this.actionEvent);
         }
     }
+}
+
+function fetchSourceData(element, value) {
+    const source = parseDynamicVariablesInString(value, this.view.models, {});
+
+    this.view.models[this.modelName + 'Error'] = undefined;
+
+    fetch(source, this.options).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error(response.statusText);
+        }
+    }).then((data) => {
+        if (this.loadingElement) this.loadingElement.style.display = 'none';
+        this.view.models[this.modelName] = data;
+        const loadedEvent = new Event('sourceLoaded');
+        element.dispatchEvent(loadedEvent);
+    }).catch(error => {
+        if (this.loadingElement) this.loadingElement.style.display = 'none';
+        this.view.models[this.modelName + 'Error'] = error;
+        const errorEvent = new Event('sourceFailed');
+        element.dispatchEvent(errorEvent);
+    });
 }
 
 export default binders
