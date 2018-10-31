@@ -6,7 +6,7 @@ These binders are designed to assist in rapid developing and prototyping when wo
 
 ## Usage
 
-##### Install
+#### Install
 
 ```bash
 npm install kinibind
