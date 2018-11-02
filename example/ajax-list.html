@@ -55,18 +55,14 @@
 
 <p class="loading-action" style="display: none">Loading Action User, Please Wait....</p>
 
+<p kb-show="actionUser.name | eval '===' 'Leanne Graham'">Leanne Graham is my favourite user</p>
+
 <h4 class="error" kb-show="actionUserError">There was a problem loading the user.</h4>
 
 <script src="../dist/kinibind.js"></script>
 
 <script>
     kinibind.bind(document.getElementById('my-element'), {numbers: [1, 2, 3, 4, 5, 6, 7]});
-
-    window.customFunction = function() {
-
-        console.log('hello world');
-
-    };
 </script>
 
 </body>

@@ -1,5 +1,6 @@
 import View from './view'
 import {parseDynamicVariablesInString} from './parsers'
+import _ from 'lodash';
 
 
 const getString = (value) => {
@@ -350,7 +351,6 @@ const binders = {
                 const className = this.reloadTrigger.split(':')[0];
                 this.reloadEvent = this.reloadTrigger.split(':')[1];
                 this.eventElement = document.getElementsByClassName(className).item(0);
-                console.log(this.reloadTrigger, className, this.reloadEvent);
 
                 if (!this.callback) {
                     this.callback = () => {
@@ -364,7 +364,6 @@ const binders = {
             }
         },
         unbind: function (element) {
-            console.log('unbind');
             if (this.eventElement) {
                 this.eventElement.removeEventListener(this.reloadEvent, this.callback);
             }

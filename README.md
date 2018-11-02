@@ -20,6 +20,10 @@ Use in a script tag...
 ```javascript
 kinibind.bind(document.getElementById('my-element'));
 ```
+
+### Binders
+
+
 #### [kb-bind]
 ___
 
@@ -97,6 +101,22 @@ If you have specified a `model` above, and the http request fails, then the resu
 
 <h4 class="error" kb-show="actionUserError">There was a problem loading the user.</h4>
 
+```
+
+### Formatters
+
+#### eval
+
+Simple formatter that allow for the model value to be evaluated against a value.
+
+##### Properties
+* operator (string) - the operator used to evaluate the comparison eg. '===', '<', '>=' ...
+* value (string | model value) - the string or model value to compare
+
+##### Example
+
+```html
+<p kb-show="actionUser.name | eval '===' 'Leanne Graham'">Leanne Graham is my favourite user</p>
 ```
 
 ## Contributing

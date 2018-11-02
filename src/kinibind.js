@@ -1,14 +1,17 @@
 import {EXTENSIONS} from './constants'
 import {parseTemplate, parseType} from './parsers'
 import {parseDynamicVariablesInString} from './parsers'
-import * as _ from 'lodash';
 
 const kinibind = {
     // Global binders.
     binders: {},
 
     // Global formatters.
-    formatters: {},
+    formatters: {
+        eval: function(value, operator, equals) {
+            return evaluateBooleanExpression(operator, value, equals);
+        }
+    },
 
     // Global sightglass adapters.
     adapters: {},
@@ -74,6 +77,19 @@ const kinibind = {
             }
         })
     }
+}
+
+function evaluateBooleanExpression(expression, value1, value2) {
+    const matches = {
+        "===": function(x, y) {return x === y},
+        "==": function(x, y) {return x == y},
+        ">": function(x, y) {return x > y},
+        ">=": function(x, y) {return x >= y},
+        "<": function(x, y) {return x < y},
+        "<=": function(x, y) {return x <= y}
+    }
+
+    return matches[expression](value1, value2);
 }
 
 export default kinibind
