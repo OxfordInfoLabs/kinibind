@@ -110,13 +110,20 @@ If you have specified a `model` above, and the http request fails, then the resu
 Simple formatter that allow for the model value to be evaluated against a value.
 
 ##### Properties
-* operator (string) - the operator used to evaluate the comparison eg. '===', '<', '>=' ...
+* operator (string) - the operator used to evaluate the comparison eg. '===', '<', '>=', '+' ...
 * value (string | model value) - the string or model value to compare
 
 ##### Example
 
 ```html
 <p kb-show="actionUser.name | eval '===' 'Leanne Graham'">Leanne Graham is my favourite user</p>
+
+<p kb-html="100 | eval '*' 2.5"></p>
+
+<p kb-html="450 | eval '+' 850"></p>
+
+<p kb-html="actionUser.id | eval '/' 450"></p>
+
 ```
 
 ## Contributing

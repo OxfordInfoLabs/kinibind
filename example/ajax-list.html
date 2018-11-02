@@ -55,7 +55,13 @@
 
 <p class="loading-action" style="display: none">Loading Action User, Please Wait....</p>
 
-<p kb-show="actionUser.name | eval '===' 'Leanne Graham'">Leanne Graham is my favourite user</p>
+<p kb-show="actionUser.name | eval '===' actionUser.name">{actionUser.name} is my favourite user</p>
+
+<p kb-html="100 | eval '*' 2.5"></p>
+
+<p kb-html="450 | eval '+' 850"></p>
+
+<p kb-html="actionUser.id | eval '/' 450"></p>
 
 <h4 class="error" kb-show="actionUserError">There was a problem loading the user.</h4>
 

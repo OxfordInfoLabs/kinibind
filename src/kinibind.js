@@ -86,7 +86,11 @@ function evaluateBooleanExpression(expression, value1, value2) {
         ">": function(x, y) {return x > y},
         ">=": function(x, y) {return x >= y},
         "<": function(x, y) {return x < y},
-        "<=": function(x, y) {return x <= y}
+        "<=": function(x, y) {return x <= y},
+        "*": function(x, y) {return x * y},
+        "+": function(x, y) {return x + y},
+        "-": function(x, y) {return x - y},
+        "/": function(x, y) {return x / y}
     }
 
     return matches[expression](value1, value2);
