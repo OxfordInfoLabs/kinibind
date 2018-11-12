@@ -47,7 +47,8 @@
 
 <hr>
 
-<button kb-action source="https://jsonplaceholder.typicode.com/users/1" model="actionUser" loading-indicator="loading-action">
+<button kb-action source="https://jsonplaceholder.typicode.com/users/1" model="actionUser"
+        loading-indicator="loading-action">
     Show Favourite
 </button>
 
@@ -64,6 +65,22 @@
 <p kb-html="actionUser.id | eval '/' 450"></p>
 
 <h4 class="error" kb-show="actionUserError">There was a problem loading the user.</h4>
+
+<hr>
+
+<div kb-bind source="http://trade.netistrar.test/domains/hinted" model="domains" payload="searchString:{searchString}"
+    reload-trigger="search-button:click" load="false">
+    <h4>Domains</h4>
+    <ul>
+        <li kb-each-domain="domains">
+            {domain.id}
+        </li>
+    </ul>
+
+</div>
+
+<input type="text" kb-value="searchString">
+<button class="search-button">Search</button>
 
 <script src="../dist/kinibind.js"></script>
 

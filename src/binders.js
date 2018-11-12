@@ -337,15 +337,14 @@ const binders = {
             }
             this.modelName = element.getAttribute('model') || 'sourceData';
             this.reloadTrigger = element.getAttribute('reload-trigger');
+            this.payload = element.getAttribute('payload');
+            this.method = element.getAttribute('method') || 'GET';
+            this.load = element.getAttribute('load') !== 'false';
 
             this.loadingIndicator = element.getAttribute('loading-indicator');
             if (this.loadingIndicator) {
                 this.loadingElement = document.getElementsByClassName(this.loadingIndicator).item(0);
             }
-
-            this.options = {
-                method: element.getAttribute('method') || 'GET'
-            };
 
             if (this.reloadTrigger) {
                 const className = this.reloadTrigger.split(':')[0];
@@ -369,12 +368,14 @@ const binders = {
             }
         },
         routine: function (element, value) {
-            fetchSourceData.call(this, element, value);
+            if (this.load) {
+                fetchSourceData.call(this, element, value);
+            }
         }
     },
 
     action: {
-        bind: function(element) {
+        bind: function (element) {
             this.value = element.getAttribute('source');
             if (!this.value) {
                 console.error('You must supply a source string to this binding');
@@ -435,7 +436,7 @@ const binders = {
 
             }
         },
-        unbind: function(element) {
+        unbind: function (element) {
             element.removeEventListener(this.actionEvent);
         }
     }
@@ -446,7 +447,22 @@ function fetchSourceData(element, value) {
 
     this.view.models[this.modelName + 'Error'] = undefined;
 
-    fetch(source, this.options).then((response) => {
+    const options = {
+        method: this.method
+    };
+
+    if (this.payload) {
+        const payloadString = parseDynamicVariablesInString(this.payload, this.view.models, {});
+        const payload = parsePayload(payloadString);
+
+        options.method = this.method !== 'GET' ? this.method : 'POST';
+        options.headers = {"Content-Type": "application/json; charset=utf-8"};
+        options.body = JSON.stringify(payload);
+        options.mode = 'no-cors';
+        options.referrer = 'no-referrer';
+    }
+
+    fetch(source, options).then((response) => {
         if (response.ok) {
             return response.json();
         } else {
@@ -463,6 +479,18 @@ function fetchSourceData(element, value) {
         const errorEvent = new Event('sourceFailed');
         element.dispatchEvent(errorEvent);
     });
+}
+
+function parsePayload(payload) {
+    const data = {};
+
+    const dataItems = payload.split(',');
+    dataItems.forEach(dataItem => {
+        const splitItem = dataItem.split(':');
+        data[splitItem[0]] = splitItem[1];
+    });
+
+    return data;
 }
 
 export default binders

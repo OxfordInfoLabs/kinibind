@@ -32,9 +32,11 @@ Load a simple http request and bind results to the specified model.
 ##### Properties
 * source (string) - the url of the http request
 * model (string) - the model property name to bind the results to
+* payload (string) - if making a POST request, send a JSON object payload. In the following format `payload="name:'nathan',age:{ageField}"`
 * method (? string) - the type of method make the request with (defaults to GET)
 * reload-trigger (? string) - supply in the format of 'class-name:click'. When the element with class 'class-name' triggers a 'click' event, new data will be request from server, and bound to the same model
 * loading-indicator (? string) - should be the class name of the element you wish to show during request, and hide after request finishes. eg. 'loading-spinner'
+* load (? boolean) - whether the http source request should be loaded initially (defaults to `true` will load on page draw)
 
 ##### Events
 The following events are raised by the kb-source element
