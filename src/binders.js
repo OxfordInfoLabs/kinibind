@@ -74,50 +74,15 @@ const binders = {
             collection = collection || []
             let indexProp = el.getAttribute('index-property') || '$index'
 
-            collection.forEach((model, index) => {
-                let data = {$parent: this.view.models}
-                data[indexProp] = index
-                data[modelName] = model
-                let view = this.iterated[index]
-
-                if (!view) {
-
-                    let previous = this.marker
-
-                    if (this.iterated.length) {
-                        previous = this.iterated[this.iterated.length - 1].els[0]
-                    }
-
-                    view = createView(this, data, previous.nextSibling)
-                    this.iterated.push(view)
-                } else {
-                    if (view.models[modelName] !== model) {
-                        // search for a view that matches the model
-                        let matchIndex, nextView
-                        for (let nextIndex = index + 1; nextIndex < this.iterated.length; nextIndex++) {
-                            nextView = this.iterated[nextIndex]
-                            if (nextView.models[modelName] === model) {
-                                matchIndex = nextIndex
-                                break
-                            }
-                        }
-                        if (matchIndex !== undefined) {
-                            // model is in other position
-                            // todo: consider avoiding the splice here by setting a flag
-                            // profile performance before implementing such change
-                            this.iterated.splice(matchIndex, 1)
-                            this.marker.parentNode.insertBefore(nextView.els[0], view.els[0])
-                            nextView.models[indexProp] = index
-                        } else {
-                            //new model
-                            nextView = createView(this, data, view.els[0])
-                        }
-                        this.iterated.splice(index, 0, nextView)
-                    } else {
-                        view.models[indexProp] = index
-                    }
-                }
-            })
+            if (!_.isArray(collection)) {
+                Object.keys(collection).forEach((key) => {
+                    processEach.call(this, collection[key], key, modelName, indexProp);
+                });
+            } else {
+                collection.forEach((model, index) => {
+                    processEach.call(this, model, index, modelName, indexProp);
+                })
+            }
 
             if (this.iterated.length > collection.length) {
                 times(this.iterated.length - collection.length, () => {
@@ -370,6 +335,8 @@ const binders = {
         routine: function (element, value) {
             if (this.load) {
                 fetchSourceData.call(this, element, value);
+            } else {
+                if (this.loadingElement) this.loadingElement.style.display = 'none';
             }
         }
     },
@@ -461,6 +428,8 @@ function fetchSourceData(element, value) {
         options.mode = 'cors';
     }
 
+    this.loadingElement.style.display = '';
+
     fetch(source, options).then((response) => {
         if (response.ok) {
             return response.json();
@@ -490,6 +459,51 @@ function parsePayload(payload) {
     });
 
     return data;
+}
+
+function processEach(model, index, modelName, indexProp) {
+    let data = {$parent: this.view.models}
+    data[indexProp] = index
+    data[modelName] = model
+    let view = this.iterated[index]
+
+    if (!view) {
+
+        let previous = this.marker
+
+        if (this.iterated.length) {
+            previous = this.iterated[this.iterated.length - 1].els[0]
+        }
+
+        view = createView(this, data, previous.nextSibling)
+        this.iterated.push(view)
+    } else {
+        if (view.models[modelName] !== model) {
+            // search for a view that matches the model
+            let matchIndex, nextView
+            for (let nextIndex = index + 1; nextIndex < this.iterated.length; nextIndex++) {
+                nextView = this.iterated[nextIndex]
+                if (nextView.models[modelName] === model) {
+                    matchIndex = nextIndex
+                    break
+                }
+            }
+            if (matchIndex !== undefined) {
+                // model is in other position
+                // todo: consider avoiding the splice here by setting a flag
+                // profile performance before implementing such change
+                this.iterated.splice(matchIndex, 1)
+                this.marker.parentNode.insertBefore(nextView.els[0], view.els[0])
+                nextView.models[indexProp] = index
+            } else {
+                //new model
+                nextView = createView(this, data, view.els[0])
+            }
+            this.iterated.splice(index, 0, nextView)
+        } else {
+            view.models[indexProp] = index
+        }
+    }
 }
 
 export default binders

@@ -68,19 +68,24 @@
 
 <hr>
 
-<div kb-bind source="http://trade.netistrar.test/domains/hinted" model="domains" payload="searchString:{searchString}"
-    reload-trigger="search-button:click" load="false">
-    <h4>Domains</h4>
-    <ul>
-        <li kb-each-domain="domains">
-            {domain.id}
+<h4>Domains</h4>
+
+<input type="text" kb-value="searchString">
+<button class="search-button">Search</button>
+
+<div kb-bind source="http://trade.netistrar.test/domains/hinted" model="domains" payload="searchString:{searchString},suggestions:true"
+    reload-trigger="search-button:click" load="false" loading-indicator="loading-domains">
+
+    <h5 class="loading-domains">Loading domains ...</h5>
+
+    <ul kb-each-suggestion="domains.suggestions">
+        <li>
+            <span><strong>{$index}</strong><br></span>
+            <span kb-each-domain="suggestion">{domain.domainName}<br></span>
         </li>
     </ul>
 
 </div>
-
-<input type="text" kb-value="searchString">
-<button class="search-button">Search</button>
 
 <script src="../dist/kinibind.js"></script>
 
