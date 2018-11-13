@@ -456,10 +456,9 @@ function fetchSourceData(element, value) {
         const payload = parsePayload(payloadString);
 
         options.method = this.method !== 'GET' ? this.method : 'POST';
-        options.headers = {"Content-Type": "application/json; charset=utf-8"};
+        options.headers = {"Content-Type": "text/plain"};
         options.body = JSON.stringify(payload);
-        options.mode = 'no-cors';
-        options.referrer = 'no-referrer';
+        options.mode = 'cors';
     }
 
     fetch(source, options).then((response) => {
