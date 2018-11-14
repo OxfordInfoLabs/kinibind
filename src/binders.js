@@ -302,6 +302,7 @@ const binders = {
             }
             this.modelName = element.getAttribute('model') || 'sourceData';
             this.reloadTrigger = element.getAttribute('reload-trigger');
+            this.triggers = [];
             this.payload = element.getAttribute('payload');
             this.method = element.getAttribute('method') || 'GET';
             this.load = element.getAttribute('load') !== 'false';
@@ -312,24 +313,34 @@ const binders = {
             }
 
             if (this.reloadTrigger) {
-                const className = this.reloadTrigger.split(':')[0];
-                this.reloadEvent = this.reloadTrigger.split(':')[1];
-                this.eventElement = document.getElementsByClassName(className).item(0);
-
                 if (!this.callback) {
                     this.callback = () => {
                         fetchSourceData.call(this, element, this.value);
                     }
                 }
 
-                if (this.eventElement) {
-                    this.eventElement.addEventListener(this.reloadEvent, this.callback);
-                }
+                const triggers = this.reloadTrigger.split(',');
+                triggers.forEach(trigger => {
+
+                    const className = trigger.split(':')[0];
+                    const eventName = trigger.split(':')[1];
+                    const triggerElement = document.getElementsByClassName(className).item(0);
+
+                    if (triggerElement) {
+                        this.triggers.push({
+                            element: triggerElement,
+                            event: eventName
+                        });
+                        triggerElement.addEventListener(eventName, this.callback);
+                    }
+                });
             }
         },
         unbind: function (element) {
-            if (this.eventElement) {
-                this.eventElement.removeEventListener(this.reloadEvent, this.callback);
+            if (this.triggers.length) {
+                this.triggers.forEach(trigger => {
+                    trigger.element.removeEventListener(trigger.event, this.callback);
+                })
             }
         },
         routine: function (element, value) {
@@ -406,6 +417,51 @@ const binders = {
         unbind: function (element) {
             element.removeEventListener(this.actionEvent);
         }
+    },
+
+    'multi-check': {
+        bind: function (el) {
+            var self = this;
+            if (!this.callback) {
+                this.callback = function(event) {
+                    event.stopPropagation();
+                    self.sync();
+                }
+            }
+
+            this.modelName = el.getAttribute('model') || 'multi';
+
+            this.inputs = _.values(el.getElementsByTagName('input'));
+            this.inputs.forEach((input) => {
+                input.addEventListener('change', this.callback)
+            })
+        },
+
+        unbind: function (el) {
+            this.inputs.forEach((input) => {
+                input.removeEventListener('change', this.callback)
+            })
+        },
+
+        routine: function (el, value) {
+            const values = [];
+            // first time round this will be undefined, which is what we want to catch,
+            // so we don't trigger the change event later on.
+            const trigger = this.view.models[this.modelName];
+
+            this.inputs.forEach((input) => {
+                if (input.checked) {
+                    values.push(input.value)
+                }
+            })
+
+            this.view.models[this.modelName] = values;
+
+            if (trigger) {
+                const change = new Event('change');
+                el.dispatchEvent(change);
+            }
+        }
     }
 }
 
@@ -419,8 +475,7 @@ function fetchSourceData(element, value) {
     };
 
     if (this.payload) {
-        const payloadString = parseDynamicVariablesInString(this.payload, this.view.models, {});
-        const payload = parsePayload(payloadString);
+        const payload = parsePayload.call(this, this.payload);
 
         options.method = this.method !== 'GET' ? this.method : 'POST';
         options.headers = {"Content-Type": "text/plain"};
@@ -428,7 +483,7 @@ function fetchSourceData(element, value) {
         options.mode = 'cors';
     }
 
-    this.loadingElement.style.display = '';
+    if (this.loadingElement) this.loadingElement.style.display = '';
 
     fetch(source, options).then((response) => {
         if (response.ok) {
@@ -438,6 +493,7 @@ function fetchSourceData(element, value) {
         }
     }).then((data) => {
         if (this.loadingElement) this.loadingElement.style.display = 'none';
+        this.view.models[this.modelName] = undefined;
         this.view.models[this.modelName] = data;
         const loadedEvent = new Event('sourceLoaded');
         element.dispatchEvent(loadedEvent);
@@ -455,7 +511,7 @@ function parsePayload(payload) {
     const dataItems = payload.split(',');
     dataItems.forEach(dataItem => {
         const splitItem = dataItem.split(':');
-        data[splitItem[0]] = splitItem[1];
+        data[splitItem[0]] = parseDynamicVariablesInString(splitItem[1], this.view.models, {});
     });
 
     return data;

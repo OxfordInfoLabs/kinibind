@@ -73,10 +73,12 @@
 <input type="text" kb-value="searchString">
 <button class="search-button">Search</button>
 
-<div kb-bind source="http://trade.netistrar.test/domains/hinted" model="domains" payload="searchString:{searchString},suggestions:true"
-    reload-trigger="search-button:click" load="false" loading-indicator="loading-domains">
+<div kb-bind source="http://trade.netistrar.test/domains/hinted" model="domains"
+     payload="searchString:{searchString},suggestions:true,tlds:{tldValues}"
+     reload-trigger="search-button:click,selected-tlds:change" load="false" loading-indicator="loading-domains">
 
-    <h5 class="loading-domains">Loading domains ...</h5>
+    <!--<h5 class="loading-domains">Loading domains ...</h5>-->
+
 
     <ul kb-each-suggestion="domains.suggestions">
         <li>
@@ -84,6 +86,24 @@
             <span kb-each-domain="suggestion">{domain.domainName}<br></span>
         </li>
     </ul>
+
+</div>
+<br>
+<br>
+<br>
+<hr>
+
+<h4>Multi Values</h4>
+
+<div class="selected-tlds" kb-multi-check model="tldValues">
+
+    <input type="checkbox" value="com"> COM
+    <input type="checkbox" value="net"> NET
+    <input type="checkbox" value="org"> ORG
+    <input type="checkbox" value="uk"> UK
+    <input type="checkbox" value="info"> INFO
+    <input type="checkbox" value="wales"> WALES
+    <input type="checkbox" value="london"> LONDON
 
 </div>
 

@@ -113,7 +113,7 @@ export function parseDynamicVariablesInString(parseString, models) {
             let evaluatedValue = _.get(models, expression);
 
             if (evaluatedValue) {
-                parseString = parseString.replace('{' + expression + '}', evaluatedValue);
+                parseString = JSON.parse(parseString.replace('{' + expression + '}', JSON.stringify(evaluatedValue)));
             }
         })
     }

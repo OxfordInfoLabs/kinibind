@@ -105,9 +105,39 @@ If you have specified a `model` above, and the http request fails, then the resu
 
 ```
 
+#### [multi-check]
+___
+
+Bind the checked values of multiple checkboxes as an array to the model property supplied.
+
+##### Properties
+* model (string) - the model property to bind the results to
+
+##### Events
+The following events are raised by the multi-check element
+* change - event fired when the array changes
+
+##### Example
+```html
+<div class="selected-tlds" kb-multi-check model="tldValues">
+
+    <input type="checkbox" value="com"> COM
+    <input type="checkbox" value="net"> NET
+    <input type="checkbox" value="org"> ORG
+    <input type="checkbox" value="uk"> UK
+    <input type="checkbox" value="info"> INFO
+    <input type="checkbox" value="wales"> WALES
+    <input type="checkbox" value="london"> LONDON
+
+</div>
+```
+
+
+
 ### Formatters
 
 #### eval
+___
 
 Simple formatter that allow for the model value to be evaluated against a value.
 
