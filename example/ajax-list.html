@@ -80,10 +80,20 @@
     <!--<h5 class="loading-domains">Loading domains ...</h5>-->
 
 
-    <ul kb-each-suggestion="domains.suggestions">
+    <ul kb-hide="tldValues.length" kb-each-suggestion="domains.suggestions">
         <li>
-            <span><strong>{$index}</strong><br></span>
-            <span kb-each-domain="suggestion">{domain.domainName}<br></span>
+            {suggestion.domainName}
+        </li>
+    </ul>
+
+    <div kb-show="">
+
+    </div>
+
+    <ul kb-show="tldValues.length" kb-each-tlds="domains.tldSuggestions" index-property="tld">
+        <li>
+            <span><strong>{tld}</strong><br></span>
+            <span kb-each-domain="tlds" kb-show="$index | eval '<' 20">{domain.domainName}<br></span>
         </li>
     </ul>
 

@@ -493,8 +493,11 @@ function fetchSourceData(element, value) {
         }
     }).then((data) => {
         if (this.loadingElement) this.loadingElement.style.display = 'none';
+
+        // model requires a reset in order the gui to be updated, prior to the new data coming in
         this.view.models[this.modelName] = undefined;
         this.view.models[this.modelName] = data;
+
         const loadedEvent = new Event('sourceLoaded');
         element.dispatchEvent(loadedEvent);
     }).catch(error => {
