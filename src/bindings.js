@@ -47,15 +47,14 @@ export class Binding {
 
     parseTarget() {
         if (this.keypath) {
-            let token = parseType(this.keypath)
+            let token = parseType(this.keypath, this.view.models)
             // If we encounter a URL in the keypath then map this straight to the binder value.
             if (this.keypath.includes('http://') || this.keypath.includes('https://')) {
                 this.value = this.keypath;
             } else if (token.type === 0) {
                 this.value = token.value
             } else {
-                this.observer = this.observe(this.view.models, this.keypath)
-
+                this.observer = this.observe(this.view.models, token.value)
                 this.model = this.observer.target
             }
         } else {

@@ -44,12 +44,21 @@ Observer.tokenize = function (keypath, root) {
         if (!!~interfaces.indexOf(chr)) {
             tokens.push(current)
             current = {i: chr, path: ''}
+        } else if (chr === "[") {
+            tokens.push(current);
+            let end = keypath.substr(index).indexOf("]");
+            tokens.push({i: ".", path: keypath.substr(index + 1, end - 1)});
+            index = index + end + 1;
+            current = {i: keypath.charAt(index), path: ''};
         } else {
             current.path += chr
         }
     }
 
-    tokens.push(current)
+
+    if (current.path.length > 0)
+        tokens.push(current)
+
     return tokens
 }
 
@@ -81,6 +90,7 @@ Observer.prototype.realize = function () {
     var unreached = -1
     var prev
     var token
+
 
     for (let index = 0; index < this.tokens.length; index++) {
         token = this.tokens[index]

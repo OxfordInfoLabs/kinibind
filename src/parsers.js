@@ -8,7 +8,8 @@ const BINDING = 1
 const QUOTED_STR = /^'.*'$|^".*"$/
 
 // Parser and tokenizer for getting the type and value from a string.
-export function parseType(string) {
+export function parseType(string, models) {
+    string = parseDynamicVariablesInString(string, models);
     let type = PRIMITIVE
     let value = string
 
@@ -109,12 +110,13 @@ export function parseDynamicVariablesInString(parseString, models) {
     const modelExpressions = getDynamicStringModelExpressions(parseString);
 
     if (modelExpressions) {
-        _.forEach(modelExpressions, function(expression) {
+        _.forEach(modelExpressions, function (expression) {
             let evaluatedValue = _.get(models, expression);
 
             if (evaluatedValue) {
-                parseString = JSON.parse(parseString.replace('{' + expression + '}', JSON.stringify(evaluatedValue)));
+                parseString = parseString.replace('{' + expression + '}', evaluatedValue);
             }
+
         })
     }
 

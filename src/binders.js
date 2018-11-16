@@ -429,12 +429,27 @@ const binders = {
                 }
             }
 
-            this.modelName = el.getAttribute('model') || 'multi';
+            this.performMultiCheck = () => {
+                this.inputs = _.values(el.getElementsByTagName('input'));
+                this.inputs.forEach((input) => {
+                    input.addEventListener('change', this.callback)
+                })
+                if (this.onEvent) {
+                    this.loadElement.removeEventListener(this.loadEvent, this.performMultiCheck);
+                }
+            };
 
-            this.inputs = _.values(el.getElementsByTagName('input'));
-            this.inputs.forEach((input) => {
-                input.addEventListener('change', this.callback)
-            })
+            this.modelName = el.getAttribute('model') || 'multi';
+            this.output = el.getAttribute('output');
+            this.onEvent = el.getAttribute('on-event');
+
+            if (this.onEvent) {
+                this.loadElement = document.getElementsByClassName(this.onEvent.split(':')[0]).item(0);
+                this.loadEvent = this.onEvent.split(':')[1];
+                this.loadElement.addEventListener(this.loadEvent, this.performMultiCheck);
+            } else {
+                this.performMultiCheck();
+            }
         },
 
         unbind: function (el) {
@@ -444,23 +459,49 @@ const binders = {
         },
 
         routine: function (el, value) {
-            const values = [];
-            // first time round this will be undefined, which is what we want to catch,
-            // so we don't trigger the change event later on.
-            const trigger = this.view.models[this.modelName];
+            this.doRoutine = () => {
+                // first time round this will be undefined, which is what we want to catch,
+                // so we don't trigger the change event later on.
+                const trigger = this.view.models[this.modelName];
+                if (this.output === 'object') {
+                    const values = {};
+                    this.inputs.forEach((input) => {
+                        const inputValue = input.getAttribute('mcvalue') || input.value;
+                        values[inputValue] = input.checked;
+                    })
 
-            this.inputs.forEach((input) => {
-                if (input.checked) {
-                    values.push(input.value)
+                    values.all = _.some(values);
+
+                    this.view.models[this.modelName] = values;
+                } else {
+                    const values = [];
+
+                    this.inputs.forEach((input) => {
+                        if (input.checked) {
+                            values.push(input.value)
+                        }
+                    })
+
+                    this.view.models[this.modelName] = values;
+
                 }
-            })
+                if (trigger) {
+                    const change = new Event('change');
+                    el.dispatchEvent(change);
+                }
 
-            this.view.models[this.modelName] = values;
-
-            if (trigger) {
-                const change = new Event('change');
-                el.dispatchEvent(change);
+                if (this.onEvent) {
+                    this.loadElement.removeEventListener(this.loadEvent, this.doRoutine);
+                    this.onEvent = null;
+                }
             }
+
+            if (this.onEvent) {
+                this.loadElement.addEventListener(this.loadEvent, this.doRoutine);
+            } else {
+                this.doRoutine();
+            }
+
         }
     }
 }
@@ -509,15 +550,11 @@ function fetchSourceData(element, value) {
 }
 
 function parsePayload(payload) {
-    const data = {};
+    payload = payload.replace(/{(.*?)}/g, "this.view.models.$1");
 
-    const dataItems = payload.split(',');
-    dataItems.forEach(dataItem => {
-        const splitItem = dataItem.split(':');
-        data[splitItem[0]] = parseDynamicVariablesInString(splitItem[1], this.view.models, {});
-    });
+    eval("payload = {" + payload + "};");
 
-    return data;
+    return payload;
 }
 
 function processEach(model, index, modelName, indexProp) {

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kinibind - Ajax List</title>
+
+    <style>
+        .label {
+            background-color: lightgray;
+            padding: 5px;
+            border-radius: 4px
+        }
+
+        li {
+            margin: 20px 0
+        }
+    </style>
+
+</head>
+<body id="my-element">
+
+<h1>AJAX list</h1>
+
+<h1 kb-hide="selectedTlds.com">Hey Dude</h1>
+
+<h1 kb-hide="selectedTlds[co.uk]">Show me</h1>
+
+<input type="checkbox" kb-checked="selectedTlds[co.uk]">
+co.uk
+
+
+<input type="checkbox" kb-checked="selectedTlds.com">
+.com
+
+
+<script src="../dist/kinibind.js"></script>
+
+<script>
+    kinibind.bind(document.getElementById('my-element'), {selectedTlds: {"co.uk": true, "com": false}});
+</script>
+
+</body>
+</html>
