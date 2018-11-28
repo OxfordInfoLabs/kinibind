@@ -70,12 +70,12 @@
 
 <h4>Domains</h4>
 
-<input type="text" kb-value="searchString">
+<input type="text" kb-value="searchString" class="search-input">
 <button class="search-button">Search</button>
 
 <div kb-bind source="http://trade.netistrar.test/domains/hinted?searchString={searchString}&category={categories}"
      model="domains" method="GET" class="main-list-load"
-     reload-trigger="search-button:click,selected-tlds:change" load="false" loading-indicator="loading-domains">
+     reload-trigger="search-button:click,selected-tlds:change,search-input:enter" load="false" loading-indicator="loading-domains">
 
     <h5 class="loading-domains">Loading domains ...</h5>
 

@@ -313,12 +313,6 @@ const binders = {
             }
 
             if (this.reloadTrigger) {
-                if (!this.callback) {
-                    this.callback = () => {
-                        fetchSourceData.call(this, element, this.value);
-                    }
-                }
-
                 const triggers = this.reloadTrigger.split(',');
                 triggers.forEach(trigger => {
 
@@ -327,19 +321,34 @@ const binders = {
                     const triggerElement = document.getElementsByClassName(className).item(0);
 
                     if (triggerElement) {
+                        const callback = (event) => {
+                            if (eventName === 'enter') {
+                                if (event.key === 'Enter') {
+                                    fetchSourceData.call(this, element, this.value);
+                                }
+                            } else {
+                                fetchSourceData.call(this, element, this.value);
+                            }
+                        };
+
                         this.triggers.push({
                             element: triggerElement,
-                            event: eventName
+                            event: eventName === 'enter' ? 'keydown' : eventName,
+                            callback: callback
                         });
-                        triggerElement.addEventListener(eventName, this.callback);
                     }
                 });
+                if (this.triggers.length) {
+                    this.triggers.forEach(trigger => {
+                        trigger.element.addEventListener(trigger.event, trigger.callback);
+                    })
+                }
             }
         },
         unbind: function (element) {
             if (this.triggers.length) {
                 this.triggers.forEach(trigger => {
-                    trigger.element.removeEventListener(trigger.event, this.callback);
+                    trigger.element.removeEventListener(trigger.event, trigger.callback);
                 })
             }
         },
@@ -421,9 +430,9 @@ const binders = {
 
     'multi-check': {
         bind: function (el) {
-            var self = this;
+            const self = this;
             if (!this.callback) {
-                this.callback = function(event) {
+                this.callback = function (event) {
                     event.stopPropagation();
                     self.sync();
                 }
@@ -456,13 +465,17 @@ const binders = {
             this.inputs.forEach((input) => {
                 input.removeEventListener('change', this.callback)
             })
+            if (this.onEvent) {
+                this.loadElement.removeEventListener(this.loadEvent, this.doRoutine);
+                this.loadElement.removeEventListener(this.loadEvent, this.performMultiCheck);
+            }
         },
 
         routine: function (el, value) {
             this.doRoutine = () => {
                 // first time round this will be undefined, which is what we want to catch,
                 // so we don't trigger the change event later on.
-                const trigger = this.view.models[this.modelName];
+                // const trigger = this.view.models[this.modelName];
                 if (this.output === 'object') {
                     const values = {};
                     this.inputs.forEach((input) => {
@@ -478,27 +491,26 @@ const binders = {
 
                     this.inputs.forEach((input) => {
                         if (input.checked) {
-                            values.push(input.value)
+                            values.push(input.getAttribute('mcvalue') || input.value)
                         }
                     })
 
                     this.view.models[this.modelName] = values;
 
                 }
-                if (trigger) {
-                    const change = new Event('change');
-                    el.dispatchEvent(change);
-                }
+                const change = new Event('change');
+                el.dispatchEvent(change);
 
                 if (this.onEvent) {
-                    this.loadElement.removeEventListener(this.loadEvent, this.doRoutine);
                     this.onEvent = null;
                 }
             }
 
             if (this.onEvent) {
                 this.loadElement.addEventListener(this.loadEvent, this.doRoutine);
-            } else {
+            }
+
+            if (!this.onEvent) {
                 this.doRoutine();
             }
 
@@ -512,7 +524,8 @@ function fetchSourceData(element, value) {
     this.view.models[this.modelName + 'Error'] = undefined;
 
     const options = {
-        method: this.method
+        method: this.method,
+        credentials: 'include'
     };
 
     if (this.payload) {
