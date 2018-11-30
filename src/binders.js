@@ -375,56 +375,62 @@ const binders = {
 
             if (actionURL) {
 
-                element.addEventListener(this.actionEvent, () => {
-                    const started = new Event('actionStarted');
-                    element.dispatchEvent(started);
+                if (!this.callback) {
+                    this.callback = () => {
+                        const started = new Event('actionStarted');
+                        element.dispatchEvent(started);
 
-                    if (modelName) {
-                        this.view.models[modelName + 'Error'] = undefined;
-                    }
+                        if (modelName) {
+                            this.view.models[modelName + 'Error'] = undefined;
+                        }
 
-                    const loadingIndicator = element.getAttribute('loading-indicator');
-                    let loadingElement;
+                        const loadingIndicator = element.getAttribute('loading-indicator');
+                        let loadingElement;
 
-                    if (loadingIndicator) {
-                        loadingElement = document.getElementsByClassName(loadingIndicator).item(0);
-                    }
+                        if (loadingIndicator) {
+                            loadingElement = document.getElementsByClassName(loadingIndicator).item(0);
+                        }
 
-                    if (loadingElement) loadingElement.style.display = '';
+                        if (loadingElement) loadingElement.style.display = '';
 
-                    const options = {
-                        method: method
+                        const options = {
+                            method: method,
+                            credentials: 'include'
+                        };
+
+                        fetch(actionURL, options).then((response) => {
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error(response.statusText);
+                            }
+
+                        }).then((data) => {
+                            if (loadingIndicator) loadingElement.style.display = 'none';
+
+                            if (modelName) {
+                                this.view.models[modelName] = data;
+                            }
+
+                            const completed = new Event('actionCompleted');
+                            element.dispatchEvent(completed);
+                        }).catch(error => {
+                            if (modelName) {
+                                this.view.models[modelName + 'Error'] = error;
+                            }
+                            const failed = new Event('actionFailed');
+                            element.dispatchEvent(failed);
+                        })
                     };
+                }
 
-                    fetch(actionURL, options).then((response) => {
-                        if (response.ok) {
-                            return response.json();
-                        } else {
-                            throw new Error(response.statusText);
-                        }
 
-                    }).then((data) => {
-                        if (loadingIndicator) loadingElement.style.display = 'none';
-
-                        if (modelName) {
-                            this.view.models[modelName] = data;
-                        }
-
-                        const completed = new Event('actionCompleted');
-                        element.dispatchEvent(completed);
-                    }).catch(error => {
-                        if (modelName) {
-                            this.view.models[modelName + 'Error'] = error;
-                        }
-                        const failed = new Event('actionFailed');
-                        element.dispatchEvent(failed);
-                    })
-                });
+                element.addEventListener(this.actionEvent, this.callback);
 
             }
         },
         unbind: function (element) {
-            element.removeEventListener(this.actionEvent);
+            element.removeEventListener(this.actionEvent, this.callback);
         }
     },
 
