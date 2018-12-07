@@ -412,13 +412,16 @@ const binders = {
                                 this.view.models[modelName] = data;
                             }
 
-                            const completed = new Event('actionCompleted');
+                            const eventSuccess = {actionSuccess: data};
+                            const completed = new CustomEvent('actionCompleted', {detail: eventSuccess});
                             element.dispatchEvent(completed);
                         }).catch(error => {
                             if (modelName) {
                                 this.view.models[modelName + 'Error'] = error;
                             }
-                            const failed = new Event('actionFailed');
+
+                            const eventError = {actionError: error};
+                            const failed = new CustomEvent('actionFailed', {detail: eventError});
                             element.dispatchEvent(failed);
                         })
                     };
@@ -449,9 +452,6 @@ const binders = {
                 this.inputs.forEach((input) => {
                     input.addEventListener('change', this.callback)
                 })
-                if (this.onEvent) {
-                    this.loadElement.removeEventListener(this.loadEvent, this.performMultiCheck);
-                }
             };
 
             this.modelName = el.getAttribute('model') || 'multi';
@@ -472,12 +472,13 @@ const binders = {
                 input.removeEventListener('change', this.callback)
             })
             if (this.onEvent) {
-                this.loadElement.removeEventListener(this.loadEvent, this.doRoutine);
                 this.loadElement.removeEventListener(this.loadEvent, this.performMultiCheck);
+                this.loadElement.removeEventListener(this.loadEvent, this.doRoutine);
             }
         },
 
         routine: function (el, value) {
+
             this.doRoutine = () => {
                 // first time round this will be undefined, which is what we want to catch,
                 // so we don't trigger the change event later on.
@@ -528,6 +529,7 @@ function fetchSourceData(element, value) {
     const source = parseDynamicVariablesInString(value, this.view.models, {});
 
     this.view.models[this.modelName + 'Error'] = undefined;
+    this.view.models[this.modelName] = undefined;
 
     const options = {
         method: this.method,
@@ -545,27 +547,33 @@ function fetchSourceData(element, value) {
 
     if (this.loadingElement) this.loadingElement.style.display = '';
 
-    fetch(source, options).then((response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error(response.statusText);
-        }
-    }).then((data) => {
-        if (this.loadingElement) this.loadingElement.style.display = 'none';
+    fetch(source, options)
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(response.statusText);
+            }
+        })
+        .then((data) => {
+            if (this.loadingElement) this.loadingElement.style.display = 'none';
 
-        // model requires a reset in order the gui to be updated, prior to the new data coming in
-        this.view.models[this.modelName] = undefined;
-        this.view.models[this.modelName] = data;
+            // model requires a reset in order for the gui to be updated, prior to the new data coming in
+            this.view.models[this.modelName] = undefined;
+            this.view.models[this.modelName] = data;
 
-        const loadedEvent = new Event('sourceLoaded');
-        element.dispatchEvent(loadedEvent);
-    }).catch(error => {
-        if (this.loadingElement) this.loadingElement.style.display = 'none';
-        this.view.models[this.modelName + 'Error'] = error;
-        const errorEvent = new Event('sourceFailed');
-        element.dispatchEvent(errorEvent);
-    });
+            const sourceSuccess = {sourceSuccess: data};
+            const loadedEvent = new CustomEvent('sourceLoaded', {detail: sourceSuccess});
+            element.dispatchEvent(loadedEvent);
+        })
+        .catch(error => {
+            if (this.loadingElement) this.loadingElement.style.display = 'none';
+            this.view.models[this.modelName + 'Error'] = error;
+            const sourceError = {sourceError: error};
+
+            const errorEvent = new CustomEvent('sourceFailed', {detail: sourceError});
+            element.dispatchEvent(errorEvent);
+        });
 }
 
 function parsePayload(payload) {
