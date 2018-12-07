@@ -48,8 +48,11 @@ export class Binding {
     parseTarget() {
         if (this.keypath) {
             let token = parseType(this.keypath, this.view.models)
-            // If we encounter a URL in the keypath then map this straight to the binder value.
-            if (this.keypath.includes('http://') || this.keypath.includes('https://')) {
+            // First of all handle the special cases where we want to let through the value
+            // to be handled downstream, otherwise carry on as normal
+            if ((this.keypath.includes('{') && !this.keypath.includes('[')) ||
+                this.keypath.includes('http')) {
+
                 this.value = this.keypath;
             } else if (token.type === 0) {
                 this.value = token.value
@@ -105,12 +108,16 @@ export class Binding {
     }
 
     // Returns an event handler for the binding around the supplied function.
-    eventHandler(fn) {
+    eventHandler(fn, key) {
         let binding = this
         let handler = binding.view.options.handler
 
         return function (ev) {
-            handler.call(fn, this, ev, binding)
+            if (key && ev.key === key) {
+                handler.call(fn, this, ev, binding)
+            } else if (!key) {
+                handler.call(fn, this, ev, binding)
+            }
         }
     }
 

@@ -36,7 +36,9 @@ const binders = {
                 el.removeEventListener(this.arg, this.handler)
             }
 
-            this.handler = this.eventHandler(value)
+            const key = el.getAttribute('key');
+
+            this.handler = this.eventHandler(value, key)
             el.addEventListener(this.arg, this.handler)
         }
     },
@@ -529,7 +531,6 @@ function fetchSourceData(element, value) {
     const source = parseDynamicVariablesInString(value, this.view.models, {});
 
     this.view.models[this.modelName + 'Error'] = undefined;
-    this.view.models[this.modelName] = undefined;
 
     const options = {
         method: this.method,
@@ -556,11 +557,17 @@ function fetchSourceData(element, value) {
             }
         })
         .then((data) => {
+            if (!data) data = {};
             if (this.loadingElement) this.loadingElement.style.display = 'none';
 
             // model requires a reset in order for the gui to be updated, prior to the new data coming in
             this.view.models[this.modelName] = undefined;
             this.view.models[this.modelName] = data;
+
+            // Add a function to allow the model to be reset
+            this.view.models[this.modelName].reset = () => {
+                this.view.models[this.modelName] = undefined;
+            };
 
             const sourceSuccess = {sourceSuccess: data};
             const loadedEvent = new CustomEvent('sourceLoaded', {detail: sourceSuccess});

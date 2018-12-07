@@ -21,22 +21,30 @@
 
 <h1>AJAX list</h1>
 
-<h1 kb-hide="selectedTlds.com">Hey Dude</h1>
+<!--<h1 kb-hide="selectedTlds.com">Hey Dude</h1>-->
 
-<h1 kb-hide="selectedTlds[co.uk]">Show me</h1>
+<!--<h1 kb-hide="selectedTlds[co.uk]">Show me</h1>-->
 
-<input type="checkbox" kb-checked="selectedTlds[co.uk]">
-co.uk
+<!--<input type="checkbox" kb-checked="selectedTlds[co.uk]">-->
+<!--co.uk-->
 
 
-<input type="checkbox" kb-checked="selectedTlds.com">
-.com
+<!--<input type="checkbox" kb-checked="selectedTlds.com">-->
+<!--.com-->
 
+<hr>
+
+<a kb-href="www.web.com/{hello}/anotherPath/{goodbye}">hell world</a>
 
 <script src="../dist/kinibind.js"></script>
 
 <script>
-    kinibind.bind(document.getElementById('my-element'), {selectedTlds: {"co.uk": true, "com": false}});
+    kinibind.bind(document.getElementById('my-element'),
+        {
+            selectedTlds: {"co.uk": true, "com": false},
+            hello: 'helloworld.com',
+            goodbye: 'goodbye'
+        });
 </script>
 
 </body>
