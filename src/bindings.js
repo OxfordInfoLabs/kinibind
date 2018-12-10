@@ -51,7 +51,7 @@ export class Binding {
             // First of all handle the special cases where we want to let through the value
             // to be handled downstream, otherwise carry on as normal
             if ((this.keypath.includes('{') && !this.keypath.includes('[')) ||
-                this.keypath.includes('http')) {
+                (this.keypath.includes('http://') || this.keypath.includes('https://'))) {
 
                 this.value = this.keypath;
             } else if (token.type === 0) {
