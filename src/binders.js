@@ -369,13 +369,12 @@ const binders = {
             if (!this.value) {
                 console.error('You must supply a source string to this binding');
             }
-            const actionURL = parseDynamicVariablesInString(this.value, this.view.models, {});
             const method = element.getAttribute('method') || 'GET';
             const modelName = element.getAttribute('model');
 
             this.actionEvent = element.getAttribute('event') || 'click';
 
-            if (actionURL) {
+            if (this.value) {
 
                 if (!this.callback) {
                     this.callback = () => {
@@ -399,6 +398,8 @@ const binders = {
                             method: method,
                             credentials: 'include'
                         };
+
+                        const actionURL = parseDynamicVariablesInString(this.value, this.view.models, {});
 
                         fetch(actionURL, options).then((response) => {
                             if (response.ok) {
@@ -557,7 +558,7 @@ function fetchSourceData(element, value) {
             }
         })
         .then((data) => {
-            if (!data) data = {};
+            if (data === undefined || data === null) data = {};
             if (this.loadingElement) this.loadingElement.style.display = 'none';
 
             // model requires a reset in order for the gui to be updated, prior to the new data coming in
@@ -565,15 +566,19 @@ function fetchSourceData(element, value) {
             this.view.models[this.modelName] = data;
 
             // Add a function to allow the model to be reset
-            this.view.models[this.modelName].reset = () => {
-                this.view.models[this.modelName] = undefined;
-            };
+            if (_.isObject(this.view.models[this.modelName])) {
+                this.view.models[this.modelName].reset = () => {
+                    this.view.models[this.modelName] = undefined;
+                };
+            }
 
             const sourceSuccess = {sourceSuccess: data};
             const loadedEvent = new CustomEvent('sourceLoaded', {detail: sourceSuccess});
+
             element.dispatchEvent(loadedEvent);
         })
         .catch(error => {
+
             if (this.loadingElement) this.loadingElement.style.display = 'none';
             this.view.models[this.modelName + 'Error'] = error;
             const sourceError = {sourceError: error};
