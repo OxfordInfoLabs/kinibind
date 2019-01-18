@@ -296,6 +296,51 @@ const binders = {
         }
     },
 
+    radioset: {
+        bind: function (el) {
+            var self = this;
+            if (!this.callback) {
+                this.callback = function (event) {
+                    event.stopPropagation();
+                    self.sync();
+                }
+            }
+
+            this.modelName = el.getAttribute('model') || 'radioData';
+
+            this.inputs = _.values(el.getElementsByTagName('input'));
+            this.inputs.forEach((input) => {
+                if (input.type === 'radio') {
+                    const initialValue = _.get(this.view.models, this.modelName);
+                    if (input.value === initialValue) {
+                        input.checked = true;
+                    }
+                    input.addEventListener('change', this.callback)
+                }
+            });
+        },
+
+        unbind: function (el) {
+            this.inputs = _.values(el.getElementsByTagName('input'));
+            this.inputs.forEach((input) => {
+                if (input.type === 'radio') {
+                    input.removeEventListener('change', this.callback)
+                }
+            });
+        },
+
+        routine: function (el, value) {
+            this.inputs = _.values(el.getElementsByTagName('input'));
+            this.inputs.forEach((input) => {
+                if (input.type === 'radio') {
+                    if (input.checked) {
+                        _.set(this.view.models, this.modelName, input.value);
+                    }
+                }
+            });
+        }
+    },
+
     bind: {
         bind: function (element) {
             this.value = element.getAttribute('source');

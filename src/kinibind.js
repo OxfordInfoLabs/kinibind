@@ -100,7 +100,8 @@ function evaluateBooleanExpression(expression, value1, value2) {
             return x <= y
         },
         "*": function (x, y) {
-            return x * y
+            let result = x * y == Math.round(x * y) ? x * y : (x * y).toFixed(2);
+            return isNaN(result) ? "" : result;
         },
         "+": function (x, y) {
             return x + y
@@ -109,7 +110,8 @@ function evaluateBooleanExpression(expression, value1, value2) {
             return x - y
         },
         "/": function (x, y) {
-            return x / y
+            let result = x / y == Math.round(x / y) ? x / y : (x / y).toFixed(2);
+            return isNaN(result) ? "" : result;
         }
     }
 
