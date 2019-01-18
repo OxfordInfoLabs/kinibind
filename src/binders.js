@@ -1,7 +1,7 @@
 import View from './view'
 import {parseDynamicVariablesInString} from './parsers'
 import _ from 'lodash';
-
+import $ from 'zepto-webpack';
 
 const getString = (value) => {
     return value != null ? value.toString() : undefined
@@ -360,44 +360,23 @@ const binders = {
             }
 
             if (this.reloadTrigger) {
-                const triggers = this.reloadTrigger.split(',');
-                triggers.forEach(trigger => {
-
+                this.reloadTrigger.split(',').forEach(trigger => {
                     const className = trigger.split(':')[0];
                     const eventName = trigger.split(':')[1];
-                    const triggerElement = document.getElementsByClassName(className).item(0);
-
-                    if (triggerElement) {
-                        const callback = (event) => {
-                            if (eventName === 'enter') {
-                                if (event.key === 'Enter') {
-                                    fetchSourceData.call(this, element, this.value);
-                                }
-                            } else {
-                                fetchSourceData.call(this, element, this.value);
-                            }
-                        };
-
-                        this.triggers.push({
-                            element: triggerElement,
-                            event: eventName === 'enter' ? 'keydown' : eventName,
-                            callback: callback
-                        });
-                    }
+                    this.triggers.push({
+                        className: className,
+                        event: eventName,
+                        bound: false
+                    });
                 });
-                if (this.triggers.length) {
-                    this.triggers.forEach(trigger => {
-                        trigger.element.addEventListener(trigger.event, trigger.callback);
-                    })
-                }
             }
+
         },
         unbind: function (element) {
-            if (this.triggers.length) {
-                this.triggers.forEach(trigger => {
-                    trigger.element.removeEventListener(trigger.event, trigger.callback);
-                })
-            }
+            this.triggers.forEach(trigger => {
+                const className = trigger.className;
+                $('.' + className).off();
+            });
         },
         routine: function (element, value) {
             if (this.load) {
@@ -412,7 +391,7 @@ const binders = {
         bind: function (element) {
             this.value = element.getAttribute('source');
             if (!this.value) {
-                console.error('You must supply a source string to this binding');
+                console.error('You must supply a source string to this binding -> ', element);
             }
             const method = element.getAttribute('method') || 'GET';
             const modelName = element.getAttribute('model');
@@ -441,14 +420,19 @@ const binders = {
 
                         const options = {
                             method: method,
-                            credentials: 'include'
+                            credentials: 'include',
+                            headers: {"Content-Type": "text/plain"},
+                            mode: 'cors'
                         };
 
                         const actionURL = parseDynamicVariablesInString(this.value, this.view.models, {});
 
                         fetch(actionURL, options).then((response) => {
+
                             if (response.ok) {
-                                return response.json();
+                                return response.text().then(function (text) {
+                                    return text ? JSON.parse(text) : {}
+                                })
                             } else {
                                 throw new Error(response.statusText);
                             }
@@ -464,6 +448,7 @@ const binders = {
                             const completed = new CustomEvent('actionCompleted', {detail: eventSuccess});
                             element.dispatchEvent(completed);
                         }).catch(error => {
+                            console.log('catch ', error);
                             if (modelName) {
                                 this.view.models[modelName + 'Error'] = error;
                             }
@@ -594,10 +579,12 @@ function fetchSourceData(element, value) {
 
     if (this.loadingElement) this.loadingElement.style.display = '';
 
-    fetch(source, options)
+    return fetch(source, options)
         .then((response) => {
             if (response.ok) {
-                return response.json();
+                return response.text().then(function (text) {
+                    return text ? JSON.parse(text) : {}
+                })
             } else {
                 throw new Error(response.statusText);
             }
@@ -619,8 +606,26 @@ function fetchSourceData(element, value) {
 
             const sourceSuccess = {sourceSuccess: data};
             const loadedEvent = new CustomEvent('sourceLoaded', {detail: sourceSuccess});
-
             element.dispatchEvent(loadedEvent);
+            return true;
+        })
+        .then(() => {
+            this.triggers.forEach(trigger => {
+                const className = trigger.className;
+                const eventName = trigger.event;
+                const $class = $('.' + className);
+                $class.off();
+                $class.on(eventName, event => {
+                    trigger.bound = true;
+                    if (eventName === 'enter') {
+                        if (event.key === 'Enter') {
+                            fetchSourceData.call(this, element, this.value);
+                        }
+                    } else {
+                        fetchSourceData.call(this, element, this.value);
+                    }
+                });
+            });
         })
         .catch(error => {
 
@@ -630,6 +635,7 @@ function fetchSourceData(element, value) {
 
             const errorEvent = new CustomEvent('sourceFailed', {detail: sourceError});
             element.dispatchEvent(errorEvent);
+            return true;
         });
 }
 

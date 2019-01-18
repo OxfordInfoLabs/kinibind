@@ -1,7 +1,7 @@
 {
   "name": "kinibind",
   "description": "Data binding plus simple Ajax requests in HTML",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "author": "Oxford Information Labs",
   "url": "https://github.com/OxfordInfoLabs/kinibind",
   "main": "./dist/kinibind.bundle.js",
@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.11",
-    "rxjs": "^6.3.3"
+    "rxjs": "^6.3.3",
+    "zepto-webpack": "^1.2.1"
   }
 }
