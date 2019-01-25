@@ -368,6 +368,16 @@ const binders = {
                         event: eventName,
                         bound: false
                     });
+                    const $class = $('.' + className);
+                    $class.on(eventName, event => {
+                        if (eventName === 'enter') {
+                            if (event.key === 'Enter') {
+                                fetchSourceData.call(this, element, this.value);
+                            }
+                        } else {
+                            fetchSourceData.call(this, element, this.value);
+                        }
+                    });
                 });
             }
 
