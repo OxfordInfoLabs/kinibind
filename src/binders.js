@@ -369,7 +369,7 @@ const binders = {
                         bound: false
                     });
                     const $class = $('.' + className);
-                    $class.on(eventName, event => {
+                    $class.on(eventName === 'enter' ? 'keyup' : eventName, event => {
                         if (eventName === 'enter') {
                             if (event.key === 'Enter') {
                                 fetchSourceData.call(this, element, this.value);
@@ -625,8 +625,7 @@ function fetchSourceData(element, value) {
                 const eventName = trigger.event;
                 const $class = $('.' + className);
                 $class.off();
-                $class.on(eventName, event => {
-                    trigger.bound = true;
+                $class.on(eventName === 'enter' ? 'keyup' : eventName, event => {
                     if (eventName === 'enter') {
                         if (event.key === 'Enter') {
                             fetchSourceData.call(this, element, this.value);
