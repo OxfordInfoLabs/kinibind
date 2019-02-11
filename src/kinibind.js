@@ -112,6 +112,9 @@ function evaluateBooleanExpression(expression, value1, value2) {
         "/": function (x, y) {
             let result = x / y == Math.round(x / y) ? x / y : (x / y).toFixed(2);
             return isNaN(result) ? "" : result;
+        },
+        "IN": function(x, y) {
+            return y.split(',').indexOf(x) > -1;
         }
     }
 
