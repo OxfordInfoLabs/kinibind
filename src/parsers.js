@@ -97,10 +97,11 @@ export function parseTemplate(template, delimiters) {
 }
 
 export function getDynamicStringModelExpressions(parseString) {
-    var expressions = parseString.match(/{\s*(.*?)\s*}/g);
+    var expressions = parseString.match(/{(.*?)}/g);
     if (expressions) {
         return expressions.map(item => {
-            return item.substr(1, item.length - 2)
+            const result = item.substr(1, item.length - 2);
+            return result;
         });
     }
     return false;
@@ -111,7 +112,7 @@ export function parseDynamicVariablesInString(parseString, models) {
 
     if (modelExpressions) {
         _.forEach(modelExpressions, function (expression) {
-            let evaluatedValue = _.get(models, expression);
+            let evaluatedValue = _.get(models, expression.trim());
 
             if (evaluatedValue !== undefined) {
                 parseString = parseString.replace('{' + expression + '}', evaluatedValue);

@@ -1,7 +1,7 @@
 {
   "name": "kinibind",
   "description": "Data binding plus simple Ajax requests in HTML",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "author": "Oxford Information Labs",
   "url": "https://github.com/OxfordInfoLabs/kinibind",
   "main": "./dist/kinibind.bundle.js",
