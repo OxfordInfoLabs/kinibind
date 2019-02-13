@@ -97,7 +97,7 @@ export function parseTemplate(template, delimiters) {
 }
 
 export function getDynamicStringModelExpressions(parseString) {
-    var expressions = parseString.match(/{(.*?)}/g);
+    var expressions = parseString.match(/{\s*(.*?)\s*}/g);
     if (expressions) {
         return expressions.map(item => {
             return item.substr(1, item.length - 2)
