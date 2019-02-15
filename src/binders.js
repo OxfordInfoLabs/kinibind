@@ -444,7 +444,9 @@ const binders = {
                                     return text ? JSON.parse(text) : {}
                                 })
                             } else {
-                                throw new Error(response.statusText);
+                                return response.text().then(function (text) {
+                                    throw new Error(text);
+                                })
                             }
 
                         }).then((data) => {
@@ -457,8 +459,8 @@ const binders = {
                             const eventSuccess = {actionSuccess: data};
                             const completed = new CustomEvent('actionCompleted', {detail: eventSuccess});
                             element.dispatchEvent(completed);
-                        }).catch(error => {
-                            console.log('catch ', error);
+                        }).catch(err => {
+                            const error = JSON.parse(err.message);
                             if (modelName) {
                                 this.view.models[modelName + 'Error'] = error;
                             }
