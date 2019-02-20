@@ -571,6 +571,9 @@ const binders = {
 }
 
 function fetchSourceData(element, value) {
+    const loadingEvent = new Event('sourceLoading');
+    element.dispatchEvent(loadingEvent);
+
     const source = parseDynamicVariablesInString(value, this.view.models, {});
 
     this.view.models[this.modelName + 'Error'] = undefined;
