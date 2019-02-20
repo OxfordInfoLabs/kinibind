@@ -571,6 +571,8 @@ const binders = {
 }
 
 function fetchSourceData(element, value) {
+    if (this.loadingElement) this.loadingElement.style.display = '';
+
     const loadingEvent = new Event('sourceLoading');
     element.dispatchEvent(loadingEvent);
 
@@ -591,8 +593,6 @@ function fetchSourceData(element, value) {
         options.body = JSON.stringify(payload);
         options.mode = 'cors';
     }
-
-    if (this.loadingElement) this.loadingElement.style.display = '';
 
     return fetch(source, options)
         .then((response) => {
