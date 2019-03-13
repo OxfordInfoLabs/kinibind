@@ -45,7 +45,9 @@ const kinibind = {
 
     // Default event handler.
     handler: function (context, ev, binding) {
-        this.call(context, ev, binding.view.models)
+        if (this) {
+            this.call(context, ev, binding.view.models)
+        }
     },
 
     // Sets the attribute on the element. If no binder above is matched it will fall

@@ -578,6 +578,14 @@ function fetchSourceData(element, value) {
 
     const source = parseDynamicVariablesInString(value, this.view.models, {});
 
+    // If we end up with non evaluated string here, dont even bother to proceed.
+    if (source.includes('{')) {
+        if (this.loadingElement) this.loadingElement.style.display = 'none';
+        const loadedEvent = new Event('sourceLoaded');
+        element.dispatchEvent(loadedEvent);
+        return Promise.resolve();
+    }
+
     this.view.models[this.modelName + 'Error'] = undefined;
 
     const options = {
