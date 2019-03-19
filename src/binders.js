@@ -405,6 +405,7 @@ const binders = {
             }
             const method = element.getAttribute('method') || 'GET';
             const modelName = element.getAttribute('model');
+            const payload = element.getAttribute('payload');
 
             this.actionEvent = element.getAttribute('event') || 'click';
 
@@ -435,10 +436,25 @@ const binders = {
                             mode: 'cors'
                         };
 
+                        if (payload) {
+                            const parsedPayload = parseDynamicVariablesInString(payload, this.view.models, {});
+                            const items = parsedPayload.split(',');
+                            const payloadObject = {};
+
+                            items.forEach(item => {
+                                const splitItem = item.split(':');
+                                payloadObject[splitItem[0]] = splitItem[1];
+                            });
+
+                            if (Object.keys(payloadObject).length) {
+                                options.body = JSON.stringify(payloadObject);
+                                options.method = method !== 'GET' ? method : 'POST';
+                            }
+                        }
+
                         const actionURL = parseDynamicVariablesInString(this.value, this.view.models, {});
 
-                        fetch(actionURL, options).then((response) => {
-
+                        fetch(encodeURI(actionURL), options).then((response) => {
                             if (response.ok) {
                                 return response.text().then(function (text) {
                                     return text ? JSON.parse(text) : {}
@@ -602,7 +618,7 @@ function fetchSourceData(element, value) {
         options.mode = 'cors';
     }
 
-    return fetch(source, options)
+    return fetch(encodeURI(source), options)
         .then((response) => {
             if (response.ok) {
                 return response.text().then(function (text) {

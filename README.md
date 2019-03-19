@@ -77,6 +77,7 @@ Trigger an http request on the event of an element.
 * source (string) - the url of the http request
 * model (? string) - the model property name to bind the results to
 * method (? string) - the type of method make the request with (defaults to GET)
+* payload (string) - if making a POST request, send a JSON object payload. In the following format `payload="name:'nathan',age:{ageField}"`
 * event (? string) - the event the action should be triggered on (defaults to `click`);
 * loading-indicator (? string) - should be the class name of the element you wish to show during request, and hide after request finishes. eg. 'loading-spinner'
 
