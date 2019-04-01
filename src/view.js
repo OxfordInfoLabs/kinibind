@@ -2,7 +2,7 @@ import kinibind from './kinibind'
 import {Binding} from './bindings'
 import {parseTemplate} from './parsers'
 import {getDynamicStringModelExpressions} from './parsers'
-import Subject from 'rxjs/internal/Subject';
+import {Subject} from 'rxjs/internal/Subject';
 import {isObject} from 'lodash-es';
 
 const textBinder = {
