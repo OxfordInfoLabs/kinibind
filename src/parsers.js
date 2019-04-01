@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import {get} from 'lodash-es';
 
 const PRIMITIVE = 0
 const KEYPATH = 1
@@ -104,15 +104,15 @@ export function getDynamicStringModelExpressions(parseString) {
             return result;
         });
     }
-    return false;
+    return [];
 }
 
 export function parseDynamicVariablesInString(parseString, models) {
     const modelExpressions = getDynamicStringModelExpressions(parseString);
 
-    if (modelExpressions) {
-        _.forEach(modelExpressions, function (expression) {
-            let evaluatedValue = _.get(models, expression.trim());
+    if (modelExpressions.length) {
+        modelExpressions.forEach(expression => {
+            let evaluatedValue = get(models, expression.trim());
 
             if (evaluatedValue !== undefined) {
                 parseString = parseString.replace('{' + expression + '}', evaluatedValue);

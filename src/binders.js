@@ -1,7 +1,6 @@
 import View from './view'
 import {parseDynamicVariablesInString} from './parsers'
-import _ from 'lodash';
-import $ from 'zepto-webpack';
+import {get, set, isObject} from 'lodash-es';
 
 const getString = (value) => {
     return value != null ? value.toString() : undefined
@@ -76,7 +75,7 @@ const binders = {
             collection = collection || []
             let indexProp = el.getAttribute('index-property') || '$index'
 
-            if (!_.isArray(collection)) {
+            if (!Array.isArray(collection)) {
                 Object.keys(collection).forEach((key) => {
                     processEach.call(this, collection[key], key, modelName, indexProp);
                 });
@@ -308,10 +307,10 @@ const binders = {
 
             this.modelName = el.getAttribute('model') || 'radioData';
 
-            this.inputs = _.values(el.getElementsByTagName('input'));
+            this.inputs = Object.values(el.getElementsByTagName('input'));
             this.inputs.forEach((input) => {
                 if (input.type === 'radio') {
-                    const initialValue = _.get(this.view.models, this.modelName);
+                    const initialValue = get(this.view.models, this.modelName);
                     if (input.value === initialValue) {
                         input.checked = true;
                     }
@@ -321,7 +320,7 @@ const binders = {
         },
 
         unbind: function (el) {
-            this.inputs = _.values(el.getElementsByTagName('input'));
+            this.inputs = Object.values(el.getElementsByTagName('input'));
             this.inputs.forEach((input) => {
                 if (input.type === 'radio') {
                     input.removeEventListener('change', this.callback)
@@ -330,11 +329,11 @@ const binders = {
         },
 
         routine: function (el, value) {
-            this.inputs = _.values(el.getElementsByTagName('input'));
+            this.inputs = Object.values(el.getElementsByTagName('input'));
             this.inputs.forEach((input) => {
                 if (input.type === 'radio') {
                     if (input.checked) {
-                        _.set(this.view.models, this.modelName, input.value);
+                        set(this.view.models, this.modelName, input.value);
                     }
                 }
             });
@@ -368,15 +367,18 @@ const binders = {
                         event: eventName,
                         bound: false
                     });
-                    const $class = $('.' + className);
-                    $class.on(eventName === 'enter' ? 'keyup' : eventName, event => {
-                        if (eventName === 'enter') {
-                            if (event.key === 'Enter') {
+
+                    const elements = document.getElementsByClassName(className);
+                    [].forEach.call(elements, element => {
+                        element.addEventListener(eventName === 'enter' ? 'keyup' : eventName, event => {
+                            if (eventName === 'enter') {
+                                if (event.key === 'Enter') {
+                                    fetchSourceData.call(this, element, this.value);
+                                }
+                            } else {
                                 fetchSourceData.call(this, element, this.value);
                             }
-                        } else {
-                            fetchSourceData.call(this, element, this.value);
-                        }
+                        });
                     });
                 });
             }
@@ -385,7 +387,11 @@ const binders = {
         unbind: function (element) {
             this.triggers.forEach(trigger => {
                 const className = trigger.className;
-                $('.' + className).off();
+                const elements = document.getElementsByClassName(className);
+                [].forEach.call(elements, element => {
+                    const eventName = trigger.event;
+                    element.removeEventListener(eventName === 'enter' ? 'keyup' : eventName);
+                });
             });
         },
         routine: function (element, value) {
@@ -509,7 +515,7 @@ const binders = {
             }
 
             this.performMultiCheck = () => {
-                this.inputs = _.values(el.getElementsByTagName('input'));
+                this.inputs = Object.values(el.getElementsByTagName('input'));
                 this.inputs.forEach((input) => {
                     input.addEventListener('change', this.callback)
                 })
@@ -549,9 +555,11 @@ const binders = {
                     this.inputs.forEach((input) => {
                         const inputValue = input.getAttribute('mcvalue') || input.value;
                         values[inputValue] = input.checked;
-                    })
+                    });
 
-                    values.all = _.some(values);
+                    values.all = Object.values(values).some(value => {
+                        return value;
+                    });
 
                     this.view.models[this.modelName] = values;
                 } else {
@@ -637,7 +645,7 @@ function fetchSourceData(element, value) {
             this.view.models[this.modelName] = data;
 
             // Add a function to allow the model to be reset
-            if (_.isObject(this.view.models[this.modelName])) {
+            if (isObject(this.view.models[this.modelName])) {
                 this.view.models[this.modelName].reset = () => {
                     this.view.models[this.modelName] = undefined;
                 };
@@ -652,16 +660,19 @@ function fetchSourceData(element, value) {
             this.triggers.forEach(trigger => {
                 const className = trigger.className;
                 const eventName = trigger.event;
-                const $class = $('.' + className);
-                $class.off();
-                $class.on(eventName === 'enter' ? 'keyup' : eventName, event => {
-                    if (eventName === 'enter') {
-                        if (event.key === 'Enter') {
+
+                const elements = document.getElementsByClassName(className);
+                [].forEach.call(elements, element => {
+                    element.removeEventListener(eventName === 'enter' ? 'keyup' : eventName);
+                    element.addEventListener(eventName === 'enter' ? 'keyup' : eventName, event => {
+                        if (eventName === 'enter') {
+                            if (event.key === 'Enter') {
+                                fetchSourceData.call(this, element, this.value);
+                            }
+                        } else {
                             fetchSourceData.call(this, element, this.value);
                         }
-                    } else {
-                        fetchSourceData.call(this, element, this.value);
-                    }
+                    });
                 });
             });
         })

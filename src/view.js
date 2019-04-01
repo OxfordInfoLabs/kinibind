@@ -2,7 +2,8 @@ import kinibind from './kinibind'
 import {Binding} from './bindings'
 import {parseTemplate} from './parsers'
 import {getDynamicStringModelExpressions} from './parsers'
-import {Subject} from 'rxjs';
+import Subject from 'rxjs/internal/Subject';
+import {isObject} from 'lodash-es';
 
 const textBinder = {
     routine: (node, value) => {
@@ -54,8 +55,8 @@ const trimStr = (str) => {
 }
 
 const updateDynamicStringVariablesForView = (bindings, viewChange) => {
-    if (viewChange && _.isObject(viewChange)) {
-        if (_.isArray(bindings)) {
+    if (viewChange && isObject(viewChange)) {
+        if (Array.isArray(bindings)) {
             bindings.forEach(binding => {
                 const modelExpressions = getDynamicStringModelExpressions(binding.keypath);
                 if (modelExpressions && modelExpressions.includes(viewChange.keyPath)) {
