@@ -1,6 +1,6 @@
 import View from './view'
 import {parseDynamicVariablesInString} from './parsers'
-import _ from 'lodash';
+import {set, get, isObject} from 'lodash-es';
 import $ from 'zepto-webpack';
 
 const getString = (value) => {
@@ -76,7 +76,7 @@ const binders = {
             collection = collection || []
             let indexProp = el.getAttribute('index-property') || '$index'
 
-            if (!_.isArray(collection)) {
+            if (!Array.isArray(collection)) {
                 Object.keys(collection).forEach((key) => {
                     processEach.call(this, collection[key], key, modelName, indexProp);
                 });
@@ -308,10 +308,10 @@ const binders = {
 
             this.modelName = el.getAttribute('model') || 'radioData';
 
-            this.inputs = _.values(el.getElementsByTagName('input'));
+            this.inputs = Object.values(el.getElementsByTagName('input'));
             this.inputs.forEach((input) => {
                 if (input.type === 'radio') {
-                    const initialValue = _.get(this.view.models, this.modelName);
+                    const initialValue = get(this.view.models, this.modelName);
                     if (input.value === initialValue) {
                         input.checked = true;
                     }
@@ -321,7 +321,7 @@ const binders = {
         },
 
         unbind: function (el) {
-            this.inputs = _.values(el.getElementsByTagName('input'));
+            this.inputs = Object.values(el.getElementsByTagName('input'));
             this.inputs.forEach((input) => {
                 if (input.type === 'radio') {
                     input.removeEventListener('change', this.callback)
@@ -330,11 +330,11 @@ const binders = {
         },
 
         routine: function (el, value) {
-            this.inputs = _.values(el.getElementsByTagName('input'));
+            this.inputs = Object.values(el.getElementsByTagName('input'));
             this.inputs.forEach((input) => {
                 if (input.type === 'radio') {
                     if (input.checked) {
-                        _.set(this.view.models, this.modelName, input.value);
+                        set(this.view.models, this.modelName, input.value);
                     }
                 }
             });
@@ -509,7 +509,7 @@ const binders = {
             }
 
             this.performMultiCheck = () => {
-                this.inputs = _.values(el.getElementsByTagName('input'));
+                this.inputs = Object.values(el.getElementsByTagName('input'));
                 this.inputs.forEach((input) => {
                     input.addEventListener('change', this.callback)
                 })
@@ -551,7 +551,7 @@ const binders = {
                         values[inputValue] = input.checked;
                     })
 
-                    values.all = _.some(values);
+                    values.all = Object.values(values).indexOf(true) > -1;
 
                     this.view.models[this.modelName] = values;
                 } else {
@@ -637,7 +637,7 @@ function fetchSourceData(element, value) {
             this.view.models[this.modelName] = data;
 
             // Add a function to allow the model to be reset
-            if (_.isObject(this.view.models[this.modelName])) {
+            if (isObject(this.view.models[this.modelName])) {
                 this.view.models[this.modelName].reset = () => {
                     this.view.models[this.modelName] = undefined;
                 };
