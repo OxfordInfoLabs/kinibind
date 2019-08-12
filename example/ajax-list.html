@@ -75,7 +75,8 @@
 
 <div kb-bind source="http://trade.netistrar.test/domains/hinted?searchString={searchString}&category={categories}"
      model="domains" method="GET" class="main-list-load"
-     reload-trigger="search-button:click,selected-tlds:change,search-input:enter" load="false" loading-indicator="loading-domains">
+     reload-trigger="search-button:click,selected-tlds:change,search-input:enter" load="false"
+     loading-indicator="loading-domains">
 
     <h5 class="loading-domains">Loading domains ...</h5>
 
@@ -85,12 +86,12 @@
         <li kb-each-featured="domains.tldResults">
             {featured.domainName}
             <span style="color: green" kb-show="featured.availability | eval '==' 'HINTED_AVAILABLE'">Available</span>
-            <span style="color: lightgray" kb-hide="featured.availability | eval '==' 'HINTED_AVAILABLE'">Unavailable</span>
+            <span style="color: lightgray"
+                  kb-hide="featured.availability | eval '==' 'HINTED_AVAILABLE'">Unavailable</span>
         </li>
     </ul>
 
     <hr>
-
 
 
     <div style="display: flex">
@@ -106,7 +107,7 @@
                 <h5>TLDs</h5>
                 <div kb-multi-check output="object" on-event="main-list-load:sourceLoaded" model="selectedTlds">
                     <div kb-each-tldresult="domains.tldResults" index-property="tld">
-                        <input type="checkbox" kb-mcvalue="tld" >{tld}
+                        <input type="checkbox" kb-mcvalue="tld">{tld}
                     </div>
                 </div>
             </div>
@@ -142,8 +143,50 @@
     </div>
 
 
-</div>
+    <hr>
 
+
+    <div style="display: flex">
+        <div style="width: 25%">
+            <div kb-multi-check model="filters">
+                <h5>Filters</h5>
+
+                <input type="checkbox" value="Suggested"> Suggested
+                <br>
+                <input type="checkbox" value="Popular"> Popular
+                <br>
+                <input type="checkbox" value="Magic"> Magic
+            </div>
+        </div>
+
+        <div>
+            <h5>Results</h5>
+
+
+            <b>Selected Filters: </b><span kb-each-filter="filters"> {filter} </span>
+
+            <p kb-if="filters | eval 'CONTAINS' 'Suggested,Magic'">
+                I am an article with Suggested or Magic filters.
+            </p>
+
+
+            <p kb-if="filters | eval 'CONTAINS' 'Suggested,Popular'">
+                I am an article with Suggested or Popular filters.
+            </p>
+
+            <p kb-if="filters | eval 'CONTAINS' 'Popular,Magic'">
+                I am an article with Popular or Magic filters.
+            </p>
+
+            <p kb-if="filters | eval 'CONTAINS' 'Magic'">
+                I am an article with Magic filters.
+            </p>
+
+        </div>
+
+
+    </div>
+</div>
 
 
 <script src="../dist/kinibind.js"></script>

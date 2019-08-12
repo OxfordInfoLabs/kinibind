@@ -1,6 +1,7 @@
 import {EXTENSIONS} from './constants'
 import {parseTemplate, parseType} from './parsers'
 import {parseDynamicVariablesInString} from './parsers'
+import {intersection} from 'lodash-es';
 
 const kinibind = {
     // Global binders.
@@ -82,6 +83,7 @@ const kinibind = {
 }
 
 function evaluateBooleanExpression(expression, value1, value2) {
+
     const matches = {
         "===": function (x, y) {
             return x === y
@@ -117,6 +119,9 @@ function evaluateBooleanExpression(expression, value1, value2) {
         },
         "IN": function(x, y) {
             return y.split(',').indexOf(x) > -1;
+        },
+        "CONTAINS": function(x, y){
+            return intersection(y.split(','), x).length > 0;
         }
     }
 
