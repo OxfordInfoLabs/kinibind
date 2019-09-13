@@ -87,6 +87,7 @@ export default class View {
 
 
     buildBinding(node, type, declaration, binder, arg) {
+
         let pipes = declaration.match(DECLARATION_SPLIT).map(trimStr)
 
         let keypath = pipes.shift()

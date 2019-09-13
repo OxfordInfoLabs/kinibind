@@ -165,20 +165,20 @@
 
             <b>Selected Filters: </b><span kb-each-filter="filters"> {filter} </span>
 
-            <p kb-if="filters | eval 'CONTAINS' 'Suggested,Magic'">
+            <p kb-if="filters | eval 'CONTAINS_EMPTY' 'Suggested,Magic'">
                 I am an article with Suggested or Magic filters.
             </p>
 
 
-            <p kb-if="filters | eval 'CONTAINS' 'Suggested,Popular'">
+            <p kb-if="filters | eval 'CONTAINS_EMPTY' 'Suggested,Popular'">
                 I am an article with Suggested or Popular filters.
             </p>
 
-            <p kb-if="filters | eval 'CONTAINS' 'Popular,Magic'">
+            <p kb-if="filters | eval 'CONTAINS_EMPTY' 'Popular,Magic'">
                 I am an article with Popular or Magic filters.
             </p>
 
-            <p kb-if="filters | eval 'CONTAINS' 'Magic'">
+            <p kb-if="filters | eval 'CONTAINS_EMPTY' 'Magic'">
                 I am an article with Magic filters.
             </p>
 

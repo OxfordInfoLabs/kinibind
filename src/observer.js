@@ -14,6 +14,7 @@ var rootInterface
 
 // Constructs a new keypath observer and kicks things off.
 function Observer(obj, keypath, callback) {
+
     this.keypath = keypath
     this.callback = callback
     this.objectPath = []
@@ -78,6 +79,7 @@ Observer.prototype.parse = function () {
         root = rootInterface
         path = this.keypath
     }
+
 
     this.tokens = Observer.tokenize(path, root)
     this.key = this.tokens.pop()

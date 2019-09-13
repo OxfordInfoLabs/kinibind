@@ -117,11 +117,14 @@ function evaluateBooleanExpression(expression, value1, value2) {
             let result = x / y == Math.round(x / y) ? x / y : (x / y).toFixed(2);
             return isNaN(result) ? "" : result;
         },
-        "IN": function(x, y) {
+        "IN": function (x, y) {
             return y.split(',').indexOf(x) > -1;
         },
-        "CONTAINS": function(x, y){
+        "CONTAINS": function (x, y) {
             return intersection(y.split(','), x).length > 0;
+        },
+        "CONTAINS_EMPTY": function (x, y) {
+            return intersection(y.split(','), x).length > 0 || typeof x === undefined || x === undefined || x.length === 0;
         }
     }
 
