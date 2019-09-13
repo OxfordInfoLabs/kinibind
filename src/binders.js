@@ -2,6 +2,7 @@ import View from './view'
 import {parseDynamicVariablesInString} from './parsers'
 import {set, get, isObject} from 'lodash-es';
 import $ from 'zepto-webpack';
+import kinibind from "./kinibind";
 
 const getString = (value) => {
     return value != null ? value.toString() : undefined
@@ -145,12 +146,12 @@ const binders = {
 
     // Shows the element when value is true.
     show: (el, value) => {
-        el.style.display = value ? '' : 'none'
+        kinibind._visibilityCallback(el, value);
     },
 
     // Hides the element when value is true (negated version of `show` binder).
     hide: (el, value) => {
-        el.style.display = value ? 'none' : ''
+        kinibind._visibilityCallback(el, !value);
     },
 
     // Enables the element when value is true.

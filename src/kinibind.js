@@ -22,6 +22,10 @@ const kinibind = {
 
     _fullPrefix: 'kb-',
 
+    _visibilityCallback: function(element, show){
+        element.style.display = show ? '' : 'none';
+    },
+
     get prefix() {
         return this._prefix
     },
@@ -90,6 +94,12 @@ function evaluateBooleanExpression(expression, value1, value2) {
         },
         "==": function (x, y) {
             return x == y
+        },
+        "!==": function (x, y) {
+            return x !== y
+        },
+        "!=": function (x, y) {
+            return x != y
         },
         ">": function (x, y) {
             return x > y
