@@ -1,7 +1,7 @@
 {
   "name": "kinibind",
   "description": "Data binding plus simple Ajax requests in HTML",
-  "version": "0.0.56",
+  "version": "0.0.57",
   "author": "Oxford Information Labs",
   "url": "https://github.com/OxfordInfoLabs/kinibind",
   "main": "./dist/kinibind.bundle.js",
@@ -20,7 +20,8 @@
   },
   "scripts": {
     "test": "",
-    "build": "webpack --config webpack.config.js -p"
+    "build": "webpack --config webpack.config.js -p",
+    "watch": "webpack --config webpack.config.js -p --watch"
   },
   "devDependencies": {
     "@types/node": "^10.11.3",

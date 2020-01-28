@@ -21,7 +21,10 @@
 
 <h1>Test</h1>
 
-<p kb-if="!hello || hello">
+
+<a href="#" kb-toggle="hello">Click to toggle model value</a>
+
+<p kb-if="hello">
     Hello world
 </p>
 
@@ -37,7 +40,7 @@
     kinibind.bind(document.getElementById('my-element'),
         {
             selectedTlds: {"co.uk": true, "com": false},
-            hello: 'helloworld.com',
+            hello: false,
             goodbye: 'goodbye'
         });
 </script>

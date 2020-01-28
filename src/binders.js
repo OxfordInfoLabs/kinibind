@@ -584,6 +584,25 @@ const binders = {
             }
 
         }
+    },
+    'toggle': {
+        publishes: true,
+        bind: function (el) {
+
+            let observer = this.observer;
+
+            if (!this.callback) {
+                this.callback = function (event) {
+                    event.stopPropagation();
+                    observer.setValue(!observer.value());
+                };
+            }
+
+            el.addEventListener("click", this.callback);
+
+        }, unbind: function (el) {
+            el.removeEventListener("click", this.callback);
+        }
     }
 }
 
