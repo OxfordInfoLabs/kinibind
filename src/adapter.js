@@ -54,6 +54,7 @@ const adapter = {
                 let k = map.pointers[r]
 
                 if (weakmap[r]) {
+
                     if (weakmap[r].callbacks[k] instanceof Array) {
                         weakmap[r].callbacks[k].forEach(callback => {
                             callback.sync()
@@ -67,6 +68,8 @@ const adapter = {
     },
 
     observeMutations: function (obj, ref, keypath) {
+
+
         if (obj instanceof Array) {
             let map = this.weakReference(obj)
 
@@ -123,6 +126,7 @@ const adapter = {
             if (!desc || !(desc.get || desc.set || !desc.configurable)) {
                 value = obj[keypath]
 
+
                 Object.defineProperty(obj, keypath, {
                     enumerable: true,
 
@@ -131,6 +135,7 @@ const adapter = {
                     },
 
                     set: newValue => {
+
                         if (newValue !== value) {
                             this.unobserveMutations(value, obj.__kb, keypath)
                             value = newValue

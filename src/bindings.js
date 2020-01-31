@@ -47,6 +47,7 @@ export class Binding {
 
     parseTarget() {
         if (this.keypath) {
+
             let token = parseType(this.keypath, this.view.models)
             // First of all handle the special cases where we want to let through the value
             // to be handled downstream, otherwise carry on as normal
@@ -124,6 +125,7 @@ export class Binding {
     // Sets the value for the binding. This Basically just runs the binding routine
     // with the supplied value formatted.
     set(value) {
+
         if ((value instanceof Function) && !this.binder.function) {
             value = this.formattedValue(value.call(this.model))
         } else {

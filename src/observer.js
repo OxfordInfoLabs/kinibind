@@ -93,7 +93,6 @@ Observer.prototype.realize = function () {
     var prev
     var token
 
-
     for (let index = 0; index < this.tokens.length; index++) {
         token = this.tokens[index]
         if (isObject(current)) {
@@ -131,7 +130,11 @@ Observer.prototype.realize = function () {
 Observer.prototype.sync = function () {
     var next, oldValue, newValue
 
+
+
     if ((next = this.realize()) !== this.target) {
+
+
         if (isObject(this.target)) {
             this.set(false, this.key, this.target, this.callback)
         }
@@ -160,6 +163,7 @@ Observer.prototype.value = function () {
 // Sets the current end value of the observed keypath. Calling setValue when
 // the full keypath is unreachable is a no-op.
 Observer.prototype.setValue = function (value) {
+
     if (isObject(this.target)) {
         adapters[this.key.i].set(this.target, this.key.path, value)
     }

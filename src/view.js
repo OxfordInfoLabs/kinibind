@@ -56,6 +56,7 @@ const trimStr = (str) => {
 
 const updateDynamicStringVariablesForView = (bindings, viewChange) => {
     if (viewChange && isObject(viewChange)) {
+
         if (Array.isArray(bindings)) {
             bindings.forEach(binding => {
                 const modelExpressions = getDynamicStringModelExpressions(binding.keypath);
@@ -104,6 +105,8 @@ export default class View {
         for (i = 0, len = elements.length; i < len; i++) {
             parseNode(this, elements[i])
         }
+
+
 
         this.bindings.sort(bindingComparator)
     }
@@ -178,6 +181,8 @@ export default class View {
 
     // Syncs up the view with the model by running the routines on all bindings.
     sync() {
+
+
         this.bindings.forEach(binding => {
             binding.sync()
         })
@@ -194,6 +199,8 @@ export default class View {
 
     // Updates the view's models along with any affected bindings.
     update(models = {}) {
+
+
         Object.keys(models).forEach(key => {
             this.models[key] = models[key]
         })

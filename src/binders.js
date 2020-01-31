@@ -47,10 +47,10 @@ const binders = {
     // Appends bound instances of the element in place for each item in the array.
     'each-*': {
         block: true,
-
         priority: 4000,
 
         bind: function (el) {
+
             if (!this.marker) {
                 this.marker = document.createComment(` kinibind: ${this.type} `)
                 this.iterated = []
@@ -73,6 +73,8 @@ const binders = {
         },
 
         routine: function (el, collection) {
+
+
             let modelName = this.arg
             collection = collection || []
             let indexProp = el.getAttribute('index-property') || '$index'
@@ -87,8 +89,10 @@ const binders = {
                 })
             }
 
-            if (this.iterated.length > collection.length) {
-                times(this.iterated.length - collection.length, () => {
+            let collectionLength = (collection instanceof Array) ? collection.length : Object.keys(collection).length;
+
+            if (this.iterated.length > collectionLength) {
+                times(this.iterated.length - collectionLength, () => {
                     let view = this.iterated.pop()
                     view.unbind()
                     this.marker.parentNode.removeChild(view.els[0])
@@ -114,6 +118,7 @@ const binders = {
                     data[key] = models[key]
                 }
             })
+
 
             this.iterated.forEach(view => {
                 view.update(data)
@@ -591,10 +596,23 @@ const binders = {
 
             let observer = this.observer;
 
+            let toggleValues = null;
+            if (el.getAttribute("toggle-values")) {
+                toggleValues = el.getAttribute("toggle-values").split(",");
+            }
+
             if (!this.callback) {
                 this.callback = function (event) {
                     event.stopPropagation();
-                    observer.setValue(!observer.value());
+
+                    if (toggleValues) {
+                        let position = toggleValues.indexOf(observer.value());
+                        position++;
+                        position = position % toggleValues.length;
+                        observer.setValue(toggleValues[position]);
+                    } else {
+                        observer.setValue(!observer.value());
+                    }
                 };
             }
 
@@ -710,6 +728,7 @@ function processEach(model, index, modelName, indexProp) {
     data[indexProp] = index
     data[modelName] = model
     let view = this.iterated[index]
+
 
     if (!view) {
 

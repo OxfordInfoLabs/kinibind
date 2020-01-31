@@ -128,6 +128,7 @@ function evaluateBooleanExpression(expression, value1, value2) {
             return isNaN(result) ? "" : result;
         },
         "IN": function (x, y) {
+            if (x == undefined) x = "undefined";
             return y.split(',').indexOf(x) > -1;
         },
         "CONTAINS": function (x, y) {
