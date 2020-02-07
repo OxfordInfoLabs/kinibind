@@ -38,12 +38,31 @@ export class Binding {
         this.formatterObservers = {}
         this.model = undefined
         this.subject = subject;
+        this.expression = false;
+        this.observers = {};
     }
 
     // Observes the object keypath
     observe(obj, keypath) {
         return new Observer(obj, keypath, this)
     }
+
+
+    // Observe an expression (i.e. all sub entities within the expression)
+    observeExpression(obj, expression) {
+
+        let matches = expression.matchAll(/[a-zA-Z0-9]+/g);
+
+        let expressions = [...matches];
+
+        expressions.forEach((item) => {
+            if (isNaN(item[0]))
+                this.observers[item[0]] = new Observer(obj, item[0], this);
+        });
+
+
+    }
+
 
     parseTarget() {
         if (this.keypath) {
@@ -58,8 +77,14 @@ export class Binding {
             } else if (token.type === 0) {
                 this.value = token.value
             } else {
-                this.observer = this.observe(this.view.models, token.value)
-                this.model = this.observer.target
+
+                if (token.value.match(/^[a-zA-Z0-9\.\[\]_\-]+$/)) {
+                    this.observer = this.observe(this.view.models, token.value)
+                    this.model = this.observer.target
+                } else {
+                    this.expression = true;
+                    this.observeExpression(this.view.models, token.value);
+                }
             }
         } else {
             this.value = undefined;
@@ -126,7 +151,15 @@ export class Binding {
     // with the supplied value formatted.
     set(value) {
 
-        if ((value instanceof Function) && !this.binder.function) {
+        if (this.expression) {
+            // Add all variables to scope
+            let variables = [];
+            for (var key in this.observers) {
+                variables.push('let ' + key + ' = this.observers["' + key + '"].value();');
+            }
+            let expression = variables.join(" ") + " value = eval(this.keypath);";
+            eval(expression);
+        } else if ((value instanceof Function) && !this.binder.function) {
             value = this.formattedValue(value.call(this.model))
         } else {
             value = this.formattedValue(value)

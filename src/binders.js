@@ -278,6 +278,7 @@ const binders = {
         },
 
         routine: function (el, value) {
+
             if (!!value !== this.attached) {
                 if (value) {
 

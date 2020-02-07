@@ -41,13 +41,47 @@
 <h2>Standalone</h2>
 {test.third}
 
-<div kb-show="test.first | eval '==' 'Hello'">
+<div kb-show="test.first == 'Hello'">
     Hello
 </div>
 
 <p>
-First = {test[first]}
+First = {test['first']}
 </p>
+
+
+<h2>Flexible conditionals</h2>
+
+First value: <input type="number" kb-value="value1" />
+Second value: <input type="number" kb-value="value2" />
+
+<br>
+
+Modulo is {value1 % value2}
+
+<p>The sum is <span kb-html="(value1 * 1) + (value2 * 1)"></span></p>
+<p>The product is <span kb-html="value1 * value2"></span></p>
+
+<br>
+
+<p kb-if="value1 > value2">The first value is bigger than the second value</p>
+<p kb-if="value2 > value1">The second value is bigger than the first value</p>
+<p kb-if="value1 == value2">The values are equal</p>
+<p kb-if="(value1 % 2 == 0) || (value2 % 2 == 0)">One of the values is even</p>
+
+
+<hr>
+
+
+<input type="text" kb-value="newline" />
+
+<br>
+Value is: {newline}
+
+<br>
+Length is: {(newline.length)}
+
+
 
 <script src="../dist/kinibind.js"></script>
 
@@ -59,7 +93,10 @@ First = {test[first]}
             goodbye: 'unset',
             tester: ["Hello", "Goodbye"],
             test: {"first": "Hello",
-            "second": "Goodbye"}
+            "second": "Goodbye"},
+            value1: 2,
+            value2: 4,
+            newline: ""
         });
 
     view.models.tester.push("Goodnight");

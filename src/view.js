@@ -89,9 +89,12 @@ export default class View {
 
     buildBinding(node, type, declaration, binder, arg) {
 
+        declaration = declaration.replace(/\|\|/g, "!!!!!");
         let pipes = declaration.match(DECLARATION_SPLIT).map(trimStr)
 
         let keypath = pipes.shift()
+
+        keypath = keypath.replace(/!!!!!/g, "||");
 
         this.bindings.push(new Binding(this, node, type, keypath, binder, arg, pipes, this.subject))
     }
