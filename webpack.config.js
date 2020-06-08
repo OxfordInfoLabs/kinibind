@@ -1,30 +1,45 @@
 const path = require('path');
 const webpack = require('webpack');
-
-const ROOT = path.resolve( __dirname, 'src' );
-const DESTINATION = path.resolve( __dirname, 'dist' );
+const ROOT = path.resolve(__dirname, 'ts');
+const DESTINATION = path.resolve(__dirname, 'dist');
 
 module.exports = {
     context: ROOT,
 
     entry: {
-        'kinibind': 'export.js'
+        'Kinibind': 'kinibind.ts'
+    },
+
+    module: {
+        rules: [
+            {
+                test: /\.tsx?$/,
+                use: [{
+                    loader: 'ts-loader',
+                    options: {
+                        "allowTsInNodeModules": true
+                    }
+
+                },
+                    'uglify-template-string-loader']
+            }
+        ]
     },
 
     output: {
-        library: 'kinibind',
+        library: 'Kinibind',
         libraryTarget: 'umd',
         libraryExport: 'default',
         filename: 'kinibind.js',
         path: DESTINATION
     },
-
     resolve: {
-        extensions: ['.js'],
+        extensions: ['.ts', '.js'],
         modules: [
             ROOT,
             'node_modules'
         ]
-    }
+    },
+    mode: "production"
 };
 

@@ -1,7 +1,7 @@
 {
   "name": "kinibind",
-  "description": "Data binding plus simple Ajax requests in HTML",
-  "version": "0.0.59",
+  "description": "Data binding framework building upon Tinybind",
+  "version": "0.0.60",
   "author": "Oxford Information Labs",
   "url": "https://github.com/OxfordInfoLabs/kinibind",
   "main": "./dist/kinibind.bundle.js",
@@ -19,20 +19,26 @@
     "url": "https://github.com/OxfordInfoLabs/kinibind"
   },
   "scripts": {
-    "test": "",
-    "build": "webpack --config webpack.config.js -p",
-    "watch": "webpack --config webpack.config.js -p --watch"
+    "watch": "webpack --config webpack.config.js --watch",
+    "build:production": "webpack --config webpack.config.js -p --display-modules",
+    "publish:project": "npm run build:production; bump patch; npm publish"
   },
   "devDependencies": {
     "@types/node": "^10.11.3",
+    "concurrently": "^4.1.0",
+    "node-sass": "^4.13.1",
     "source-map-loader": "0.2.3",
-    "webpack": "4.12.0",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.4.1",
+    "uglify-template-string-loader": "^1.1.1",
+    "uglifyjs-webpack-plugin": "^2.1.2",
+    "version-bump-prompt": "^5.0.1",
+    "webpack": "^4.41.6",
     "webpack-cli": "3.0.8",
     "webpack-dev-server": "3.1.11"
   },
   "dependencies": {
-    "lodash-es": "^4.17.11",
-    "rxjs": "^6.3.3",
-    "zepto-webpack": "^1.2.1"
+    "dayjs": "^1.8.28",
+    "tinybind": "^1.0.0"
   }
 }
