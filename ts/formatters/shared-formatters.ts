@@ -19,7 +19,9 @@ let SharedFormatters = {
             return value.length;
         }
         return false;
-    }
+    },
+
+
 }
 
 export default SharedFormatters;

@@ -3,6 +3,13 @@
  */
 let ArrayFormatters = {
 
+
+    item: function (value, index) {
+        if (value instanceof Array) {
+            return value[index];
+        }
+    },
+
     join: function (value, joinString) {
         if (value instanceof Array) {
             return value.join(joinString);

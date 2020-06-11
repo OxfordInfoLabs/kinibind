@@ -3,6 +3,10 @@
  */
 let ObjectFormatters = {
 
+    member: function (value, member) {
+        return value ? value[member] : null;
+    },
+
     keys: function (value) {
         return value ? Object.keys(value) : [];
     },
@@ -18,6 +22,8 @@ let ObjectFormatters = {
             return [];
         }
     }
+
+
 }
 
 export default ObjectFormatters;

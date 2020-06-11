@@ -37,24 +37,15 @@ export default class Kinibind {
 
 
     /**
-     * Get a parameter value
+     * Return the model for convenience
      *
-     * @param key
+     * @return Object
      */
-    public getModelItem(key) {
-        return this.boundContext.models[key];
+    public get model() {
+        return this.boundContext.models;
     }
 
 
-    /**
-     * Set a parameter value
-     *
-     * @param key
-     * @param value
-     */
-    public setModelItem(key, value) {
-        this.boundContext.models[key] = value;
-    }
 
 
     /**
@@ -129,8 +120,8 @@ export default class Kinibind {
         // Function argument formatter - allows for arbitrary args to
         // be passed to a custom function
         tinybind.formatters.args = function (fn) {
-            let args = Array.prototype.slice.call(arguments, 1)
-            return () => fn.apply(null, args)
+            let args = Array.prototype.slice.call(arguments, 1);
+            return (event) => fn.apply(null, args.concat([event]));
         }
     }
 
