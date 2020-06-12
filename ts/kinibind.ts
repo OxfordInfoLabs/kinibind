@@ -20,7 +20,10 @@ export default class Kinibind {
     private static configured = false;
 
     // Bound context from tinybind
-    private boundContext;
+    private boundContext = null;
+
+    // Keep tabs on existing bound elements to resolve sub tree issues.
+    private static boundContexts: any[] = [];
 
 
     /**
@@ -31,8 +34,24 @@ export default class Kinibind {
      */
     constructor(element, model = {}) {
 
-        // Bind the params
-        this.boundContext = Kinibind.binder.bind(element, model);
+        // Check whether the new element is contained within an existing bind.
+        // If so, converge with the parent and merge the model.
+        Kinibind.boundContexts.forEach(boundContext => {
+            if (boundContext.element.contains(element)) {
+                this.boundContext = boundContext.context;
+                Object.assign(boundContext.context.models, model);
+            }
+        });
+
+        // Bind the params if a new context
+        if (!this.boundContext)
+            this.boundContext = Kinibind.binder.bind(element, model);
+
+        // Add bound contexts to the static array for later parentage.
+        Kinibind.boundContexts.push({
+            element: element,
+            context: this.boundContext
+        });
     }
 
 
@@ -44,8 +63,6 @@ export default class Kinibind {
     public get model() {
         return this.boundContext.models;
     }
-
-
 
 
     /**
