@@ -9,6 +9,7 @@ import SharedFormatters from "./formatters/shared-formatters";
 import MathsFormatters from "./formatters/maths-formatters";
 import LogicFormatters from "./formatters/logic-formatters";
 import ObjectFormatters from "./formatters/object-formatters";
+import Each from "./binders/each";
 
 /**
  * Kinibind base class
@@ -162,6 +163,11 @@ export default class Kinibind {
 
         // Toggle binding allows for elements to set model on click.
         tinybind.binders["toggle"] = Toggle;
+
+
+        // Override the each binder to gracefully handle non-arrays as input
+        tinybind.binders["each-*"] = Each(tinybind.binders["each-*"]);
+
 
     }
 

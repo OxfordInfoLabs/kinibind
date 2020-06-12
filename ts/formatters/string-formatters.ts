@@ -5,7 +5,11 @@
 let StringFormatters = {
 
     concat: function (value, otherValue) {
-        return value + otherValue;
+        let string = "";
+        for (var arg = 0; arg < arguments.length; arg++){
+            string += arguments[arg];
+        }
+        return string;
     },
 
     split: function (value, splitCharacter = ",") {

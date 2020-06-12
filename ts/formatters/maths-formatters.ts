@@ -22,6 +22,20 @@ let MathsFormatters = {
 
     modulo: function (value, otherModel) {
         return value % otherModel;
+    },
+
+    decimalplaces: function (value, dp) {
+        return value.toFixed(dp);
+    },
+
+    floor: function (value) {
+        return Math.floor(value);
+    },
+    ceil: function (value) {
+        return Math.ceil(value);
+    },
+    round: function (value) {
+        return Math.round(value);
     }
 
 }
