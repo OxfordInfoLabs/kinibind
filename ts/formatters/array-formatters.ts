@@ -26,6 +26,18 @@ let ArrayFormatters = {
             });
         }
         return values;
+    },
+
+    slice: function (value, from, length) {
+        if (value instanceof Array) {
+            if (length) {
+                return value.slice(from, from + length);
+            } else {
+                return value.slice(from);
+            }
+        } else {
+            return [];
+        }
     }
 
 }
