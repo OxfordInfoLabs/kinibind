@@ -10,6 +10,7 @@ import MathsFormatters from "./formatters/maths-formatters";
 import LogicFormatters from "./formatters/logic-formatters";
 import ObjectFormatters from "./formatters/object-formatters";
 import Each from "./binders/each";
+import DefaultAdapter from "./adapters/default-adapter";
 
 /**
  * Kinibind base class
@@ -148,6 +149,13 @@ export default class Kinibind {
      * Initialise the built in adapters we need.
      */
     private static initialiseAdapters() {
+
+        // Extend default adapter with our extra logic.
+        tinybind.adapters[tinybind.rootInterface] = {
+            ...tinybind.adapters[tinybind.rootInterface],
+            ...DefaultAdapter
+        };
+
         tinybind.adapters['['] = ArrayAdapter;
     }
 

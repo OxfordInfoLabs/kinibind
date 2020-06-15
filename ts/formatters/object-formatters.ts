@@ -1,10 +1,14 @@
 /**
  * Object operation formatters
  */
+import Kinibind from "../kinibind";
+
 let ObjectFormatters = {
 
-    member: function (value, member) {
-        return value ? value[member] : null;
+    member: {
+        read: function (value, member) {
+            return value ? value[member] : null;
+        }
     },
 
     keys: function (value) {

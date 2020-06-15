@@ -1,0 +1,74 @@
+<html>
+
+<body>
+
+
+<div id="bound">
+
+    <h1>{title}</h1>
+
+
+    <ul>
+        <li kb-each-key="items | keys">
+            <b>{key}</b>: {items | member key | member 'Fruit'}
+        </li>
+    </ul>
+
+    <ul>
+        <li kb-each-item="array">
+            <b>{item}</b>
+        </li>
+    </ul>
+
+
+    <button type="button" kb-on-click="update">Update Model</button>
+
+
+    <div>
+        Green: <input type="text" kb-value="items.Green.Fruit">
+        Red: <input type="text" kb-value="items.Red.Fruit">
+        Yellow: <input type="text" kb-value="items.Yellow.Fruit">
+    </div>
+
+
+    {items.Green.Fruit}
+
+</div>
+
+
+<script type="text/javascript" src="../dist/kinibind.js"></script>
+
+
+<script type="text/javascript">
+
+    let bind = new Kinibind(document.getElementById("bound"), {
+        "title": "Welcome to the colour machine",
+        "items": {
+            "Green": {
+                "Fruit": "Apple"
+            },
+            "Red": {
+                "Fruit": "Strawberry"
+            },
+            "Yellow": {
+                "Fruit": "Banana"
+            }
+        },
+        "array": [
+            "Purple",
+            "Pink",
+            "Lilac"
+        ],
+        "update": () => {
+            bind.model.items.Green.Fruit = "Lime";
+            bind.model.items.Orange = {Fruit: "Orange"};
+            bind.model.array.push("Indigo");
+        }
+    });
+
+
+</script>
+
+</body>
+
+</html>
