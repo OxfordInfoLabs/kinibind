@@ -64,7 +64,7 @@ let DefaultAdapter = {
 
 
             // Set up parent object structure for firing parent events when children change or are added.
-            if (typeof (obj[keypath]) === 'object' && !(obj[keypath] instanceof Array)) {
+            if (typeof (obj[keypath]) === 'object' && !(obj[keypath] instanceof Array) && obj[keypath] !== null) {
                 let data = this.weakReference(obj[keypath]);
                 data.parentObject = obj;
                 data.keypath = keypath;
