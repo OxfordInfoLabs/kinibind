@@ -58,12 +58,32 @@ export default class Kinibind {
 
 
     /**
-     * Return the model for convenience
+     * Return the model for manipulation in code
      *
      * @return Object
      */
     public get model() {
         return this.boundContext.models;
+    }
+
+
+    /**
+     * Add a new property to a model object - required to make it reactive
+     *
+     * @param modelObject
+     * @param propertyName
+     * @param propertyValue
+     */
+    public addNewProperty(modelObject, propertyName, propertyValue) {
+
+        // Observe the new property
+        tinybind.adapters[tinybind.rootInterface].observe(modelObject, propertyName, {
+            sync: () => {
+            }
+        });
+
+        // Set the value
+        modelObject[propertyName] = propertyValue;
     }
 
 

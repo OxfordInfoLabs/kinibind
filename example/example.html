@@ -61,7 +61,7 @@
         ],
         "update": () => {
             bind.model.items.Green.Fruit = "Lime";
-            bind.model.items.Orange = {Fruit: "Orange"};
+            bind.addNewProperty(bind.model.items, "Orange", {Fruit: "Orange"});
             bind.model.array.push("Indigo");
         }
     });
