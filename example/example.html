@@ -35,6 +35,50 @@
 
     {"hello" | hash}
 
+
+    <div style="margin-top:30px">
+
+        <div style="display: grid; grid-template-columns: 100px 50px">
+
+            <div >
+                <label style="display:block;">
+                    All values
+                    <input type="radio" name="blogcategory" value="" kb-checked="blogFilters.category.value" />
+                </label>
+                <label kb-each-category="blog | memberValues 'category' | mergeValues | distinct" style="display:block;">
+                    {category}
+                    <input type="radio" name="blogcategory" kb-value="category" kb-checked="blogFilters.category.value" />
+                </label>
+            </div>
+
+            <div>
+                <input type="text" placeholder="Search blogs" kb-value="blogFilters.titleSearch.value"/>
+                <input type="date" placeholder="yyyy-mm-dd" kb-value="blogFilters.fromDate.value" />
+                <input type="date" placeholder="yyyy-mm-dd" kb-value="blogFilters.toDate.value" />
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr kb-each-blog="blog | filter blogFilters | sort 'title' 'asc' | slice 0 3">
+                        <td>{blog.title}</td>
+                        <td>{blog.category | join}</td>
+                        <td>{blog.date}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 
@@ -54,6 +98,45 @@
             },
             "Yellow": {
                 "Fruit": "Banana"
+            }
+        },
+        "blog": [
+            {
+                "title": "Hello world",
+                "category": ["Maths", "English"],
+                "date": "2012-01-01"
+            }, {
+                "title": "Goodbye Sun",
+                "category": ["Science", "English"],
+                "date": "2014-01-01"
+            }, {
+                "title": "Calculus",
+                "category": ["Maths"],
+                "date": "2011-01-01"
+            }, {
+                "title": "Finkle",
+                "category": ["English", "Science"],
+                "date": "2013-01-01"
+            }, {
+                "title": "Hello moon",
+                "category": ["Science"],
+                "date": "2012-01-01"
+            }
+
+        ],
+        "blogFilters": {
+            "titleSearch": {
+                "member": "title",
+                "type": "like"
+            },
+            "category": {},
+            "fromDate": {
+                "member": "date",
+                "type": "gte"
+            },
+            "toDate": {
+                "member": "date",
+                "type": "lte"
             }
         },
         "array": [

@@ -4,12 +4,11 @@
 let SharedFormatters = {
 
     contains: function (value, contains) {
-        if (value instanceof Array)
+        if (value) {
             return value.indexOf(contains) >= 0
-        else if (value) {
-            return value.includes(contains);
+        } else {
+            return false;
         }
-        return false;
     },
 
     length: function (value, contains) {

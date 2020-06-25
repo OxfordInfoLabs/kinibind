@@ -1,6 +1,8 @@
 /**
  * Array formatting functions - operate solely on array objects.
  */
+import ArrayFilterer from "../util/array-filterer";
+
 let ArrayFormatters = {
 
 
@@ -26,6 +28,61 @@ let ArrayFormatters = {
             });
         }
         return values;
+    },
+
+
+    // Merge all values in an array (assumed to be arrays) into a single array
+    mergeValues: function (value) {
+        let values = [];
+        if (value instanceof Array) {
+            value.forEach(arrayItem => {
+                if (arrayItem instanceof Array) {
+                    values = values.concat(arrayItem);
+                }
+            });
+        }
+
+        return values;
+    },
+
+    distinct: function (value) {
+        if (value instanceof Array) {
+            return value.filter((value, index, self) => {
+                return self.indexOf(value) === index;
+            });
+        }
+    },
+
+    filter: function (value, filter, filterValue = null, filterType = "equals") {
+
+        if (value instanceof Array) {
+
+
+            let filterObject = {};
+            if (filterValue) {
+
+                filterObject[filter] = {
+                    value: filterValue,
+                    type: filterType
+                };
+            } else {
+                filterObject = filter;
+            }
+
+            let filterer = new ArrayFilterer(filterObject);
+
+            return value.filter(item => {
+                return filterer.filterArray(item);
+            });
+
+        } else {
+            return value;
+        }
+
+    },
+
+    sort: function (value) {
+        return value;
     },
 
     slice: function (value, from, length) {
