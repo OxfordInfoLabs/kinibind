@@ -66,9 +66,10 @@
                     </thead>
                     <tbody>
                     <tr kb-each-blog="blog | filter blogFilters | sort 'title' 'asc' | slice 0 3">
-                        <td>{blog.title}</td>
+                        <td kb-set-indicator="blog.date | gt '2012-01-01' | ternary 'New' 'Old'">{blog.title}</td>
                         <td>{blog.category | join}</td>
                         <td>{blog.date}</td>
+                        <td>{indicator}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -79,7 +80,36 @@
 
     </div>
 
+
+    <h2>Set example</h2>
+
+    <div>
+
+        <div>
+            <label>Value 1 <input type="checkbox" kb-checked="value1"></label>
+        </div>
+
+        <div>
+            <label>Value 2 <input type="checkbox" kb-checked="value2"></label>
+        </div>
+
+        <div>
+            <label>Value 3 <input type="checkbox" kb-checked="value3"></label>
+        </div>
+
+
+        <span kb-set-clause="value1 | or value2"></span>
+
+        <br>
+        Value of (1 or 2) and 3 is: <b>{clause | and value3 | ternary 'Yippee' 'Nada'}</b>
+    </div>
+
+
 </div>
+
+
+
+
 
 
 <script type="text/javascript" src="../dist/kinibind.js"></script>

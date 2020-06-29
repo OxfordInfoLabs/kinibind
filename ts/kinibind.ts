@@ -1,5 +1,5 @@
 import tinybind from "tinybind";
-import CheckedIf from "./binders/checked-if";
+import Checked from "./binders/checked";
 import Toggle from "./binders/toggle";
 import ArrayAdapter from "./adapters/array-adapter";
 import DateFormatters from "./formatters/date-formatters";
@@ -11,6 +11,8 @@ import LogicFormatters from "./formatters/logic-formatters";
 import ObjectFormatters from "./formatters/object-formatters";
 import Each from "./binders/each";
 import DefaultAdapter from "./adapters/default-adapter";
+import Value from "./binders/value";
+import Set from "./binders/set";
 
 /**
  * Kinibind base class
@@ -185,9 +187,15 @@ export default class Kinibind {
      */
     private static initialiseBinders() {
 
-        // One way checked if binder
-        tinybind.binders["checked-if"] = CheckedIf;
+        // Extends checked binder to allow for one way binding
+        tinybind.binders["checked"] = Checked(tinybind.binders["checked"]);
 
+        // Extends value binder to allow for one way binding
+        tinybind.binders["value"] = Value(tinybind.binders["value"]);
+
+
+        // Set binding sets interim values
+        tinybind.binders["set-*"] = Set;
 
         // Toggle binding allows for elements to set model on click.
         tinybind.binders["toggle"] = Toggle;
