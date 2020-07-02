@@ -1,7 +1,7 @@
 {
   "name": "kinibind",
   "description": "Data binding framework building upon Tinybind",
-  "version": "0.0.71",
+  "version": "0.0.78",
   "author": "Oxford Information Labs",
   "url": "https://github.com/OxfordInfoLabs/kinibind",
   "main": "./dist/kinibind.bundle.js",
