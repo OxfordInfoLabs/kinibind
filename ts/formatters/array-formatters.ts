@@ -18,6 +18,26 @@ let ArrayFormatters = {
         }
     },
 
+    concat: function (value, otherArray) {
+        if (value instanceof Array && otherArray instanceof Array) {
+            return value.concat(otherArray);
+        }
+
+        return value;
+    },
+
+    slice: function (value, from, length) {
+        if (value instanceof Array) {
+            if (length) {
+                return value.slice(from, from + length);
+            } else {
+                return value.slice(from);
+            }
+        } else {
+            return [];
+        }
+    },
+
     memberValues: function (value, member) {
         let values = [];
         if (value instanceof Array) {
@@ -83,18 +103,6 @@ let ArrayFormatters = {
 
     sort: function (value) {
         return value;
-    },
-
-    slice: function (value, from, length) {
-        if (value instanceof Array) {
-            if (length) {
-                return value.slice(from, from + length);
-            } else {
-                return value.slice(from);
-            }
-        } else {
-            return [];
-        }
     }
 
 }

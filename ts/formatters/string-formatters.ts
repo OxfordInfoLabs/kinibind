@@ -6,7 +6,7 @@ import {sha256} from 'js-sha256';
  */
 let StringFormatters = {
 
-    concat: function (value, otherValue) {
+    append: function (value, otherValue) {
         let string = "";
         for (var arg = 0; arg < arguments.length; arg++) {
             string += arguments[arg];
