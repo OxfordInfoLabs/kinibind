@@ -43,7 +43,16 @@ export default class Kinibind {
         Kinibind.boundContexts.forEach(boundContext => {
             if (boundContext.element.contains(element)) {
                 this.boundContext = boundContext.context;
-                Object.assign(boundContext.context.models, model);
+
+                // Only assign keys which are not present in parent
+                Object.keys(model).forEach(key => {
+                    if (!boundContext.context.models[key]) {
+                        boundContext.context.models[key] = model[key];
+                    }
+                });
+
+                model["_kinibindInherit"] = true;
+
             }
         });
 
