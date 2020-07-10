@@ -31,7 +31,9 @@ let Toggle = {
             };
         }
 
-        el.addEventListener("click", this.callback);
+        let toggleEvent = el.getAttribute("toggle-event") ? el.getAttribute("toggle-event") : "click";
+
+        el.addEventListener(toggleEvent, this.callback);
 
     },
 
