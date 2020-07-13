@@ -24,7 +24,15 @@ let Toggle = {
                     let position = toggleValues.indexOf(observer.value());
                     position++;
                     position = position % toggleValues.length;
-                    observer.setValue(toggleValues[position]);
+
+                    let value = toggleValues[position];
+                    if (value == "true") {
+                        value = true;
+                    } else if (value == "false") {
+                        value = false;
+                    }
+
+                    observer.setValue(value);
                 } else {
                     observer.setValue(!observer.value());
                 }
