@@ -13,6 +13,7 @@ import Each from "./binders/each";
 import DefaultAdapter from "./adapters/default-adapter";
 import Value from "./binders/value";
 import Set from "./binders/set";
+import FunctionFormatters from "./formatters/function-formatters";
 
 /**
  * Kinibind base class
@@ -163,16 +164,12 @@ export default class Kinibind {
             ...SharedFormatters,
             ...ObjectFormatters,
             ...MathsFormatters,
-            ...LogicFormatters
+            ...LogicFormatters,
+            ...FunctionFormatters
         };
 
 
-        // Function argument formatter - allows for arbitrary args to
-        // be passed to a custom function
-        tinybind.formatters.args = function (fn) {
-            let args = Array.prototype.slice.call(arguments, 1);
-            return (event) => fn.apply(null, args.concat([event]));
-        }
+
     }
 
 
