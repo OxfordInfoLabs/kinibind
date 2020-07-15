@@ -80,8 +80,7 @@ let ArrayFormatters = {
 
 
             let filterObject = {};
-            if (filterValue) {
-
+            if (typeof filter == "string") {
                 filterObject[filter] = {
                     value: filterValue,
                     type: filterType
