@@ -1,3 +1,4 @@
+import './util/polyfills';
 import tinybind from "tinybind";
 import Checked from "./binders/checked";
 import Toggle from "./binders/toggle";

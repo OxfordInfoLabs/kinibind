@@ -2,24 +2,25 @@
  * Array formatting functions - operate solely on array objects.
  */
 import ArrayFilterer from "../util/array-filterer";
+import ArrayProxy from "../proxy/array-proxy";
 
 let ArrayFormatters = {
 
 
     item: function (value, index) {
-        if (value instanceof Array) {
+        if (ArrayFormatters.__ensureArray(value)) {
             return value[index];
         }
     },
 
     join: function (value, joinString) {
-        if (value instanceof Array) {
+        if (ArrayFormatters.__ensureArray(value)) {
             return value.join(joinString);
         }
     },
 
     concat: function (value, otherArray) {
-        if (value instanceof Array && otherArray instanceof Array) {
+        if (ArrayFormatters.__ensureArray(value) && ArrayFormatters.__ensureArray(otherArray)) {
             return value.concat(otherArray);
         }
 
@@ -27,7 +28,7 @@ let ArrayFormatters = {
     },
 
     slice: function (value, from, length) {
-        if (value instanceof Array) {
+        if (ArrayFormatters.__ensureArray(value)) {
             if (length) {
                 return value.slice(from, from + length);
             } else {
@@ -40,7 +41,7 @@ let ArrayFormatters = {
 
     memberValues: function (value, member) {
         let values = [];
-        if (value instanceof Array) {
+        if (ArrayFormatters.__ensureArray(value)) {
             value.forEach(value => {
                 if (value instanceof Object) {
                     values.push(value[member]);
@@ -54,7 +55,7 @@ let ArrayFormatters = {
     // Merge all values in an array (assumed to be arrays) into a single array
     mergeValues: function (value) {
         let values = [];
-        if (value instanceof Array) {
+        if (ArrayFormatters.__ensureArray(value)) {
             value.forEach(arrayItem => {
                 if (arrayItem instanceof Array) {
                     values = values.concat(arrayItem);
@@ -66,7 +67,7 @@ let ArrayFormatters = {
     },
 
     distinct: function (value) {
-        if (value instanceof Array) {
+        if (ArrayFormatters.__ensureArray(value)) {
             return value.filter((value, index, self) => {
                 return self.indexOf(value) === index;
             });
@@ -75,7 +76,7 @@ let ArrayFormatters = {
 
     filter: function (value, filter, filterValue = null, filterType = "equals") {
 
-        if (value instanceof Array) {
+        if (ArrayFormatters.__ensureArray(value)) {
 
 
             let filterObject = {};
@@ -103,6 +104,10 @@ let ArrayFormatters = {
 
     sort: function (value) {
         return value;
+    },
+
+    __ensureArray: function (value) {
+        return value instanceof Array || value instanceof Proxy
     }
 
 }
