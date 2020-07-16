@@ -10,7 +10,7 @@
 
     <ul>
         <li kb-each-key="items | keys">
-            <b>{key}</b>: {items | member key | member 'Fruit'}
+            <b>{key}</b>: {items | member key | member 'Fruit'} - {items | member key | member 'Text' | member 'Paragraph'}
         </li>
     </ul>
 
@@ -176,8 +176,13 @@
         ],
         "update": () => {
             bind.model.items.Green.Fruit = "Lime";
-            bind.addNewProperty(bind.model.items, "Orange", {Fruit: "Orange"});
+            bind.addNewProperty(bind.model.items, "Orange", {Fruit: "Orange", "Text": {
+                "Paragraph": "Pooch"
+            }});
+            bind.model.items.Orange.Text.Paragraph = "Doggy";
             bind.model.array.push("Indigo");
+            console.log(bind.model);
+
         }
     });
 

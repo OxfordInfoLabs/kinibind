@@ -19,6 +19,7 @@ let DefaultAdapter = {
             if (!desc || !(desc.get || desc.set || !desc.configurable)) {
                 value = obj[keypath];
 
+
                 Object.defineProperty(obj, keypath, {
                     enumerable: true,
                     get: function get() {
@@ -48,6 +49,9 @@ let DefaultAdapter = {
                             }
 
 
+                            // Observe recursively
+                            _this2.observeObject(newValue, _this2);
+
                             // Call parent updates
                             let parentData = _this2.weakReference(obj);
                             if (parentData.parentObject) {
@@ -62,9 +66,9 @@ let DefaultAdapter = {
 
             }
 
-
             // Set up parent object structure for firing parent events when children change or are added.
             if (typeof (obj[keypath]) === 'object' && !(obj[keypath] instanceof Array) && obj[keypath] !== null) {
+
                 let data = this.weakReference(obj[keypath]);
                 data.parentObject = obj;
                 data.keypath = keypath;
@@ -77,9 +81,24 @@ let DefaultAdapter = {
             callbacks[keypath].push(callback);
         }
 
+
         this.observeArray(obj[keypath], obj.__rv, keypath);
 
 
+    },
+    observeObject: function(object, observer){
+        // Recursively observe new items.
+        if (typeof object === 'object'){
+            for (var key in object) {
+                observer.observe(object, key, {
+                    sync: () => {
+                    }
+                });
+
+                // Call recursively
+                observer.observeObject(object[key], observer);
+            }
+        }
     }
 };
 
