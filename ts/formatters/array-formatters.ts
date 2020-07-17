@@ -130,7 +130,7 @@ let ArrayFormatters = {
                     }
 
                     let newSort: any = {member: member};
-                    newSort.direction = (arguments.length < i + 1 ? arguments[i + 1] : direction).toLowerCase();
+                    newSort.direction = ((arguments.length > i + 1) ? arguments[i + 1] : direction).toLowerCase();
                     sortData.push(newSort);
                 }
             } else {
@@ -138,8 +138,8 @@ let ArrayFormatters = {
             }
 
 
-            // Use sort data to sort first and second element
-            return value.sort((firstElement, secondElement) => {
+
+            let sortCallback = (firstElement, secondElement) => {
                 for (var i = 0; i < sortData.length; i++) {
                     let item = sortData[i];
 
@@ -156,8 +156,15 @@ let ArrayFormatters = {
 
                 return 0;
 
-            });
+            };
 
+            sortCallback["sortData"] = sortData;
+
+            // Use sort data to sort first and second element
+            return value.sort(sortCallback);
+
+        } else {
+            return value;
         }
     },
 

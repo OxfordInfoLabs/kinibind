@@ -14,6 +14,7 @@ export default abstract class ArrayProxy {
 
     // Static result cache for results by hash.
     private static resultCache = {};
+    private static fetchedResults = {};
 
     // Parent proxy
     protected parentProxy: ArrayProxy = null;
@@ -37,6 +38,7 @@ export default abstract class ArrayProxy {
      */
     public slice(from: number, to?: number) {
 
+
         let newFilterData: any = {offset: from};
         if (to) {
             newFilterData.limit = to - from;
@@ -55,6 +57,21 @@ export default abstract class ArrayProxy {
     public filter(callback) {
 
         let newFilterData = {filters: {...this.filterQuery.filters, ...callback.filters}};
+        return new ForwardingArrayProxy(this, newFilterData);
+
+    }
+
+
+    /**
+     * Implement sorting
+     *
+     * @param callback
+     */
+    public sort(callback) {
+        let newFilterData: any = {
+            sortOrders: this.filterQuery.sortOrders.concat(callback.sortData)
+        };
+
         return new ForwardingArrayProxy(this, newFilterData);
 
     }
@@ -125,12 +142,12 @@ export default abstract class ArrayProxy {
 
     // Load data
     private loadData() {
-        if (!ArrayProxy.resultCache[this.filterQuery.hash]) {
-            ArrayProxy.resultCache[this.filterQuery.hash] = new FilteredResults([], 0);
+        let hash = this.filterQuery.hash;
+        if (!ArrayProxy.fetchedResults[hash]) {
+            ArrayProxy.fetchedResults[hash] = 1;
             this.filterResults(this.filterQuery).then(results => {
-                ArrayProxy.resultCache[this.filterQuery.hash] = results;
-                let parentProxy = this.parentProxy ? this.parentProxy : this;
-                parentProxy.timestamp = new Date().toUTCString();
+                ArrayProxy.resultCache[hash] = results;
+                this.timestamp = new Date().toUTCString();
             });
         }
     }
@@ -158,6 +175,7 @@ class ForwardingArrayProxy extends ArrayProxy {
      */
     constructor(parentProxy: any, newFilterData: any) {
         super();
+
         this.parentProxy = parentProxy;
         let filterQueryData = {...parentProxy.filterQuery, ...newFilterData};
         this.filterQuery = new FilterQuery(filterQueryData);

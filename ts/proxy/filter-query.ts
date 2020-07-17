@@ -9,7 +9,7 @@ export default class FilterQuery {
     public filters: any = {};
 
     // Sort orders
-    public sortOrders: any = {};
+    public sortOrders: any = [];
 
     // Offset
     public offset: number = 0;
@@ -33,11 +33,17 @@ export default class FilterQuery {
         let filterString = "";
 
         // @ts-ignore
-        Object.values(this.filters).forEach((value:any) => {
+        Object.values(this.filters).forEach((value: any) => {
             filterString += value.value + "|";
         });
 
+        let sortString = "";
+        this.sortOrders.forEach(sort => {
+            sortString += sort.member + sort.direction + "|";
+        });
+
+
         // @ts-ignore
-        return sha256(filterString + Object.values(this.sortOrders).join("|") + String(this.offset) + String(this.limit));
+        return sha256(filterString + sortString + String(this.offset) + String(this.limit));
     }
 }
