@@ -106,7 +106,7 @@ let ArrayFormatters = {
     },
 
     __ensureArray: function (value) {
-        return value instanceof Array || value instanceof Proxy
+        return value instanceof Array || value instanceof ArrayProxy
     }
 
 }

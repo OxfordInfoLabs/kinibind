@@ -26,32 +26,31 @@ export default abstract class ArrayProxy {
 
 
     /**
-     * Create an instance of this Array Proxy
+     * Override forEach function
+     *
+     * @param callback
      */
-    public static create(sourceUrl) {
-
-        // @ts-ignore
-        let instance = new this();
-        let object = [];
-
-        return new Proxy(object, instance);
-
+    public forEach(callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any): void {
+        this.loadData();
+        Array.prototype.forEach.call(this.results.results, callbackfn, thisArg);
     }
 
 
-    public get(target, property) {
-
-        // Handle special internal property from framework
-        if (property == "__rv") {
-            return target["__rv"];
-        }
-
-        // Pass through everything else.
-        return this.results.results[property];
-
-
+    /**
+     * Get length for array
+     */
+    public get length() {
+        this.loadData();
+        return this.results.results.length;
     }
 
+    // Load data
+    private loadData() {
+        this.filterResults(this.filters, this.sortOrders, this.offset, this.limit).then(results => {
+            this.results = results;
+            this.currentFilterHash = Math.random();
+        });
+    }
 
     /**
      * Worker method to be implemented by sub classes.  This should obtain the results and return the data

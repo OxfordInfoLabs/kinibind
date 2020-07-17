@@ -8,7 +8,7 @@ export default function Each(eachBinder) {
     eachBinder.routine = function (el, collection) {
 
 
-        if (!Array.isArray(collection) && !(collection && collection.forEach)) {
+        if (!Array.isArray(collection) && !(collection instanceof ArrayProxy)) {
             collection = [];
         }
 

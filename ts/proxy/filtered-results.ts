@@ -1,6 +1,6 @@
 export default class FilteredResults {
 
-    private _results: [];
+    private _results:  any[];
     private _totalCount;
 
     /**
@@ -9,7 +9,7 @@ export default class FilteredResults {
      * @param results
      * @param totalCount
      */
-    constructor(results: [], totalCount) {
+    constructor(results: any[], totalCount) {
         this._results = results;
         this._totalCount = totalCount;
     }
@@ -17,7 +17,7 @@ export default class FilteredResults {
     /**
      * Get the results as an array
      */
-    get results(): [] {
+    get results():  any[] {
         return this._results;
     }
 
