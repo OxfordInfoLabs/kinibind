@@ -22,7 +22,7 @@ if (window.Element && !Element.prototype.closest) {
 }
 
 // Includes function
-String.prototype.includes = function (str) {
+String.prototype["includes"] = function (str) {
     var returnValue = false;
 
     if (this.indexOf(str) !== -1) {
