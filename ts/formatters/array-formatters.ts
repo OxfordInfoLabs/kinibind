@@ -28,6 +28,11 @@ let ArrayFormatters = {
     },
 
     slice: function (value, from, length) {
+
+        // Convert to numbers
+        from = Number(from);
+        length = length ? Number(length) : null;
+
         if (ArrayFormatters.__ensureArray(value)) {
             if (length) {
                 return value.slice(from, from + length);
@@ -91,9 +96,13 @@ let ArrayFormatters = {
 
             let filterer = new ArrayFilterer(filterObject);
 
-            return value.filter(item => {
+            let callback = item => {
                 return filterer.filterArray(item);
-            });
+            };
+
+            callback["filters"] = filterObject;
+
+            return value.filter(callback);
 
         } else {
             return value;
@@ -101,8 +110,61 @@ let ArrayFormatters = {
 
     },
 
-    sort: function (value) {
-        return value;
+    sort: function (value, sortBy) {
+
+        if (ArrayFormatters.__ensureArray(value)) {
+
+            // Determine sort mode
+            let sortData = [];
+            if (typeof sortBy == "string") {
+
+                for (var i = 1; i < arguments.length; i += 2) {
+
+                    let member = arguments[i];
+                    let direction = 'asc';
+
+                    let splitMember = member.split(" ");
+                    if (splitMember.length == 2) {
+                        member = splitMember[0];
+                        direction = splitMember[1];
+                    }
+
+                    let newSort: any = {member: member};
+                    newSort.direction = (arguments.length < i + 1 ? arguments[i + 1] : direction).toLowerCase();
+                    sortData.push(newSort);
+                }
+            } else {
+                sortData = sortBy;
+            }
+
+
+            // Use sort data to sort first and second element
+            return value.sort((firstElement, secondElement) => {
+                for (var i = 0; i < sortData.length; i++) {
+                    let item = sortData[i];
+
+                    // Skip this check if the two match
+                    if (firstElement[item.member] == secondElement[item.member])
+                        continue;
+
+                    if (item.direction == "asc") {
+                        return firstElement[item.member] < secondElement[item.member] ? -1 : 1;
+                    } else {
+                        return firstElement[item.member] > secondElement[item.member] ? -1 : 1;
+                    }
+                }
+
+                return 0;
+
+            });
+
+        }
+    },
+
+    totalCount: function (value) {
+        if (value instanceof ArrayProxy) {
+            return value.totalCount;
+        }
     },
 
     __ensureArray: function (value) {

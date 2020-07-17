@@ -10,7 +10,8 @@
 
     <ul>
         <li kb-each-key="items | keys">
-            <b>{key}</b>: {items | member key | member 'Fruit'} - {items | member key | member 'Text' | member 'Paragraph'}
+            <b>{key}</b>: {items | member key | member 'Fruit'} - {items | member key | member 'Text' | member
+            'Paragraph'}
         </li>
     </ul>
 
@@ -40,32 +41,34 @@
 
         <div style="display: grid; grid-template-columns: 100px 50px">
 
-            <div >
+            <div>
                 <label style="display:block;">
                     All values
-                    <input type="radio" name="blogcategory" value="" kb-checked="blogFilters.category.value" />
+                    <input type="radio" name="blogcategory" value="" kb-checked="blogFilters.category.value"/>
                 </label>
-                <label kb-each-category="blog | memberValues 'category' | mergeValues | distinct" style="display:block;">
+                <label kb-each-category="blog | memberValues 'category' | mergeValues | distinct"
+                       style="display:block;">
                     {category}
-                    <input type="radio" name="blogcategory" kb-value="category" kb-checked="blogFilters.category.value" />
+                    <input type="radio" name="blogcategory" kb-value="category"
+                           kb-checked="blogFilters.category.value"/>
                 </label>
             </div>
 
             <div>
                 <input type="text" placeholder="Search blogs" kb-value="blogFilters.titleSearch.value"/>
-                <input type="date" placeholder="yyyy-mm-dd" kb-value="blogFilters.fromDate.value" />
-                <input type="date" placeholder="yyyy-mm-dd" kb-value="blogFilters.toDate.value" />
+                <input type="date" placeholder="yyyy-mm-dd" kb-value="blogFilters.fromDate.value"/>
+                <input type="date" placeholder="yyyy-mm-dd" kb-value="blogFilters.toDate.value"/>
 
                 <table>
                     <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Date</th>
+                        <th kb-toggle="sortmember" toggle-values="title desc,title asc">Title</th>
+                        <th kb-toggle="sortmember" toggle-values="category asc,category desc">Category</th>
+                        <th kb-toggle="sortmember" toggle-values="date asc,date desc">Date</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr kb-each-blog="blog | filter blogFilters | sort 'title' 'asc' | slice 0 3">
+                    <tr kb-each-blog="blog | filter blogFilters | sort sortmember | slice 0 3">
                         <td kb-set-indicator="blog.date | gt '2012-01-01' | ternary 'New' 'Old'">{blog.title}</td>
                         <td>{blog.category | join}</td>
                         <td>{blog.date}</td>
@@ -106,10 +109,6 @@
 
 
 </div>
-
-
-
-
 
 
 <script type="text/javascript" src="../dist/kinibind.js"></script>
@@ -169,6 +168,9 @@
                 "type": "lte"
             }
         },
+
+        "sortmember": "title asc",
+
         "array": [
             "Purple",
             "Pink",
@@ -176,9 +178,11 @@
         ],
         "update": () => {
             bind.model.items.Green.Fruit = "Lime";
-            bind.addNewProperty(bind.model.items, "Orange", {Fruit: "Orange", "Text": {
-                "Paragraph": "Pooch"
-            }});
+            bind.addNewProperty(bind.model.items, "Orange", {
+                Fruit: "Orange", "Text": {
+                    "Paragraph": "Pooch"
+                }
+            });
             bind.model.items.Orange.Text.Paragraph = "Doggy";
             bind.model.array.push("Indigo");
             console.log(bind.model);

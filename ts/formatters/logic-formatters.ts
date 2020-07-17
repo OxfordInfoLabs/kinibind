@@ -51,6 +51,16 @@ let LogicFormatters = {
     // Ternary expression
     ternary: function (expression, trueValue, falseValue) {
         return expression ? trueValue : falseValue;
+    },
+
+    // Fill an array with numbers from the from to the to
+    // for looping purposes
+    countArray: function (from, to) {
+        let countArray = [];
+        for (var i = from; i <= to; i++) {
+            countArray.push(i);
+        }
+        return countArray;
     }
 
 

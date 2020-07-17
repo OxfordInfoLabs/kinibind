@@ -2,37 +2,93 @@
  * Filtered proxy object
  */
 import FilteredResults from "./filtered-results";
+import FilterQuery from "./filter-query";
 
 export default abstract class ArrayProxy {
 
-    // Filters
-    private filters: any = {};
+    // Blank query object
+    protected filterQuery: FilterQuery = new FilterQuery();
 
-    // Sort orders
-    private sortOrders: any = {};
+    // Update timestamp
+    private _timestamp = null;
 
-    // Offset
-    private offset: number = 0;
+    // Static result cache for results by hash.
+    private static resultCache = {};
 
-    // Limit
-    private limit: number = 1000000000;
-
-    // Current Filter Hash
-    private currentFilterHash = null;
+    // Parent proxy
+    protected parentProxy: ArrayProxy = null;
 
 
-    // Latest filtered results
-    private results: FilteredResults = new FilteredResults([], 0);
+    // Ripple timestamp value up to top.
+    public set timestamp(newValue) {
+        if (this.parentProxy) {
+            this.parentProxy.timestamp = newValue;
+        } else {
+            this._timestamp = newValue;
+        }
+    }
 
 
     /**
-     * Override forEach function
+     * Implement slicing
+     *
+     * @param from
+     * @param to
+     */
+    public slice(from: number, to?: number) {
+
+        let newFilterData: any = {offset: from};
+        if (to) {
+            newFilterData.limit = to - from;
+        }
+
+        // Return a new forwarding array proxy
+        return new ForwardingArrayProxy(this, newFilterData);
+    }
+
+
+    /**
+     * Implement filtering
+     *
+     * @param callback
+     */
+    public filter(callback) {
+
+        let newFilterData = {filters: {...this.filterQuery.filters, ...callback.filters}};
+        return new ForwardingArrayProxy(this, newFilterData);
+
+    }
+
+
+    /**
+     * Implement join
+     *
+     * @param joinString
+     */
+    public join(joinString: string) {
+        this.loadData();
+        return this.loadedResults.join(joinString);
+    }
+
+
+    /**
+     * Implement concat
+     *
+     * @param otherArray
+     */
+    public concat(otherArray) {
+        this.loadData();
+        return this.loadedResults.concat(otherArray);
+    }
+
+    /**
+     * Implement forEach for looping
      *
      * @param callback
      */
     public forEach(callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any): void {
         this.loadData();
-        Array.prototype.forEach.call(this.results.results, callbackfn, thisArg);
+        Array.prototype.forEach.call(this.loadedResults, callbackfn, thisArg);
     }
 
 
@@ -41,27 +97,76 @@ export default abstract class ArrayProxy {
      */
     public get length() {
         this.loadData();
-        return this.results.results.length;
+        return this.loadedResults.length;
     }
+
+
+    /**
+     * Get total count if available
+     */
+    public get totalCount() {
+        this.loadData();
+        if (ArrayProxy.resultCache[this.filterQuery.hash]) {
+            return ArrayProxy.resultCache[this.filterQuery.hash].totalCount;
+        } else {
+            return "";
+        }
+    }
+
+    // Get loaded results
+    private get loadedResults() {
+        if (ArrayProxy.resultCache[this.filterQuery.hash]) {
+            return ArrayProxy.resultCache[this.filterQuery.hash].results;
+        } else {
+            return [];
+        }
+    }
+
 
     // Load data
     private loadData() {
-        this.filterResults(this.filters, this.sortOrders, this.offset, this.limit).then(results => {
-            this.results = results;
-            this.currentFilterHash = Math.random();
-        });
+        if (!ArrayProxy.resultCache[this.filterQuery.hash]) {
+            ArrayProxy.resultCache[this.filterQuery.hash] = new FilteredResults([], 0);
+            this.filterResults(this.filterQuery).then(results => {
+                ArrayProxy.resultCache[this.filterQuery.hash] = results;
+                let parentProxy = this.parentProxy ? this.parentProxy : this;
+                parentProxy.timestamp = new Date().toUTCString();
+            });
+        }
     }
 
     /**
-     * Worker method to be implemented by sub classes.  This should obtain the results and return the data
+     * Worker method to be implemented by sub classes from a filter query.  This should obtain the results and return the data
      * as a FilteredResults object.  This is modelled as a Promise to allow for asynchronous calls such as
      * server side AJAX.
      *
-     * @param filters
-     * @param sortOrders
-     * @param offset
-     * @param limit
+     * @param filterQuery
+     * @return Promise<FilteredResults>
      */
-    protected abstract filterResults(filters, sortOrders, offset, limit): Promise<FilteredResults>;
+    public abstract filterResults(filterQuery: FilterQuery): Promise<FilteredResults>;
+
+}
+
+// Internal forwarding array proxy
+class ForwardingArrayProxy extends ArrayProxy {
+
+    /**
+     * Constructed with a processing proxy and a filter query
+     *
+     * @param processingProxy
+     * @param filterQuery
+     */
+    constructor(parentProxy: any, newFilterData: any) {
+        super();
+        this.parentProxy = parentProxy;
+        let filterQueryData = {...parentProxy.filterQuery, ...newFilterData};
+        this.filterQuery = new FilterQuery(filterQueryData);
+    }
+
+
+    // This will call the parent proxy at all times
+    public filterResults(filterQuery: FilterQuery): Promise<FilteredResults> {
+        return this.parentProxy.filterResults(filterQuery);
+    }
 
 }

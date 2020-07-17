@@ -89,14 +89,16 @@ export default class Kinibind {
      */
     public addNewProperty(modelObject, propertyName, propertyValue) {
 
+        // Set the value
+        modelObject[propertyName] = propertyValue;
+
         // Observe the new property
         tinybind.adapters[tinybind.rootInterface].observe(modelObject, propertyName, {
             sync: () => {
             }
         });
 
-        // Set the value
-        modelObject[propertyName] = propertyValue;
+
     }
 
 

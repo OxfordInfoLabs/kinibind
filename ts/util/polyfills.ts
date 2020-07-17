@@ -37,4 +37,6 @@ if (window.NodeList && !NodeList.prototype.forEach) {
     (<any>NodeList.prototype).forEach = Array.prototype.forEach;
 }
 
-
+// Object values polyfill
+// @ts-ignore
+if (!Object.values) Object.values = o=>Object.keys(o).map(k=>o[k]);
