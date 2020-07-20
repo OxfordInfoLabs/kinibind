@@ -38,12 +38,12 @@ export default class Kinibind {
      * @param element
      * @param params
      */
-    constructor(element, model = {}) {
+    constructor(element, model = {}, joinSelector = null) {
 
         // Check whether the new element is contained within an existing bind.
         // If so, converge with the parent and merge the model.
         Kinibind.boundContexts.forEach(boundContext => {
-            if (boundContext.element.contains(element)) {
+            if (boundContext.element.contains(element) || (joinSelector && boundContext.element.matches(joinSelector))) {
                 this.boundContext = boundContext.context;
 
                 // Only assign keys which are not present in parent
@@ -57,6 +57,11 @@ export default class Kinibind {
 
             }
         });
+
+
+        if (joinSelector && this.boundContext){
+            Kinibind.binder.bind(element, this.boundContext.models);
+        }
 
         // Bind the params if a new context
         if (!this.boundContext)
@@ -170,7 +175,6 @@ export default class Kinibind {
             ...LogicFormatters,
             ...FunctionFormatters
         };
-
 
 
     }

@@ -34,7 +34,11 @@ export default class FilterQuery {
 
         // @ts-ignore
         Object.values(this.filters).forEach((value: any) => {
-            filterString += value.value + "|";
+            if (typeof value != "string" && value && value.value) {
+                filterString += value.value + "|";
+            } else {
+                filterString += value;
+            }
         });
 
         let sortString = "";

@@ -142,7 +142,9 @@ export default abstract class ArrayProxy {
 
     // Load data
     private loadData() {
+
         let hash = this.filterQuery.hash;
+
         if (!ArrayProxy.fetchedResults[hash]) {
             ArrayProxy.fetchedResults[hash] = 1;
             this.filterResults(this.filterQuery).then(results => {
