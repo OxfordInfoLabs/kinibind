@@ -8,7 +8,12 @@ let ArrayFormatters = {
 
 
     item: function (value, index) {
+
         if (ArrayFormatters.__ensureArray(value)) {
+
+            if (value instanceof ArrayProxy)
+                value = value.values;
+
             return value[index];
         }
     },
@@ -138,7 +143,6 @@ let ArrayFormatters = {
             }
 
 
-
             let sortCallback = (firstElement, secondElement) => {
                 for (var i = 0; i < sortData.length; i++) {
                     let item = sortData[i];
@@ -165,6 +169,12 @@ let ArrayFormatters = {
 
         } else {
             return value;
+        }
+    },
+
+    values: function (value) {
+        if (value instanceof ArrayProxy) {
+            return value.values;
         }
     },
 

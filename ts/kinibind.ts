@@ -58,7 +58,6 @@ export default class Kinibind {
             }
         });
 
-
         if (joinSelector && this.boundContext){
             Kinibind.binder.bind(element, this.boundContext.models);
         }

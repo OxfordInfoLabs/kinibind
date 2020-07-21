@@ -83,8 +83,7 @@ export default abstract class ArrayProxy {
      * @param joinString
      */
     public join(joinString: string) {
-        this.loadData();
-        return this.loadedResults.join(joinString);
+        return this.values.join(joinString);
     }
 
 
@@ -94,8 +93,7 @@ export default abstract class ArrayProxy {
      * @param otherArray
      */
     public concat(otherArray) {
-        this.loadData();
-        return this.loadedResults.concat(otherArray);
+        return this.values.concat(otherArray);
     }
 
     /**
@@ -104,8 +102,7 @@ export default abstract class ArrayProxy {
      * @param callback
      */
     public forEach(callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any): void {
-        this.loadData();
-        Array.prototype.forEach.call(this.loadedResults, callbackfn, thisArg);
+        Array.prototype.forEach.call(this.values, callbackfn, thisArg);
     }
 
 
@@ -113,10 +110,17 @@ export default abstract class ArrayProxy {
      * Get length for array
      */
     public get length() {
-        this.loadData();
-        return this.loadedResults.length;
+        return this.values.length;
     }
 
+
+    /**
+     * Get values for array
+     */
+    public get values() {
+        this.loadData();
+        return this.loadedResults;
+    }
 
     /**
      * Get total count if available
@@ -132,6 +136,7 @@ export default abstract class ArrayProxy {
 
     // Get loaded results
     private get loadedResults() {
+
         if (ArrayProxy.resultCache[this.filterQuery.hash]) {
             return ArrayProxy.resultCache[this.filterQuery.hash].results;
         } else {
@@ -144,7 +149,6 @@ export default abstract class ArrayProxy {
     private loadData() {
 
         let hash = this.filterQuery.hash;
-
         if (!ArrayProxy.fetchedResults[hash]) {
             ArrayProxy.fetchedResults[hash] = 1;
             this.filterResults(this.filterQuery).then(results => {
