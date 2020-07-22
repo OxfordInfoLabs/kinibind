@@ -13,6 +13,7 @@ let DefaultAdapter = {
 
         if (!callbacks[keypath]) {
 
+
             callbacks[keypath] = [];
             var desc = Object.getOwnPropertyDescriptor(obj, keypath);
 
@@ -38,30 +39,16 @@ let DefaultAdapter = {
 
                             if (data) {
 
-                                var _callbacks = data.callbacks[keypath];
+                                // Run all callbacks
+                                _this2.runCallbacks(obj, keypath, _this2);
 
-
-                                if (_callbacks) {
-                                    _callbacks.forEach(function (cb) {
-                                        cb.sync();
-                                    });
-                                }
-
+                                // Observe array for new values
                                 _this2.observeArray(newValue, obj.__rv, keypath);
                             }
 
-
                             // Observe recursively
                             _this2.observeObject(newValue, _this2);
-
-                            // Call parent updates
-                            let parentData = _this2.weakReference(obj);
-                            if (parentData.parentObject) {
-                                parentData.parentObject[parentData.keypath] = parentData.parentObject[parentData.keypath];
-                            }
-
                         }
-
 
                     }
                 });
@@ -74,10 +61,12 @@ let DefaultAdapter = {
         // Ensure we set up parent object structure for firing parent events when children change or are added.
         if (typeof (obj[keypath]) === 'object' && !(obj[keypath] instanceof Array) && obj[keypath] !== null) {
 
-            let data = this.weakReference(obj[keypath]);
-            if (!data.parentObject) {
-                data.parentObject = obj;
-                data.keypath = keypath;
+            if (keypath.substr(0, 8) != "__parent") {
+                let data = this.weakReference(obj[keypath]);
+                if (!data.parentObject) {
+                    data.parentObject = obj;
+                    data.keypath = keypath;
+                }
             }
         }
 
@@ -93,6 +82,7 @@ let DefaultAdapter = {
     observeObject: function (object, observer) {
         // Recursively observe new items.
         if (typeof object === 'object') {
+
             for (var key in object) {
 
                 if (key !== "constructor") {
@@ -101,12 +91,38 @@ let DefaultAdapter = {
                         sync: () => {
                         }
                     });
+
                 }
 
-                // Call recursively
-                observer.observeObject(object[key], observer);
+                if (key.substr(0, 8) != "__parent") {
+                    observer.observeObject(object[key], observer);
+                }
+
             }
         }
+    },
+    runCallbacks: function (object, keypath, observer) {
+
+        var data = observer.weakmap[object.__rv];
+
+        var _callbacks = data.callbacks[keypath];
+
+        if (_callbacks) {
+            _callbacks.forEach(function (cb) {
+                cb.sync();
+            });
+        }
+
+
+        // Call parent updates
+        let parentData = observer.weakReference(object);
+        if (parentData.parentObject) {
+            if (parentData.keypath.substr(0, 8) != "__parent") {
+                observer.runCallbacks(parentData.parentObject, parentData.keypath, observer);
+            }
+        }
+
+
     }
 };
 

@@ -3,32 +3,29 @@
  */
 import FilteredResults from "./filtered-results";
 import FilterQuery from "./filter-query";
+import {filter} from "minimatch";
 
 export default abstract class ArrayProxy {
 
     // Blank query object
     protected filterQuery: FilterQuery = new FilterQuery();
 
-    // Update timestamp
-    private _timestamp = null;
-
-    // Static result cache for results by hash.
-    private static resultCache = {};
-    private static fetchedResults = {};
-
     // Parent proxy
-    protected parentProxy: ArrayProxy = null;
+    protected __parentProxy: ArrayProxy = null;
 
+    /**
+     * Array of forward proxies for this proxy
+     */
+    public proxies: any = {};
 
-    // Ripple timestamp value up to top.
-    public set timestamp(newValue) {
-        if (this.parentProxy) {
-            this.parentProxy.timestamp = newValue;
-        } else {
-            this._timestamp = newValue;
-        }
-    }
+    // Loaded filter results for this proxy
+    private results: FilteredResults = new FilteredResults([], 0);
 
+    // Loaded
+    public status: string = "PENDING";
+
+    // Version field for triggering
+    public version = 0;
 
     /**
      * Implement slicing
@@ -45,7 +42,7 @@ export default abstract class ArrayProxy {
         }
 
         // Return a new forwarding array proxy
-        return new ForwardingArrayProxy(this, newFilterData);
+        return this.getProxy(newFilterData);
     }
 
 
@@ -57,7 +54,7 @@ export default abstract class ArrayProxy {
     public filter(callback) {
 
         let newFilterData = {filters: {...this.filterQuery.filters, ...callback.filters}};
-        return new ForwardingArrayProxy(this, newFilterData);
+        return this.getProxy(newFilterData);
 
     }
 
@@ -72,7 +69,7 @@ export default abstract class ArrayProxy {
             sortOrders: this.filterQuery.sortOrders.concat(callback.sortData)
         };
 
-        return new ForwardingArrayProxy(this, newFilterData);
+        return this.getProxy(newFilterData);
 
     }
 
@@ -119,7 +116,7 @@ export default abstract class ArrayProxy {
      */
     public get values() {
         this.loadData();
-        return this.loadedResults;
+        return this.results.results;
     }
 
     /**
@@ -127,35 +124,45 @@ export default abstract class ArrayProxy {
      */
     public get totalCount() {
         this.loadData();
-        if (ArrayProxy.resultCache[this.filterQuery.hash]) {
-            return ArrayProxy.resultCache[this.filterQuery.hash].totalCount;
-        } else {
-            return "";
-        }
+        return this.results.totalCount;
     }
 
-    // Get loaded results
-    private get loadedResults() {
 
-        if (ArrayProxy.resultCache[this.filterQuery.hash]) {
-            return ArrayProxy.resultCache[this.filterQuery.hash].results;
-        } else {
-            return [];
+    // Get a proxy / create one for a given filter query
+    private getProxy(newFilterData: any) {
+
+        // Construct a new filter query using the new data
+        let filterQueryData = {...this.filterQuery, ...newFilterData};
+        let newFilterQuery = new FilterQuery(filterQueryData);
+
+        let hash = newFilterQuery.hash;
+
+        if (!this.proxies[hash]) {
+            this.proxies[hash] = new ForwardingArrayProxy(this.__parentProxy ? this.__parentProxy : this,
+                newFilterQuery);
         }
+
+        return this.proxies[hash];
+
     }
 
 
     // Load data
     private loadData() {
 
-        let hash = this.filterQuery.hash;
-        if (!ArrayProxy.fetchedResults[hash]) {
-            ArrayProxy.fetchedResults[hash] = 1;
-            this.filterResults(this.filterQuery).then(results => {
-                ArrayProxy.resultCache[hash] = results;
-                this.timestamp = new Date().toUTCString();
-            });
+        if (this.status == "PENDING") {
+            this.status = "LOADING";
+
+            let parentProxy = this.__parentProxy ? this.__parentProxy : this;
+
+            parentProxy.filterResults(this.filterQuery).then((filteredResults => {
+                this.status = "LOADED";
+                this.results = filteredResults;
+                parentProxy.version = parentProxy.version + 1;
+            }));
+
         }
+
     }
 
     /**
@@ -179,18 +186,17 @@ class ForwardingArrayProxy extends ArrayProxy {
      * @param processingProxy
      * @param filterQuery
      */
-    constructor(parentProxy: any, newFilterData: any) {
+    constructor(parentProxy: any, filterQuery: FilterQuery) {
         super();
 
-        this.parentProxy = parentProxy;
-        let filterQueryData = {...parentProxy.filterQuery, ...newFilterData};
-        this.filterQuery = new FilterQuery(filterQueryData);
+        this.__parentProxy = parentProxy;
+        this.filterQuery = filterQuery;
     }
 
 
     // This will call the parent proxy at all times
     public filterResults(filterQuery: FilterQuery): Promise<FilteredResults> {
-        return this.parentProxy.filterResults(filterQuery);
+        return this.__parentProxy.filterResults(filterQuery);
     }
 
 }
