@@ -41,6 +41,20 @@ let StringFormatters = {
 
     hash: function (value) {
         return sha256(value);
+    },
+
+    // Regex and standard replacement in one.
+    replace: function (value, find, replace) {
+
+        if (find.substr(0, 1) == "/") {
+
+            let split = find.split("/");
+            let modifiers = split.pop();
+            split.shift();
+            find = new RegExp(split.join("/"), modifiers);
+
+        }
+        return value.replace(find, replace);
     }
 
 }
