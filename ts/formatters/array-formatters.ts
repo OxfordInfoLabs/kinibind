@@ -15,12 +15,16 @@ let ArrayFormatters = {
                 value = value.values;
 
             return value[index];
+        } else {
+            return undefined;
         }
     },
 
     join: function (value, joinString) {
         if (ArrayFormatters.__ensureArray(value)) {
             return value.join(joinString);
+        } else {
+            return value;
         }
     },
 
@@ -29,10 +33,10 @@ let ArrayFormatters = {
             return value.concat(otherArray);
         }
 
-        return value;
+        return [];
     },
 
-    slice: function (value, from, length) {
+    slice: function (value, from, length?) {
 
         // Convert to numbers
         from = Number(from);
