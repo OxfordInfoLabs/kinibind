@@ -7,7 +7,7 @@ if (!Element.prototype.matches) {
 }
 
 // Closest function
-if (window.Element && !Element.prototype.closest) {
+if ((<any>window).Element && !Element.prototype.closest) {
     Element.prototype.closest =
         function(s) {
             var matches = (this.document || this.ownerDocument).querySelectorAll(s),
@@ -33,7 +33,7 @@ String.prototype["includes"] = function (str) {
 }
 
 // Foreach polyfill
-if (window.NodeList && !NodeList.prototype.forEach) {
+if ((<any>window).NodeList && !NodeList.prototype.forEach) {
     (<any>NodeList.prototype).forEach = Array.prototype.forEach;
 }
 

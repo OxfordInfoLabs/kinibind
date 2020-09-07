@@ -17,7 +17,8 @@ module.exports = {
                 use: [{
                     loader: 'ts-loader',
                     options: {
-                        "allowTsInNodeModules": true
+                        "allowTsInNodeModules": true,
+                        'configFile': 'tsconfig.webpack.json'
                     }
 
                 },

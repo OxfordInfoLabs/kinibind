@@ -22,13 +22,18 @@
   "scripts": {
     "watch": "webpack --config webpack.config.js --watch",
     "build:production": "webpack --config webpack.config.js -p --display-modules",
-    "publish:project": "npm run build:production; bump patch; npm publish"
+    "publish:project": "npm run build:production; bump patch; npm publish",
+    "unit:test": "jasmine-ts --config=jasmine.json"
   },
   "devDependencies": {
+    "@types/jasmine": "^3.5.14",
     "@types/node": "^10.11.3",
+    "jasmine": "^3.6.1",
+    "jasmine-ts": "^0.3.0",
     "source-map-loader": "^1.0.1",
     "ts-loader": "^5.3.3",
-    "typescript": "^3.4.1",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.2",
     "uglify-template-string-loader": "^1.1.1",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "version-bump-prompt": "^6.0.3",
