@@ -85,6 +85,8 @@ let ArrayFormatters = {
             return value.filter((value, index, self) => {
                 return self.indexOf(value) === index;
             });
+        } else {
+            return [];
         }
     },
 
@@ -114,7 +116,7 @@ let ArrayFormatters = {
             return value.filter(callback);
 
         } else {
-            return value;
+            return [];
         }
 
     },

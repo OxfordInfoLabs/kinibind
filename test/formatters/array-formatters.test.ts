@@ -62,12 +62,102 @@ describe('Array formatter tests', function () {
 
         expect(ArrayFormatters.memberValues(objects, "name")).toEqual(["Mark", "James", "Paul"]);
         expect(ArrayFormatters.memberValues(objects, "age")).toEqual([22, 44, 30]);
-        
+
     });
-    
-    
-    
-    
+
+
+    it("Should be able to merge values into a single array", () => {
+
+        let bigArray = [
+            [1, 2, 3, 4, 5, 6],
+            [7, 8, 9, 10]
+        ];
+
+
+        // Invalid values
+        expect(ArrayFormatters.mergeValues("Mark")).toEqual([]);
+        expect(ArrayFormatters.mergeValues([1, 2, 3, 4, 5, 6])).toEqual([]);
+
+        // Valid merge
+        expect(ArrayFormatters.mergeValues(bigArray)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+
+    });
+
+
+    it("Should be able to get distinct values for an array", () => {
+
+        // Invalid value
+        expect(ArrayFormatters.distinct("Hello")).toEqual([]);
+
+        // Valid values
+        expect(ArrayFormatters.distinct([0, 1, 1, 1, 2])).toEqual([0, 1, 2]);
+        expect(ArrayFormatters.distinct(["The", "Big", "The", "Small"])).toEqual(["The", "Big", "Small"]);
+
+
+    });
+
+
+    it("Should be able to filter arrays of objects", () => {
+
+
+        let data = [
+            {
+                "name": "Mark",
+                "age": 33,
+                "category": "HR"
+            }, {
+                "name": "Bob",
+                "age": 40,
+                "category": "Development"
+            }, {
+                "name": "Joff",
+                "age": 60,
+                "category": "HR"
+            },
+            {
+                "name": "Markus",
+                "age": 45,
+                "category": "Admin"
+            }
+        ];
+
+
+        // Invalid filter data yields blank array
+        expect(ArrayFormatters.filter("Mark", "test")).toEqual([]);
+
+        // Unexpected filter value returns data intact.
+        expect(ArrayFormatters.filter(data, [])).toEqual(data);
+
+        // Valid filters
+        expect(ArrayFormatters.filter(data, "category", "HR")).toEqual([
+            {
+                "name": "Mark",
+                "age": 33,
+                "category": "HR"
+            }, {
+                "name": "Joff",
+                "age": 60,
+                "category": "HR"
+            }
+        ]);
+
+
+        expect(ArrayFormatters.filter(data, "age", 45, "gte")).toEqual([
+            {
+                "name": "Joff",
+                "age": 60,
+                "category": "HR"
+            },
+            {
+                "name": "Markus",
+                "age": 45,
+                "category": "Admin"
+            }
+        ]);
+
+
+    });
 
 
 });
