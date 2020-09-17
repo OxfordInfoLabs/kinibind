@@ -1,4 +1,5 @@
 import {sha256} from 'js-sha256';
+import {md5} from 'md5';
 
 /**
  * String only formatters
@@ -41,6 +42,10 @@ let StringFormatters = {
 
     hash: function (value) {
         return sha256(value);
+    },
+
+    md5: function (value) {
+        return md5(value);
     },
 
     // Regex and standard replacement in one.
