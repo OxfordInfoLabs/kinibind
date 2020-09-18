@@ -1,5 +1,5 @@
 import {sha256} from 'js-sha256';
-import {md5} from 'md5';
+import * as md5 from "js-md5";
 
 /**
  * String only formatters
