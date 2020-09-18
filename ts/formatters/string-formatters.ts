@@ -45,7 +45,7 @@ let StringFormatters = {
     },
 
     md5: function (value) {
-        return md5(value);
+        return (<any>md5)(value);
     },
 
     // Regex and standard replacement in one.
