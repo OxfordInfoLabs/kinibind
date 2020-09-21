@@ -117,7 +117,8 @@ export default class Kinibind {
             "prefix": "kb"
         };
 
-        config = {...config, ...defaultConfig};
+        config = {...defaultConfig, ...config};
+
 
         tinybind.configure(config);
 
