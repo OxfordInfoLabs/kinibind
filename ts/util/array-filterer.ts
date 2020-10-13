@@ -48,7 +48,6 @@ export default class ArrayFilterer {
                     case "equals":
                         matches = matches && (memberValue instanceof Array ? memberValue.indexOf(filterValue) >= 0 :
                             memberValue == filterValue);
-
                         break;
                     case "like":
                         matches = matches && memberValue.toLowerCase().indexOf(filterValue.toLowerCase()) >= 0;
@@ -64,6 +63,9 @@ export default class ArrayFilterer {
                         break;
                     case "lt":
                         matches = matches && memberValue < filterValue;
+                        break;
+                    case "in":
+                        matches = matches && (filterValue instanceof Array) ? filterValue.indexOf(memberValue) >= 0 : false;
                         break;
 
                 }
