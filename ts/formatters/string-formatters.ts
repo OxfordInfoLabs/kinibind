@@ -60,7 +60,20 @@ let StringFormatters = {
 
         }
         return value.replace(find, replace);
+    },
+
+    startsWith: function (value, prefix) {
+        return value ? value.startsWith(prefix) : false;
+    },
+
+    endsWith: function (value, suffix) {
+        return value ? value.endsWith(suffix) : false;
+    },
+
+    contains: function (value, string) {
+        return value ? value.includes(string): false;
     }
+
 
 }
 
