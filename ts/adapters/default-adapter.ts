@@ -80,8 +80,9 @@ let DefaultAdapter = {
 
     },
     observeObject: function (object, observer) {
+
         // Recursively observe new items.
-        if (typeof object === 'object') {
+        if (typeof object === 'object' && !object.__rv) {
 
             for (var key in object) {
 
@@ -105,7 +106,7 @@ let DefaultAdapter = {
 
         var data = observer.weakmap[object.__rv];
 
-        var _callbacks = data.callbacks[keypath];
+        var _callbacks = data && data.callbacks && data.callbacks[keypath] ? data.callbacks[keypath] : [];
 
         if (_callbacks) {
             _callbacks.forEach(function (cb) {

@@ -29,51 +29,39 @@ export default class ArrayFilterer {
         Object.keys(this.filterObject).forEach(filterKey => {
 
             let filterDef = this.filterObject[filterKey];
-            let filterMemberKey = (filterDef.member ? filterDef.member : filterKey).split(".");
 
-            let memberValue = element;
-            filterMemberKey.forEach(segment => {
-                if (memberValue)
-                    memberValue = memberValue[segment];
-            });
+            let filterMemberKeys = (filterDef.member ? filterDef.member : filterKey).split(",");
 
+            let filterMatch = false;
 
-            let filterValue = filterDef.value;
+            // Loop through each key
+            filterMemberKeys.forEach(filterMemberKey => {
 
-            if (filterValue || (filterValue === 0) || (filterValue === false)) {
+                filterMemberKey = filterMemberKey.split(".");
 
-                let filterType = filterDef.type ? filterDef.type : "equals";
+                let memberValue = element;
+                filterMemberKey.forEach(segment => {
+                    if (memberValue)
+                        memberValue = memberValue[segment];
+                });
 
-                switch (filterType) {
-                    case "equals":
-                        matches = matches && (memberValue instanceof Array ? memberValue.indexOf(filterValue) >= 0 :
-                            memberValue == filterValue);
-                        break;
-                    case "like":
-                        matches = matches && memberValue.toLowerCase().indexOf(filterValue.toLowerCase()) >= 0;
-                        break;
-                    case "startsWith":
-                        matches = matches && memberValue.toLowerCase().startsWith(filterValue.toLowerCase());
-                        break;
-                    case "gte":
-                        matches = matches && memberValue >= filterValue;
-                        break;
-                    case "gt":
-                        matches = matches && memberValue > filterValue;
-                        break;
-                    case "lte":
-                        matches = matches && memberValue <= filterValue;
-                        break;
-                    case "lt":
-                        matches = matches && memberValue < filterValue;
-                        break;
-                    case "in":
-                        matches = matches && (filterValue instanceof Array) ? filterValue.indexOf(memberValue) >= 0 : false;
-                        break;
+                let filterValue = filterDef.value;
 
+                let hasFilterValue = filterValue || (filterValue === 0) || (filterValue === false);
+
+                let match = !hasFilterValue || memberValue;
+
+                if (memberValue && hasFilterValue) {
+                    match = this.filterMatch(filterDef, memberValue, filterValue);
                 }
 
-            }
+                // Or the filter matches together
+                filterMatch = filterMatch || match;
+
+            });
+
+            // And the filter match to complete.
+            matches = matches && filterMatch;
 
         });
 
@@ -83,6 +71,42 @@ export default class ArrayFilterer {
     }
 
 
+    private filterMatch(filterDef,  memberValue, filterValue) {
+
+        let match = false;
+
+        let filterType = filterDef.type ? filterDef.type : "equals";
+
+        switch (filterType) {
+            case "equals":
+                match = (memberValue instanceof Array ? memberValue.indexOf(filterValue) >= 0 :
+                    memberValue == filterValue);
+                break;
+            case "like":
+                match = memberValue.toLowerCase().indexOf(filterValue.toLowerCase()) >= 0;
+                break;
+            case "startsWith":
+                match = memberValue.toLowerCase().startsWith(filterValue.toLowerCase());
+                break;
+            case "gte":
+                match =memberValue >= filterValue;
+                break;
+            case "gt":
+                match = memberValue > filterValue;
+                break;
+            case "lte":
+                match =  memberValue <= filterValue;
+                break;
+            case "lt":
+                match = memberValue < filterValue;
+                break;
+            case "in":
+                match = (filterValue instanceof Array) ? filterValue.indexOf(memberValue) >= 0 : false;
+                break;
+
+        }
+        return match;
+    }
 }
 
 

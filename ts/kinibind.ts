@@ -119,7 +119,6 @@ export default class Kinibind {
 
         config = {...defaultConfig, ...config};
 
-
         tinybind.configure(config);
 
         // Set configured flag

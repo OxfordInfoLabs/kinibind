@@ -94,7 +94,6 @@ let ArrayFormatters = {
 
         if (ArrayFormatters.__ensureArray(value)) {
 
-
             let filterObject = {};
             if (typeof filter == "string") {
                 filterObject[filter] = {

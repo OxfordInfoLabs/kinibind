@@ -108,6 +108,26 @@
     </div>
 
 
+    <h2>Blog articles with multi field search</h2>
+
+    <input type="text" kb-value="multiSearch">
+
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Date</th>
+        </tr>
+        <tr kb-each-article="blog | filter 'title,description' multiSearch 'like'">
+            <td>{article.title}</td>
+            <td>{article.description}</td>
+            <td>{article.category | join ', '}</td>
+            <td>{article.date | date 'DD/MM/YYYY'}</td>
+        </tr>
+    </table>
+
+
 </div>
 
 
@@ -132,22 +152,27 @@
         "blog": [
             {
                 "title": "Hello world",
+                "description": "I am a new log article",
                 "category": ["Maths", "English"],
                 "date": "2012-01-01"
             }, {
                 "title": "Goodbye Sun",
+                "description": "The weather is important here as well",
                 "category": ["Science", "English"],
                 "date": "2014-01-01"
             }, {
                 "title": "Calculus",
+                "description": "Maths and other trigonometry pale into insignificance",
                 "category": ["Maths"],
                 "date": "2011-01-01"
             }, {
                 "title": "Finkle",
+                "description": "Random musings of weather and maths",
                 "category": ["English", "Science"],
                 "date": "2013-01-01"
             }, {
                 "title": "Hello moon",
+                "description": "Evening calls and the weather is bright",
                 "category": ["Science"],
                 "date": "2012-01-01"
             }
