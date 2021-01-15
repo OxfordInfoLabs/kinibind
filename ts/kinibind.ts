@@ -15,6 +15,7 @@ import DefaultAdapter from "./adapters/default-adapter";
 import Value from "./binders/value";
 import Set from "./binders/set";
 import FunctionFormatters from "./formatters/function-formatters";
+import DebugFormatters from "./formatters/debug-formatters";
 
 /**
  * Kinibind base class
@@ -58,19 +59,20 @@ export default class Kinibind {
             }
         });
 
-        if (joinSelector && this.boundContext){
+        if (this.boundContext){
             Kinibind.binder.bind(element, this.boundContext.models);
+        } else {
+            this.boundContext = Kinibind.binder.bind(element, model);
         }
 
-        // Bind the params if a new context
-        if (!this.boundContext)
-            this.boundContext = Kinibind.binder.bind(element, model);
+
 
         // Add bound contexts to the static array for later parentage.
         Kinibind.boundContexts.push({
             element: element,
             context: this.boundContext
         });
+
     }
 
 
@@ -172,7 +174,8 @@ export default class Kinibind {
             ...ObjectFormatters,
             ...MathsFormatters,
             ...LogicFormatters,
-            ...FunctionFormatters
+            ...FunctionFormatters,
+            ...DebugFormatters
         };
 
 

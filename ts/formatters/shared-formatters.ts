@@ -18,8 +18,7 @@ let SharedFormatters = {
             return value.length;
         }
         return false;
-    },
-
+    }
 
 }
 

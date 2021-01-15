@@ -82,7 +82,7 @@ let DefaultAdapter = {
     observeObject: function (object, observer) {
 
         // Recursively observe new items.
-        if (typeof object === 'object' && !object.__rv) {
+        if ((typeof object === 'object') && object && !object.__rv) {
 
             for (var key in object) {
 

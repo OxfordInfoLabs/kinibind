@@ -1,7 +1,6 @@
 /**
  * Object operation formatters
  */
-import Kinibind from "../kinibind";
 
 let ObjectFormatters = {
 
@@ -25,6 +24,16 @@ let ObjectFormatters = {
         } else {
             return [];
         }
+    },
+
+    // Combine multiple objects using their members via the spread operator
+    combine: function (value) {
+        let object = {...value};
+        for (var arg = 1; arg < arguments.length; arg++) {
+            if (typeof arguments[arg] == "object")
+                object = {...object, ...arguments[arg]};
+        }
+        return object;
     }
 
 

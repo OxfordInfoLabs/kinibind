@@ -53,6 +53,11 @@ let LogicFormatters = {
         return expression ? trueValue : falseValue;
     },
 
+    // If not expression - i.e. if argument not set use alternative
+    ifNot: function(value, otherValue){
+      return value ? value : otherValue;
+    },
+
     // Fill an array with numbers from the from to the to
     // for looping purposes
     countArray: function (from, to) {
