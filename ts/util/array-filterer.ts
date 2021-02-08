@@ -40,10 +40,21 @@ export default class ArrayFilterer {
                 filterMemberKey = filterMemberKey.split(".");
 
                 let memberValue = element;
+
                 filterMemberKey.forEach(segment => {
-                    if (memberValue)
+
+                    if (memberValue instanceof Array) {
+                        let newValue = [];
+                        memberValue.forEach(item => {
+                            if (item)
+                                newValue.push(item[segment]);
+                        });
+                        memberValue = newValue;
+                    }
+                    else if (memberValue)
                         memberValue = memberValue[segment];
                 });
+
 
                 let filterValue = filterDef.value;
 
@@ -71,7 +82,7 @@ export default class ArrayFilterer {
     }
 
 
-    private filterMatch(filterDef,  memberValue, filterValue) {
+    private filterMatch(filterDef, memberValue, filterValue) {
 
         let match = false;
 
@@ -89,13 +100,13 @@ export default class ArrayFilterer {
                 match = memberValue.toLowerCase().startsWith(filterValue.toLowerCase());
                 break;
             case "gte":
-                match =memberValue >= filterValue;
+                match = memberValue >= filterValue;
                 break;
             case "gt":
                 match = memberValue > filterValue;
                 break;
             case "lte":
-                match =  memberValue <= filterValue;
+                match = memberValue <= filterValue;
                 break;
             case "lt":
                 match = memberValue < filterValue;
@@ -107,6 +118,8 @@ export default class ArrayFilterer {
         }
         return match;
     }
+
+
 }
 
 

@@ -71,7 +71,15 @@ let StringFormatters = {
     },
 
     contains: function (value, string) {
-        return value ? value.includes(string): false;
+        return value ? value.includes(string) : false;
+    },
+
+    toJSON: function (value) {
+        try {
+            return JSON.parse(value);
+        } catch (e){
+            return null;
+        }
     }
 
 

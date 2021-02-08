@@ -210,7 +210,7 @@ export default class Kinibind {
 
 
         // Set binding sets interim values
-        tinybind.binders["set-*"] = Set;
+        tinybind.binders["set-*"] =  tinybind.binders["set-*"] ?  tinybind.binders["set-*"]  : Set;
 
         // Toggle binding allows for elements to set model on click.
         tinybind.binders["toggle"] = Toggle;

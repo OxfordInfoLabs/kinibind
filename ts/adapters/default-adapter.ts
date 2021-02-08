@@ -13,14 +13,12 @@ let DefaultAdapter = {
 
         if (!callbacks[keypath]) {
 
-
             callbacks[keypath] = [];
             var desc = Object.getOwnPropertyDescriptor(obj, keypath);
 
 
             if (!desc || !(desc.get || desc.set || !desc.configurable)) {
                 value = obj[keypath];
-
 
                 Object.defineProperty(obj, keypath, {
                     enumerable: true,
