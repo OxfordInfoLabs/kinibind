@@ -29,6 +29,10 @@ let LogicFormatters = {
         return value <= otherValue;
     },
 
+    between: function (value, lowValue, highValue) {
+        return value >= lowValue && value <= highValue;
+    },
+
     and: function (value, otherValue) {
         return value && otherValue;
     },
@@ -54,8 +58,8 @@ let LogicFormatters = {
     },
 
     // If not expression - i.e. if argument not set use alternative
-    ifNot: function(value, otherValue){
-      return value ? value : otherValue;
+    ifNot: function (value, otherValue) {
+        return value ? value : otherValue;
     },
 
     // Fill an array with numbers from the from to the to
