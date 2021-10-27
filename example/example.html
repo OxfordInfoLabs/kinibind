@@ -127,6 +127,30 @@
         </tr>
     </table>
 
+    <hr>
+
+    <div kb-each-blogart="blog | filter 'colour' false 'set'">
+        {blogart.title}
+    </div>
+
+
+    <div id="sub-bound">
+
+        <h2>Sub bound element</h2>
+
+
+        <h4>Blog articles</h4>
+        <ul>
+            <li kb-each-blogarticle="blog">
+                {blogarticle.title}
+            </li>
+        </ul>
+
+        <h4>Local Scope Title: {title}</h4>
+
+
+    </div>
+
 
 </div>
 
@@ -213,6 +237,11 @@
             console.log(bind.model);
 
         }
+    });
+
+
+    let subBind = new Kinibind(document.getElementById("sub-bound"), {
+        "title": "Sub Bound title is set specifically for this bind"
     });
 
 

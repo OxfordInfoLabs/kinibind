@@ -27,6 +27,9 @@ export default abstract class ArrayProxy {
     // Version field for triggering
     public version = 0;
 
+    // Identification field
+    public __arrayProxy = 1;
+
     /**
      * Implement slicing
      *

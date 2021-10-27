@@ -5,37 +5,37 @@ let MathsFormatters = {
 
 
     add: function (value, otherModel) {
-        return value + otherModel;
+        return Number(value) + Number(otherModel);
     },
 
     subtract: function (value, otherModel) {
-        return value - otherModel;
+        return Number(value) - Number(otherModel);
     },
 
     multiply: function (value, otherModel) {
-        return value * otherModel;
+        return Number(value) * Number(otherModel);
     },
 
     divide: function (value, otherModel) {
-        return value / otherModel;
+        return Number(value) / Number(otherModel);
     },
 
     modulo: function (value, otherModel) {
-        return value % otherModel;
+        return Number(value) % Number(otherModel);
     },
 
     decimalplaces: function (value, dp) {
-        return value.toFixed(dp);
+        return Number(value).toFixed(dp);
     },
 
     floor: function (value) {
-        return Math.floor(value);
+        return Math.floor(Number(value));
     },
     ceil: function (value) {
-        return Math.ceil(value);
+        return Math.ceil(Number(value));
     },
     round: function (value) {
-        return Math.round(value);
+        return Math.round(Number(value));
     }
 
 }

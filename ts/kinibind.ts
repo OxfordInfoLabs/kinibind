@@ -39,39 +39,23 @@ export default class Kinibind {
      * @param element
      * @param params
      */
-    constructor(element, model = {}, joinSelector = null) {
+    constructor(element, model = {}) {
 
-        // Check whether the new element is contained within an existing bind.
-        // If so, converge with the parent and merge the model.
-        Kinibind.boundContexts.forEach(boundContext => {
-            if (boundContext.element.contains(element) || (joinSelector && boundContext.element.matches(joinSelector))) {
-                this.boundContext = boundContext.context;
 
-                // Only assign keys which are not present in parent
-                Object.keys(model).forEach(key => {
-                    if (!boundContext.context.models[key]) {
-                        boundContext.context.models[key] = model[key];
-                    }
-                });
-
-                model["_kinibindInherit"] = true;
-
+        // Check if we are inside a bind
+        let nested = false;
+        for (var i = 0; i < Kinibind.boundContexts.length; i++) {
+            let boundContext = Kinibind.boundContexts[i];
+            if (boundContext.contains(element)) {
+                nested = true;
+                break;
             }
-        });
-
-        if (this.boundContext){
-            Kinibind.binder.bind(element, this.boundContext.models);
-        } else {
-            this.boundContext = Kinibind.binder.bind(element, model);
         }
 
 
+        this.boundContext = Kinibind.binder.bind(element, model);
+        Kinibind.boundContexts.push(element);
 
-        // Add bound contexts to the static array for later parentage.
-        Kinibind.boundContexts.push({
-            element: element,
-            context: this.boundContext
-        });
 
     }
 
@@ -210,7 +194,7 @@ export default class Kinibind {
 
 
         // Set binding sets interim values
-        tinybind.binders["set-*"] =  tinybind.binders["set-*"] ?  tinybind.binders["set-*"]  : Set;
+        tinybind.binders["set-*"] = tinybind.binders["set-*"] ? tinybind.binders["set-*"] : Set;
 
         // Toggle binding allows for elements to set model on click.
         tinybind.binders["toggle"] = Toggle;

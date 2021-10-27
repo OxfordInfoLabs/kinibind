@@ -21,6 +21,7 @@ export default class ArrayFilterer {
      */
     public filterArray(element) {
 
+
         let matches = true;
 
         /**
@@ -50,8 +51,7 @@ export default class ArrayFilterer {
                                 newValue.push(item[segment]);
                         });
                         memberValue = newValue;
-                    }
-                    else if (memberValue)
+                    } else if (memberValue)
                         memberValue = memberValue[segment];
                 });
 
@@ -60,10 +60,18 @@ export default class ArrayFilterer {
 
                 let hasFilterValue = filterValue || (filterValue === 0) || (filterValue === false);
 
-                let match = !hasFilterValue || memberValue;
+                let match;
 
-                if (memberValue && hasFilterValue) {
-                    match = this.filterMatch(filterDef, memberValue, filterValue);
+                // Handle special set case
+                if (filterDef.type == "set") {
+                    match = hasFilterValue && (filterValue ? memberValue : !memberValue);
+                } else {
+
+                    match = !hasFilterValue || memberValue;
+
+                    if (memberValue && hasFilterValue) {
+                        match = this.filterMatch(filterDef, memberValue, filterValue);
+                    }
                 }
 
                 // Or the filter matches together
@@ -87,6 +95,7 @@ export default class ArrayFilterer {
         let match = false;
 
         let filterType = filterDef.type ? filterDef.type : "equals";
+
 
         switch (filterType) {
             case "equals":

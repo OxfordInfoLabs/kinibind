@@ -92,6 +92,7 @@ let ArrayFormatters = {
 
     filter: function (value, filter, filterValue = null, filterType = "equals") {
 
+
         if (ArrayFormatters.__ensureArray(value)) {
 
             let filterObject = {};
@@ -103,6 +104,7 @@ let ArrayFormatters = {
             } else {
                 filterObject = filter;
             }
+
 
             let filterer = new ArrayFilterer(filterObject);
 

@@ -4,7 +4,11 @@
 let DebugFormatters = {
 
     dump: function (value) {
-        return JSON.stringify(value);
+        try {
+            return JSON.stringify(value);
+        } catch (e){
+            return "";
+        }
     }
 
 };
