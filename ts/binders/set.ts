@@ -5,16 +5,13 @@ import tinybind from "tinybind";
  */
 let Set = {
 
+    priority: 4000,
+
     // Simply update the model value
     routine: function (el, value) {
 
-        this.view.models[this.arg] = value;
-
-        // Observe the new property
-        tinybind.adapters[tinybind.rootInterface].observe(this.view.models, this.arg, {
-            sync: () => {
-            }
-        });
+        let model = this.view.models;
+        model[this.arg] = value;
 
     }
 

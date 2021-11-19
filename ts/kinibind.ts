@@ -16,6 +16,10 @@ import Value from "./binders/value";
 import Set from "./binders/set";
 import FunctionFormatters from "./formatters/function-formatters";
 import DebugFormatters from "./formatters/debug-formatters";
+import Bind from "./binders/bind";
+import Component from "./component/component";
+import ComponentBind from "./binders/component-bind";
+
 
 /**
  * Kinibind base class
@@ -26,11 +30,21 @@ export default class Kinibind {
     private static initialised = false;
     private static configured = false;
 
-    // Bound context from tinybind
-    private boundContext = null;
+    /**
+     * Component mapping classes
+     *
+     * @private
+     */
+    private static _components = {};
 
-    // Keep tabs on existing bound elements to resolve sub tree issues.
-    private static boundContexts: any[] = [];
+    // Bound context from tinybind
+    private _boundContext = null;
+
+
+    /**
+     * Expose the component class statically
+     */
+    public static Component = Component;
 
 
     /**
@@ -41,24 +55,17 @@ export default class Kinibind {
      */
     constructor(element, model = {}) {
 
-
-        // Check if we are inside a bind
-        let nested = false;
-        for (var i = 0; i < Kinibind.boundContexts.length; i++) {
-            let boundContext = Kinibind.boundContexts[i];
-            if (boundContext.contains(element)) {
-                nested = true;
-                break;
-            }
-        }
-
-
-        this.boundContext = Kinibind.binder.bind(element, model);
-        Kinibind.boundContexts.push(element);
-
+        this._boundContext = Kinibind.binder.bind(element, model);
 
     }
 
+
+    /**
+     * Get the bound context (native tinybind view)
+     */
+    get boundContext(): any {
+        return this._boundContext;
+    }
 
     /**
      * Return the model for manipulation in code
@@ -66,7 +73,7 @@ export default class Kinibind {
      * @return Object
      */
     public get model() {
-        return this.boundContext.models;
+        return this._boundContext.models;
     }
 
 
@@ -103,6 +110,11 @@ export default class Kinibind {
             "prefix": "kb"
         };
 
+        // If components set, stash these
+        if (config.components) {
+            Kinibind._components = config.components;
+        }
+
         config = {...defaultConfig, ...config};
 
         tinybind.configure(config);
@@ -120,6 +132,14 @@ export default class Kinibind {
             this.initialise();
 
         return tinybind;
+    }
+
+
+    /**
+     * Get any configured components
+     */
+    static get components(): {} {
+        return this._components;
     }
 
 
@@ -203,6 +223,11 @@ export default class Kinibind {
         // Override the each binder to gracefully handle non-arrays as input
         tinybind.binders["each-*"] = Each(tinybind.binders["each-*"]);
 
+        // Add bind element
+        tinybind.binders["bind"] = Bind;
+
+        // Add component element
+        tinybind.binders["component-*"] = ComponentBind;
 
     }
 

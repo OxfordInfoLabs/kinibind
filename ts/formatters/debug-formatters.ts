@@ -7,7 +7,7 @@ let DebugFormatters = {
         try {
             return JSON.stringify(value);
         } catch (e){
-            return "";
+            return "NON-JSON value - see console logs";
         }
     }
 

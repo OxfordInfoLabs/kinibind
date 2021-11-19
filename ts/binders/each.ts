@@ -7,7 +7,6 @@ export default function Each(eachBinder) {
     // Overload the existing logic to be tolerant about non array input.
     eachBinder.routine = function (el, collection) {
 
-
         if (!Array.isArray(collection) && !(collection instanceof ArrayProxy)) {
             collection = [];
         }
