@@ -19,11 +19,11 @@ let ComponentBind = {
 
         this.marker.parentNode.insertBefore(el, this.marker.nextSibling);
 
-        let kinibind = Bind.routine.call(this, el, null);
+        let model = Bind.routine.call(this, el, null);
 
         if (Kinibind.components[this.arg]) {
             let constructor = Kinibind.components[this.arg];
-            new constructor(el, kinibind);
+            new constructor(el, model);
         }
 
 

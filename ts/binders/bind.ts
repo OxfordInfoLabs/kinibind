@@ -48,7 +48,7 @@ let Bind = {
         this.marker.parentNode.insertBefore(el, this.marker.nextSibling);
         this.attached = true;
 
-        return kinibind;
+        return nestedModel;
 
     },
 

@@ -15,18 +15,18 @@ export default abstract class Component{
      *
      * @private
      */
-    private _kinibind: any;
+    private _model: any;
 
     /**
-     * Construct with an element and a kinibind
+     * Construct with an element and a model
      *
      * @param element
-     * @param kinibind
+     * @param model
      */
-    constructor(element: HTMLElement, kinibind: Kinibind) {
+    constructor(element: HTMLElement, model: Kinibind) {
         this._element = element;
-        this._kinibind = kinibind;
-        this.initialise(element, kinibind);
+        this._model = model;
+        this.initialise(element, model);
     }
 
 
@@ -40,8 +40,8 @@ export default abstract class Component{
     /**
      * Convenience getter for model
      */
-    get kinibind(): Kinibind {
-        return this._kinibind;
+    get model(): any {
+        return this._model;
     }
 
     /**
@@ -50,7 +50,7 @@ export default abstract class Component{
      * @param element
      * @param kinibind
      */
-    public abstract initialise(element: HTMLElement, kinibind: Kinibind);
+    public abstract initialise(element: HTMLElement, model: any);
 
 
 }
