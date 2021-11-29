@@ -40,8 +40,6 @@ export default class Kinibind {
     // Bound context from tinybind
     private _boundContext = null;
 
-    // All active kinibinds
-    private static _allKinibinds = [];
 
     /**
      * Expose the component class statically
@@ -56,18 +54,10 @@ export default class Kinibind {
      * @param params
      */
     constructor(element, model = {}) {
-
         this._boundContext = Kinibind.binder.bind(element, model);
-        Kinibind._allKinibinds.push(this);
     }
 
 
-    /**
-     * Get all bound kinibind instances
-     */
-    public static get all(){
-        return Kinibind._allKinibinds;
-    }
 
 
     /**

@@ -42,11 +42,12 @@ let Bind = {
         let nestedModel = {...this.view.models};
 
         // Create a new kinibind context
-        let kinibind = new Kinibind(el, nestedModel);
-        this.nested = kinibind.boundContext;
+        this.kinibind = new Kinibind(el, nestedModel);
+        this.nested = this.kinibind.boundContext;
 
         this.marker.parentNode.insertBefore(el, this.marker.nextSibling);
         this.attached = true;
+
 
         return nestedModel;
 
