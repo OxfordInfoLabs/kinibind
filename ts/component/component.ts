@@ -5,6 +5,13 @@ import Kinibind from "../kinibind";
 
 export default abstract class Component{
 
+
+    /**
+     *
+     * @private
+     */
+    private _document: Document;
+
     /**
      *
      * @private
@@ -23,10 +30,11 @@ export default abstract class Component{
      * @param element
      * @param model
      */
-    constructor(element: HTMLElement, model: Kinibind) {
+    constructor(element: HTMLElement, model: Kinibind, document: Document) {
         this._element = element;
         this._model = model;
-        this.initialise(element, model);
+        this._document = document;
+        this.initialise(element, model, document);
     }
 
 
@@ -50,7 +58,7 @@ export default abstract class Component{
      * @param element
      * @param kinibind
      */
-    public abstract initialise(element: HTMLElement, model: any);
+    public abstract initialise(element: HTMLElement, model: any, document: Document);
 
 
 }

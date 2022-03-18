@@ -32,14 +32,14 @@ let Bind = {
     },
 
     // Simply update the model value
-    routine: function (el, value) {
+    routine: function (el, value, cloneParentModel = true) {
 
         if (value) {
             el.innerHTML = value;
         }
 
         // Create a clone of the model
-        let nestedModel = {...this.view.models};
+        let nestedModel = cloneParentModel ? {...this.view.models} : this.view.models;
 
         // Create a new kinibind context
         this.kinibind = new Kinibind(el, nestedModel);

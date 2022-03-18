@@ -20,6 +20,9 @@ let DefaultAdapter = {
             if (!desc || !(desc.get || desc.set || !desc.configurable)) {
                 value = obj[keypath];
 
+                // Observe this object
+                _this2.observeObject(value, _this2);
+
                 Object.defineProperty(obj, keypath, {
                     enumerable: true,
                     get: function get() {
@@ -75,6 +78,7 @@ let DefaultAdapter = {
 
         this.observeArray(obj[keypath], obj.__rv, keypath);
 
+       
 
     },
     observeObject: function (object, observer) {
@@ -100,9 +104,15 @@ let DefaultAdapter = {
             }
         }
     },
-    runCallbacks: function (object, keypath, observer) {
+    runCallbacks: function (object, keypath, observer, processed = []) {
 
         var data = observer.weakmap[object.__rv];
+
+        // Ensure we don't get unnecesary recursion
+        if (processed.includes(data))
+            return;
+
+        processed.push(data);
 
         var _callbacks = data && data.callbacks && data.callbacks[keypath] ? data.callbacks[keypath] : [];
 
@@ -117,7 +127,7 @@ let DefaultAdapter = {
         let parentData = observer.weakReference(object);
         if (parentData.parentObject) {
             if (parentData.keypath.substr(0, 8) != "__parent") {
-                observer.runCallbacks(parentData.parentObject, parentData.keypath, observer);
+                observer.runCallbacks(parentData.parentObject, parentData.keypath, observer, processed);
             }
         }
 

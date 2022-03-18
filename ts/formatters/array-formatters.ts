@@ -6,7 +6,7 @@ import ArrayProxy from "../proxy/array-proxy";
 
 let ArrayFormatters = {
 
-
+    // Extract item from array at index
     item: function (value, index) {
 
         if (ArrayFormatters.__ensureArray(value)) {
@@ -20,6 +20,7 @@ let ArrayFormatters = {
         }
     },
 
+    // Join an array to produce a string using the join string argument
     join: function (value, joinString) {
         if (ArrayFormatters.__ensureArray(value)) {
             return value.join(joinString);
@@ -28,6 +29,7 @@ let ArrayFormatters = {
         }
     },
 
+    // Concatenate arrays together
     concat: function (value, otherArray) {
         if (ArrayFormatters.__ensureArray(value) && ArrayFormatters.__ensureArray(otherArray)) {
             return value.concat(otherArray);
@@ -36,6 +38,7 @@ let ArrayFormatters = {
         return [];
     },
 
+    // Get a slice of an array
     slice: function (value, from, length?) {
 
         // Convert to numbers
@@ -53,6 +56,7 @@ let ArrayFormatters = {
         }
     },
 
+    // Produce array of values from an array of objects
     memberValues: function (value, member) {
         let values = [];
         if (ArrayFormatters.__ensureArray(value)) {
@@ -80,6 +84,7 @@ let ArrayFormatters = {
         return values;
     },
 
+    // Get distinct items in an array
     distinct: function (value) {
         if (ArrayFormatters.__ensureArray(value)) {
             return value.filter((value, index, self) => {
@@ -90,6 +95,7 @@ let ArrayFormatters = {
         }
     },
 
+    // Filter an array based upon a filter member / value and filter type
     filter: function (value, filter, filterValue = null, filterType = "equals") {
 
 
@@ -122,6 +128,7 @@ let ArrayFormatters = {
 
     },
 
+    // Sort an array by a member and ASC / DESC
     sort: function (value, sortBy) {
 
         if (ArrayFormatters.__ensureArray(value)) {
@@ -179,12 +186,20 @@ let ArrayFormatters = {
         }
     },
 
+    // Get all values of an array (designed for when a proxy)
     values: function (value) {
         if (value instanceof ArrayProxy) {
             return value.values;
+        } else {
+            return value;
         }
     },
 
+    /**
+     * Total count of an array if a proxy
+     *
+     * @param value
+     */
     totalCount: function (value) {
         if (value instanceof ArrayProxy) {
             return value.totalCount;

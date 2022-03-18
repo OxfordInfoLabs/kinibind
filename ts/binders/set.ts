@@ -13,6 +13,12 @@ let Set = {
         let model = this.view.models;
         model[this.arg] = value;
 
+        // Observe the new property
+        tinybind.adapters[tinybind.rootInterface].observe(model, this.arg, {
+            sync: () => {
+            }
+        });
+
     }
 
 }
