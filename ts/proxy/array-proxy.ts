@@ -93,7 +93,11 @@ export default abstract class ArrayProxy {
      * @param otherArray
      */
     public concat(otherArray) {
-        return this.values.concat(otherArray);
+        if (otherArray instanceof ArrayProxy) {
+            return this.values.concat(otherArray.values);
+        } else {
+            return this.values.concat(otherArray);
+        }
     }
 
     /**

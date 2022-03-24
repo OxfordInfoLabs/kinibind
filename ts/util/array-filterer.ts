@@ -21,8 +21,8 @@ export default class ArrayFilterer {
      */
     public filterArray(element) {
 
-
         let matches = true;
+
 
         /**
          * Loop through the keys
@@ -32,6 +32,7 @@ export default class ArrayFilterer {
             let filterDef = this.filterObject[filterKey];
 
             let filterMemberKeys = (filterDef.member ? filterDef.member : filterKey).split(",");
+
 
             let filterMatch = false;
 
@@ -57,6 +58,7 @@ export default class ArrayFilterer {
 
 
                 let filterValue = filterDef.value;
+
 
                 let hasFilterValue = filterValue || (filterValue === 0) || (filterValue === false);
 
@@ -96,11 +98,14 @@ export default class ArrayFilterer {
 
         let filterType = filterDef.type ? filterDef.type : "equals";
 
-
         switch (filterType) {
             case "equals":
-                match = (memberValue instanceof Array ? memberValue.indexOf(filterValue) >= 0 :
+                match = (memberValue instanceof Array ? this.indexOf(memberValue, filterValue) >= 0 :
                     memberValue == filterValue);
+                break;
+            case "notequals":
+                match = (memberValue instanceof Array ? this.indexOf(memberValue, filterValue) < 0 :
+                    memberValue != filterValue);
                 break;
             case "like":
                 match = memberValue.toLowerCase().indexOf(filterValue.toLowerCase()) >= 0;
@@ -121,11 +126,39 @@ export default class ArrayFilterer {
                 match = memberValue < filterValue;
                 break;
             case "in":
-                match = (filterValue instanceof Array) ? filterValue.indexOf(memberValue) >= 0 : false;
+                // Handle in case - this allows for the comparison to be an array in
+                // which case an array intersection is performed.
+                if (filterValue instanceof Array) {
+                    if (memberValue instanceof Array) {
+                        let matches = filterValue.filter((item) => {
+                            return this.indexOf(memberValue, item) !== -1;
+                        });
+                        match = matches.length > 0;
+                    } else {
+                        match = this.indexOf(filterValue, memberValue) >= 0;
+                    }
+                } else {
+                    match = false;
+                }
                 break;
 
         }
         return match;
+    }
+
+
+    // Index of which tolerates object value comparisons but still returns efficiently if not object
+    private indexOf(sourceArray, targetValue) {
+        if (typeof targetValue == "object") {
+            let stringTarget = JSON.stringify(targetValue);
+            for (let i = 0; i < sourceArray.length; i++) {
+                if (stringTarget == JSON.stringify(sourceArray[i]))
+                    return i;
+            }
+            return -1;
+        } else {
+            return sourceArray.indexOf(targetValue);
+        }
     }
 
 
