@@ -196,6 +196,19 @@ let ArrayFormatters = {
     },
 
     /**
+     * Sum the values of an array
+     *
+     * @param value
+     */
+    sum: function (value) {
+        let sum = 0;
+        value.forEach((valueEntry) => {
+            sum += Number(valueEntry);
+        });
+        return sum;
+    },
+
+    /**
      * Total count of an array if a proxy
      *
      * @param value
@@ -205,6 +218,9 @@ let ArrayFormatters = {
             return value.totalCount;
         }
     },
+
+
+
 
     __ensureArray: function (value) {
         return value instanceof Array || value instanceof ArrayProxy
