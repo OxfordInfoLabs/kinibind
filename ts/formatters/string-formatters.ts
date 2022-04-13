@@ -32,6 +32,19 @@ let StringFormatters = {
         return value ? value.substring(start, end) : '';
     },
 
+    uppercase: function (value) {
+        return value ? value.toUpperCase() : '';
+    },
+
+    lowercase: function (value) {
+        return value ? value.toLowerCase() : '';
+    },
+
+    initialCaps: function (value) {
+        return value && value.length > 1 ? value.substring(0, 1).toUpperCase() + value.substring(1).toLowerCase() :
+            value.toUpperCase();
+    },
+
     words: function (value) {
         if (value) {
             return value.split(/\W/).length;
@@ -77,7 +90,7 @@ let StringFormatters = {
     toJSON: function (value) {
         try {
             return JSON.parse(value);
-        } catch (e){
+        } catch (e) {
             return null;
         }
     }
