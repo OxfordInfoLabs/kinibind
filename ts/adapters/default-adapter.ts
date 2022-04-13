@@ -71,14 +71,14 @@ let DefaultAdapter = {
             }
         }
 
-        if (callbacks[keypath].indexOf(callback) === -1) {
+        if (callbacks[keypath] && callbacks[keypath]["indexOf"] && (callbacks[keypath].indexOf(callback) === -1)) {
             callbacks[keypath].push(callback);
         }
 
 
         this.observeArray(obj[keypath], obj.__rv, keypath);
 
-       
+
 
     },
     observeObject: function (object, observer) {
