@@ -61,6 +61,10 @@ let StringFormatters = {
         return (<any>md5)(value);
     },
 
+    urlencode: function (value) {
+        return encodeURI(value);
+    },
+
     // Regex and standard replacement in one.
     replace: function (value, find, replace) {
 
