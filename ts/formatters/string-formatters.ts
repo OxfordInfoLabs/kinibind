@@ -65,6 +65,16 @@ let StringFormatters = {
         return encodeURI(value);
     },
 
+    urlencodeparams: function (value) {
+        try {
+            let url = new URL(value);
+            let queryString = url.searchParams.toString()
+            return url.origin + url.pathname + (queryString ? "?" + queryString : "");
+        } catch (e) {
+            return value;
+        }
+    },
+
     // Regex and standard replacement in one.
     replace: function (value, find, replace) {
 
@@ -89,6 +99,20 @@ let StringFormatters = {
 
     contains: function (value, string) {
         return value ? value.includes(string) : false;
+    },
+
+    htmlToText: function (value, escapeCharacters: string = "") {
+        let element = document.createElement("div");
+        element.innerHTML = value;
+        let textOnly = element.textContent;
+        if (escapeCharacters && escapeCharacters.length) {
+            for (let i = 0; i < escapeCharacters.length; i++) {
+                let char = escapeCharacters.substr(i, 1);
+                let regexp = new RegExp(char, "g");
+                textOnly = textOnly.replace(regexp, "\\" + char);
+            }
+        }
+        return textOnly;
     },
 
     toJSON: function (value) {
