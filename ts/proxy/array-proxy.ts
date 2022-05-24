@@ -148,7 +148,6 @@ export default abstract class ArrayProxy {
             this.proxies[hash] = new ForwardingArrayProxy(this.__parentProxy ? this.__parentProxy : this,
                 newFilterQuery);
         }
-
         return this.proxies[hash];
 
     }

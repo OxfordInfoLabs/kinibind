@@ -59,8 +59,7 @@ export default class ArrayFilterer {
 
                 let filterValue = filterDef.value;
 
-
-                let hasFilterValue = filterValue || (filterValue === 0) || (filterValue === false);
+                let hasFilterValue = filterValue || (filterValue === 0) || (filterValue === false) || (filterValue == []);
 
                 let match;
 
@@ -126,13 +125,16 @@ export default class ArrayFilterer {
                 match = memberValue < filterValue;
                 break;
             case "in":
+
                 // Handle in case - this allows for the comparison to be an array in
                 // which case an array intersection is performed.
                 if (filterValue instanceof Array) {
                     if (memberValue instanceof Array) {
+
                         let matches = filterValue.filter((item) => {
-                            return this.indexOf(memberValue, item) !== -1;
+                            return this.indexOf(memberValue, item) >= 0;
                         });
+
                         match = matches.length > 0;
                     } else {
                         match = this.indexOf(filterValue, memberValue) >= 0;

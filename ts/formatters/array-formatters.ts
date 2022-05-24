@@ -9,7 +9,7 @@ let ArrayFormatters = {
     // Extract item from array at index
     item: function (value, index) {
 
-        if (ArrayFormatters.__ensureArray(value)) {
+        if (ArrayFormatters.__checkArray(value)) {
 
             if (value instanceof ArrayProxy)
                 value = value.values;
@@ -22,7 +22,7 @@ let ArrayFormatters = {
 
     // Join an array to produce a string using the join string argument
     join: function (value, joinString) {
-        if (ArrayFormatters.__ensureArray(value)) {
+        if (ArrayFormatters.__checkArray(value)) {
             return value.join(joinString);
         } else {
             return value;
@@ -31,7 +31,7 @@ let ArrayFormatters = {
 
     // Concatenate arrays together
     concat: function (value, otherArray) {
-        if (ArrayFormatters.__ensureArray(value) && ArrayFormatters.__ensureArray(otherArray)) {
+        if (ArrayFormatters.__checkArray(value) && ArrayFormatters.__checkArray(otherArray)) {
             return value.concat(otherArray);
         }
 
@@ -45,7 +45,7 @@ let ArrayFormatters = {
         from = Number(from);
         length = length ? Number(length) : null;
 
-        if (ArrayFormatters.__ensureArray(value)) {
+        if (ArrayFormatters.__checkArray(value)) {
             if (length) {
                 return value.slice(from, from + length);
             } else {
@@ -59,7 +59,7 @@ let ArrayFormatters = {
     // Produce array of values from an array of objects
     memberValues: function (value, member) {
         let values = [];
-        if (ArrayFormatters.__ensureArray(value)) {
+        if (ArrayFormatters.__checkArray(value)) {
             value.forEach(value => {
                 if (value instanceof Object) {
                     values.push(value[member]);
@@ -73,7 +73,7 @@ let ArrayFormatters = {
     // Merge all values in an array (assumed to be arrays) into a single array
     mergeValues: function (value) {
         let values = [];
-        if (ArrayFormatters.__ensureArray(value)) {
+        if (ArrayFormatters.__checkArray(value)) {
             value.forEach(arrayItem => {
                 if (arrayItem instanceof Array) {
                     values = values.concat(arrayItem);
@@ -86,7 +86,7 @@ let ArrayFormatters = {
 
     // Get distinct items in an array
     distinct: function (value) {
-        if (ArrayFormatters.__ensureArray(value)) {
+        if (ArrayFormatters.__checkArray(value)) {
             return value.filter((value, index, self) => {
                 return self.indexOf(value) === index;
             });
@@ -98,8 +98,7 @@ let ArrayFormatters = {
     // Filter an array based upon a filter member / value and filter type
     filter: function (value, filter, filterValue = null, filterType = "equals") {
 
-
-        if (ArrayFormatters.__ensureArray(value)) {
+        if (ArrayFormatters.__checkArray(value)) {
 
             let filterObject = {};
             if (typeof filter == "string") {
@@ -131,7 +130,7 @@ let ArrayFormatters = {
     // Sort an array by a member and ASC / DESC
     sort: function (value, sortBy) {
 
-        if (ArrayFormatters.__ensureArray(value)) {
+        if (ArrayFormatters.__checkArray(value)) {
 
             // Determine sort mode
             let sortData = [];
@@ -219,10 +218,16 @@ let ArrayFormatters = {
         }
     },
 
+    /**
+     * Ensure value is an array
+     *
+     * @param value
+     */
+    ensureArray: function (value) {
+        return ArrayFormatters.__checkArray(value) ? value : [];
+    },
 
-
-
-    __ensureArray: function (value) {
+    __checkArray: function (value) {
         return value instanceof Array || value instanceof ArrayProxy
     }
 

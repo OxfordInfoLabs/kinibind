@@ -28,7 +28,7 @@ export default class Kinibind {
 
     // Ensure we initialise tinybind once
     private static initialised = false;
-    private static configured = false;
+    private static _config = {};
 
     /**
      * Component mapping classes
@@ -56,8 +56,6 @@ export default class Kinibind {
     constructor(element, model = {}) {
         this._boundContext = Kinibind.binder.bind(element, model);
     }
-
-
 
 
     /**
@@ -104,7 +102,7 @@ export default class Kinibind {
      *
      * @param config
      */
-    static set config(config) {
+    static set config(config: any) {
 
         let defaultConfig = {
             "prefix": "kb"
@@ -120,8 +118,17 @@ export default class Kinibind {
         tinybind.configure(config);
 
         // Set configured flag
-        this.configured = true;
+        this._config = config;
     }
+
+    /**
+     * Get static config
+     *
+     */
+    static get config() {
+        return this._config;
+    }
+
 
     /**
      * Get singleton instance of binder
@@ -146,9 +153,6 @@ export default class Kinibind {
     // Initialise binder with extra stuff
     private static initialise() {
 
-        if (!this.configured) {
-            this.config = {};
-        }
 
         // Initialise formatters
         this.initialiseFormatters();

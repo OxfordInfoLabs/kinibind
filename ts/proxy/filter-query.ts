@@ -30,16 +30,8 @@ export default class FilterQuery {
 
     get hash(): string {
 
-        let filterString = "";
-
         // @ts-ignore
-        Object.values(this.filters).forEach((value: any) => {
-            if (typeof value != "string" && value && value.value) {
-                filterString += value.value + "|";
-            } else {
-                filterString += value;
-            }
-        });
+        let filterString =  JSON.stringify(this.filters);
 
         let sortString = "";
         this.sortOrders.forEach(sort => {
