@@ -165,9 +165,9 @@ let ArrayFormatters = {
                         continue;
 
                     if (item.direction == "asc") {
-                        return firstElement[item.member] < secondElement[item.member] ? -1 : 1;
+                        return !firstElement[item.member] || (firstElement[item.member] < secondElement[item.member]) ? -1 : 1;
                     } else {
-                        return firstElement[item.member] > secondElement[item.member] ? -1 : 1;
+                        return !secondElement[item.member] || (firstElement[item.member] > secondElement[item.member]) ? -1 : 1;
                     }
                 }
 
