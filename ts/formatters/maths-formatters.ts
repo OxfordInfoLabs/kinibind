@@ -28,6 +28,10 @@ let MathsFormatters = {
         return Number(value).toFixed(dp);
     },
 
+    commaseparatedthousands: function (value) {
+        return Number(value).toLocaleString("en-US");
+    },
+
     floor: function (value) {
         return Math.floor(Number(value));
     },
