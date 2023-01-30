@@ -59,7 +59,7 @@ export default class ArrayFilterer {
 
                 let filterValue = filterDef.value;
 
-                let hasFilterValue = filterValue || (filterValue === 0) || (filterValue === false) || (filterValue == []);
+                let hasFilterValue = filterValue || (filterValue === 0) || (filterValue === false);
 
                 let match;
 
