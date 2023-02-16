@@ -19,6 +19,7 @@ import DebugFormatters from "./formatters/debug-formatters";
 import Bind from "./binders/bind";
 import Component from "./component/component";
 import ComponentBind from "./binders/component-bind";
+import MultiCheck from "./binders/multicheck";
 
 
 /**
@@ -223,6 +224,8 @@ export default class Kinibind {
         // Toggle binding allows for elements to set model on click.
         tinybind.binders["toggle"] = Toggle;
 
+        // Multicheck binding to allow for multiple checkboxes to be bound to an array
+        tinybind.binders["multicheck"] = MultiCheck;
 
         // Override the each binder to gracefully handle non-arrays as input
         tinybind.binders["each-*"] = Each(tinybind.binders["each-*"]);

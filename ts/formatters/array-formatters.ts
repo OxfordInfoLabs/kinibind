@@ -85,10 +85,19 @@ let ArrayFormatters = {
     },
 
     // Get distinct items in an array
-    distinct: function (value) {
+    distinct: function (value, compareMember = null) {
         if (ArrayFormatters.__checkArray(value)) {
+
+            let compareValues = [];
+            if (compareMember) {
+                compareValues = ArrayFormatters.memberValues(value, compareMember);
+            }
+
             return value.filter((value, index, self) => {
-                return self.indexOf(value) === index;
+                if (compareMember) {
+                    return compareValues.indexOf(value[compareMember]) === index;
+                } else
+                    return self.indexOf(value) === index;
             });
         } else {
             return [];
