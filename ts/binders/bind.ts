@@ -16,8 +16,10 @@ let Bind = {
             this.marker = document.createComment(' tinybind: ' + this.type);
             this.attached = false
 
-            el.parentNode.insertBefore(this.marker, el)
-            el.parentNode.removeChild(el)
+            if (el.parentNode) {
+                el.parentNode.insertBefore(this.marker, el);
+                el.parentNode.removeChild(el);
+            }
         } else if (this.bound === false && this.nested) {
             this.nested.bind()
         }
@@ -45,7 +47,8 @@ let Bind = {
         this.kinibind = new Kinibind(el, nestedModel);
         this.nested = this.kinibind.boundContext;
 
-        this.marker.parentNode.insertBefore(el, this.marker.nextSibling);
+        if (this.marker.parentNode)
+            this.marker.parentNode.insertBefore(el, this.marker.nextSibling);
         this.attached = true;
 
 

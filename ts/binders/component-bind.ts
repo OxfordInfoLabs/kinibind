@@ -17,7 +17,8 @@ let ComponentBind = {
     // Call bind logic and
     routine: function (el, value) {
 
-        this.marker.parentNode.insertBefore(el, this.marker.nextSibling);
+        if (this.marker.parentNode)
+            this.marker.parentNode.insertBefore(el, this.marker.nextSibling);
 
         let model = Bind.routine.call(this, el, null, false);
 
