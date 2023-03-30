@@ -106,6 +106,14 @@ export default class ArrayFilterer {
                 match = (memberValue instanceof Array ? this.indexOf(memberValue, filterValue) < 0 :
                     memberValue != filterValue);
                 break;
+            case "contains":
+                match = (memberValue instanceof Array ? this.indexOf(memberValue, filterValue) >= 0 :
+                    false);
+                break;
+            case "notContains":
+                match = (memberValue instanceof Array ? this.indexOf(memberValue, filterValue) < 0 :
+                    false);
+                break;
             case "like":
                 match = memberValue.toLowerCase().indexOf(filterValue.toLowerCase()) >= 0;
                 break;
