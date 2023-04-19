@@ -13,28 +13,33 @@ let Toggle = {
 
         if (!this.callback) {
             this.callback = function (event) {
-                event.stopPropagation();
 
-                let toggleValues = null;
-                if (el.getAttribute("toggle-values")) {
-                    toggleValues = el.getAttribute("toggle-values").split(",");
-                }
+                // if special initialise object toggle mode initialise the object
+                if (el.getAttribute("initialise-object")) {
+                    observer.setValue({});
+                } else {
 
-                if (toggleValues) {
-                    let position = toggleValues.indexOf(observer.value());
-                    position++;
-                    position = position % toggleValues.length;
-
-                    let value = toggleValues[position].trim();
-                    if (value == "true") {
-                        value = true;
-                    } else if (value == "false") {
-                        value = false;
+                    let toggleValues = null;
+                    if (el.getAttribute("toggle-values")) {
+                        toggleValues = el.getAttribute("toggle-values").split(",");
                     }
 
-                    observer.setValue(value);
-                } else {
-                    observer.setValue(!observer.value());
+                    if (toggleValues) {
+                        let position = toggleValues.indexOf(observer.value());
+                        position++;
+                        position = position % toggleValues.length;
+
+                        let value = toggleValues[position].trim();
+                        if (value == "true") {
+                            value = true;
+                        } else if (value == "false") {
+                            value = false;
+                        }
+
+                        observer.setValue(value);
+                    } else {
+                        observer.setValue(!observer.value());
+                    }
                 }
             };
         }

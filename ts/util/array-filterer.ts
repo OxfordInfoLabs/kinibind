@@ -33,11 +33,13 @@ export default class ArrayFilterer {
 
             let filterMemberKeys = (filterDef.member ? filterDef.member : filterKey).split(",");
 
-
             let filterMatch = false;
 
             // Loop through each key
             filterMemberKeys.forEach(filterMemberKey => {
+
+                let splitMember = filterMemberKey.split(" SPLIT ");
+                filterMemberKey = splitMember[0];
 
                 filterMemberKey = filterMemberKey.split(".");
 
@@ -55,6 +57,11 @@ export default class ArrayFilterer {
                     } else if (memberValue)
                         memberValue = memberValue[segment];
                 });
+
+                // If we have a delimiter split now
+                if (memberValue && splitMember.length > 1) {
+                    memberValue = memberValue.split(splitMember[1] || ",");
+                }
 
 
                 let filterValue = filterDef.value;

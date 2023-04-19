@@ -3,6 +3,7 @@
  */
 import ArrayFilterer from "../util/array-filterer";
 import ArrayProxy from "../proxy/array-proxy";
+import ArrayGrouper from "../util/array-grouper";
 
 let ArrayFormatters = {
 
@@ -192,6 +193,12 @@ let ArrayFormatters = {
         } else {
             return value;
         }
+    },
+
+    // Group by one or more members
+    group: function (value, ...arg) {
+        let grouper = new ArrayGrouper();
+        return grouper.groupArray(value, arg);
     },
 
     // Get all values of an array (designed for when a proxy)
