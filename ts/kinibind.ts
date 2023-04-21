@@ -89,12 +89,25 @@ export default class Kinibind {
         modelObject[propertyName] = propertyValue;
 
         // Observe the new property
+        this.observePropertyChanges(modelObject, propertyName);
+
+    }
+
+
+    /**
+     * Observe property changes to a model object property
+     *
+     * @param modelObject
+     * @param propertyName
+     */
+    public observePropertyChanges(modelObject, propertyName, callbackFunction = null) {
+        // Observe the new property
         tinybind.adapters[tinybind.rootInterface].observe(modelObject, propertyName, {
             sync: () => {
+                if (callbackFunction)
+                    callbackFunction(modelObject[propertyName]);
             }
         });
-
-
     }
 
 

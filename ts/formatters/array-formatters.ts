@@ -122,14 +122,8 @@ let ArrayFormatters = {
 
 
             let filterer = new ArrayFilterer(filterObject);
+            return filterer.filterArray(value);
 
-            let callback = item => {
-                return filterer.filterArray(item);
-            };
-
-            callback["filters"] = filterObject;
-
-            return value.filter(callback);
 
         } else {
             return [];

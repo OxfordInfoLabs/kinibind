@@ -1,7 +1,7 @@
 /**
  * Component class
  */
-import Kinibind from "../kinibind";
+import tinybind from "tinybind";
 
 export default abstract class Component {
 
@@ -30,7 +30,7 @@ export default abstract class Component {
      * @param element
      * @param model
      */
-    constructor(element: HTMLElement, model: Kinibind, document: Document) {
+    constructor(element: HTMLElement, model: any, document: Document) {
         this._element = element;
         this._model = model;
         this._document = document;
@@ -65,6 +65,29 @@ export default abstract class Component {
         }
         return this._model[propertyName];
     }
+
+    /**
+     * Observe a model property and call the callback function when the property changes
+     *
+     * @param propertyName
+     * @param callbackFunction
+     * @protected
+     */
+    protected observeModelProperty(propertyName, callbackFunction) {
+
+        let model = this._model;
+        if (propertyName.startsWith("parent.")){
+            model = this._model.parent;
+            propertyName = propertyName.substr(7);
+        }
+
+        tinybind.adapters[tinybind.rootInterface].observe(model, propertyName, {
+            sync: () => {
+                callbackFunction(model[propertyName]);
+            }
+        });
+    }
+
 
     /**
      * Only required method, receives the element and kinibind instance as arguments
