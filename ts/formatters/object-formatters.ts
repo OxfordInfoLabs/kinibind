@@ -43,6 +43,11 @@ let ObjectFormatters = {
         } else {
             return [value];
         }
+    },
+
+    // Create a blank object from any input
+    blankObject: function (value) {
+        return {};
     }
 
 

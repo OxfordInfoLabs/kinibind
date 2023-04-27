@@ -105,20 +105,24 @@ describe('Array formatter tests', function () {
             {
                 "name": "Mark",
                 "age": 33,
-                "category": "HR"
+                "category": "HR",
+                "tags": "General"
             }, {
                 "name": "Bob",
                 "age": 40,
-                "category": "Development"
+                "category": "Development",
+                "tags": "General,Director"
             }, {
                 "name": "Joff",
                 "age": 60,
-                "category": "HR"
+                "category": "HR",
+                "tags": "Director,Long-server"
             },
             {
                 "name": "Markus",
                 "age": 45,
-                "category": "Admin"
+                "category": "Admin",
+                "tags": "Secretariat"
             }
         ];
 
@@ -134,11 +138,13 @@ describe('Array formatter tests', function () {
             {
                 "name": "Mark",
                 "age": 33,
-                "category": "HR"
+                "category": "HR",
+                "tags": "General"
             }, {
                 "name": "Joff",
                 "age": 60,
-                "category": "HR"
+                "category": "HR",
+                "tags": "Director,Long-server"
             }
         ]);
 
@@ -147,15 +153,165 @@ describe('Array formatter tests', function () {
             {
                 "name": "Joff",
                 "age": 60,
-                "category": "HR"
+                "category": "HR",
+                "tags": "Director,Long-server"
             },
             {
                 "name": "Markus",
                 "age": 45,
-                "category": "Admin"
+                "category": "Admin",
+                "tags": "Secretariat"
             }
         ]);
 
+
+        // Try an example using SPLIT functionality
+        let filterTags = ["Director"];
+        expect(ArrayFormatters.filter(data, "tags SPLIT ,", filterTags, 'in')).toEqual([
+            {
+                "name": "Bob",
+                "age": 40,
+                "category": "Development",
+                "tags": "General,Director"
+            }, {
+                "name": "Joff",
+                "age": 60,
+                "category": "HR",
+                "tags": "Director,Long-server"
+            }
+        ]);
+
+        filterTags = ["Long-server", "Secretariat"];
+        expect(ArrayFormatters.filter(data, "tags SPLIT ,", filterTags, 'in')).toEqual([
+            {
+                "name": "Joff",
+                "age": 60,
+                "category": "HR",
+                "tags": "Director,Long-server"
+            },
+            {
+                "name": "Markus",
+                "age": 45,
+                "category": "Admin",
+                "tags": "Secretariat"
+            }
+        ]);
+
+    });
+
+    it('Should be able to group array of objects', () => {
+
+        let data = [
+            {
+                "name": "Mark",
+                "age": 33,
+                "category": "HR",
+                "skills": "Typing,Management"
+            }, {
+                "name": "Bob",
+                "age": 40,
+                "category": "Development",
+                "skills": "Typing"
+            }, {
+                "name": "Joff",
+                "age": 60,
+                "category": "HR",
+                "skills": "Management,Personnel,Retail"
+            },
+            {
+                "name": "Markus",
+                "age": 45,
+                "category": "Admin",
+                "skills": "Personnel,Filing"
+            }
+        ];
+
+
+        expect(ArrayFormatters.group(data, "category")).toEqual({
+            "Admin": [
+                {
+                    "name": "Markus",
+                    "age": 45,
+                    "category": "Admin",
+                    "skills": "Personnel,Filing"
+                }
+            ],
+            "Development": [
+                {
+                    "name": "Bob",
+                    "age": 40,
+                    "category": "Development",
+                    "skills": "Typing"
+                }
+            ],
+            "HR": [
+                {
+                    "name": "Mark",
+                    "age": 33,
+                    "category": "HR",
+                    "skills": "Typing,Management"
+                },
+                {
+                    "name": "Joff",
+                    "age": 60,
+                    "category": "HR",
+                    "skills": "Management,Personnel,Retail"
+                }
+            ]
+
+        });
+
+        expect(ArrayFormatters.group(data, "skills SPLIT ,")).toEqual({
+
+            "Filing": [{
+                "name": "Markus",
+                "age": 45,
+                "category": "Admin",
+                "skills": "Personnel,Filing"
+            }],
+            "Management": [{
+                "name": "Mark",
+                "age": 33,
+                "category": "HR",
+                "skills": "Typing,Management"
+            },
+                {
+                    "name": "Joff",
+                    "age": 60,
+                    "category": "HR",
+                    "skills": "Management,Personnel,Retail"
+                }],
+            "Personnel": [{
+                "name": "Joff",
+                "age": 60,
+                "category": "HR",
+                "skills": "Management,Personnel,Retail"
+            }, {
+                "name": "Markus",
+                "age": 45,
+                "category": "Admin",
+                "skills": "Personnel,Filing"
+            }],
+            "Retail": [{
+                "name": "Joff",
+                "age": 60,
+                "category": "HR",
+                "skills": "Management,Personnel,Retail"
+            }],
+            "Typing": [{
+                "name": "Mark",
+                "age": 33,
+                "category": "HR",
+                "skills": "Typing,Management"
+            }, {
+                "name": "Bob",
+                "age": 40,
+                "category": "Development",
+                "skills": "Typing"
+            }]
+
+
+        });
 
     });
 

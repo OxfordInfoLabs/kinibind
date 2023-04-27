@@ -13,16 +13,37 @@ export default class ArrayFilterer {
         this.filterObject = filterObject;
     }
 
+    /**
+     * Filter an input array using the passed filter object
+     *
+     * @param array
+     */
+    public filterArray(array){
+
+        let callback = item => {
+            return this.filterArrayElement(item);
+        };
+
+        callback["filters"] = this.filterObject;
+
+        return array.filter(callback);
+
+    }
+
 
     /**
      * Filter an array using a filter object
      *
-     * @param filterObject
+     * @param element any
      */
-    public filterArray(element) {
+    public filterArrayElement(element) {
 
         let matches = true;
 
+        // If no filter object
+        if (this.filterObject == null || this.filterObject == {}){
+            return element;
+        }
 
         /**
          * Loop through the keys
@@ -31,13 +52,18 @@ export default class ArrayFilterer {
 
             let filterDef = this.filterObject[filterKey];
 
-            let filterMemberKeys = (filterDef.member ? filterDef.member : filterKey).split(",");
+            if (!filterDef)
+                return;
 
+            let filterMemberKeys = (filterDef.member ? filterDef.member : filterKey).split(",");
 
             let filterMatch = false;
 
             // Loop through each key
             filterMemberKeys.forEach(filterMemberKey => {
+
+                let splitMember = filterMemberKey.split(" SPLIT ");
+                filterMemberKey = splitMember[0];
 
                 filterMemberKey = filterMemberKey.split(".");
 
@@ -55,6 +81,11 @@ export default class ArrayFilterer {
                     } else if (memberValue)
                         memberValue = memberValue[segment];
                 });
+
+                // If we have a delimiter split now
+                if (memberValue && splitMember.length > 1) {
+                    memberValue = memberValue.split(splitMember[1] || ",");
+                }
 
 
                 let filterValue = filterDef.value;
