@@ -85,8 +85,11 @@ let StringFormatters = {
             split.shift();
             find = new RegExp(split.join("/"), modifiers);
 
+            return value.replace(find, replace);
+
+        } else {
+           return value.replaceAll(find, replace);
         }
-        return value.replace(find, replace);
     },
 
     startsWith: function (value, prefix) {

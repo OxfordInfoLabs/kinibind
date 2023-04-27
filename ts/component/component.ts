@@ -52,42 +52,6 @@ export default abstract class Component {
         return this._model;
     }
 
-    /**
-     * Wait for a model property in case this has been loaded asynchronously
-     *
-     * @param propertyName
-     */
-    async waitForModelProperty(propertyName, maxTimeoutSeconds = 1) {
-        let attempts = 0;
-        while ((attempts < maxTimeoutSeconds * 20) && this._model[propertyName] === undefined) {
-            await this.wait(50);
-            attempts++;
-        }
-        return this._model[propertyName];
-    }
-
-    /**
-     * Observe a model property and call the callback function when the property changes
-     *
-     * @param propertyName
-     * @param callbackFunction
-     * @protected
-     */
-    protected observeModelProperty(propertyName, callbackFunction) {
-
-        let model = this._model;
-        if (propertyName.startsWith("parent.")){
-            model = this._model.parent;
-            propertyName = propertyName.substr(7);
-        }
-
-        tinybind.adapters[tinybind.rootInterface].observe(model, propertyName, {
-            sync: () => {
-                callbackFunction(model[propertyName]);
-            }
-        });
-    }
-
 
     /**
      * Only required method, receives the element and kinibind instance as arguments
@@ -98,18 +62,5 @@ export default abstract class Component {
     public abstract initialise(element: HTMLElement, model: any, document: Document);
 
 
-    /**
-     * Wait a mumber of ms
-     *
-     * @param ms
-     * @private
-     */
-    private wait(ms) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(ms)
-            }, ms)
-        })
-    }
 
 }

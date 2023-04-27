@@ -41,7 +41,7 @@ export default class ArrayFilterer {
         let matches = true;
 
         // If no filter object
-        if (this.filterObject == null || this.filterObject == {}){
+        if (this.filterObject == null){
             return element;
         }
 

@@ -76,9 +76,33 @@ let DefaultAdapter = {
         }
 
 
+        if (!obj.observeProperty) {
+
+            // Add an observe property function for convenient binding
+            obj.observeProperty = function (propertyName, callback) {
+                _this2.observe(obj, propertyName, {
+                    sync: () => {
+                        callback(obj[propertyName]);
+                    }
+                });
+            };
+
+            // Add an await property function for conveniently waiting for a property to appear
+            obj.awaitProperty = async function (propertyName, maxTimeoutSeconds = 1) {
+                let attempts = 0;
+                while ((attempts < maxTimeoutSeconds * 20) && obj[propertyName] === undefined) {
+                    await new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            resolve(50)
+                        }, 50)
+                    });
+                    attempts++;
+                }
+                return obj[propertyName];
+            };
+        }
+
         this.observeArray(obj[keypath], obj.__rv, keypath);
-
-
 
     },
     observeObject: function (object, observer) {
@@ -102,8 +126,11 @@ let DefaultAdapter = {
                 }
 
             }
+
+
         }
-    },
+    }
+    ,
     runCallbacks: function (object, keypath, observer, processed = []) {
 
         var data = observer.weakmap[object.__rv];
