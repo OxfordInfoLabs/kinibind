@@ -1,21 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 577 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+<svg width="100%" height="100%" viewBox="0 0 577 326" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
     <g transform="matrix(2.88817,0,0,2.88817,-1004.11,-538.767)">
         <g transform="matrix(1.20995,0,0,1.35487,-253.08,57.7717)">
             <rect x="496.502" y="95.061" width="165.115" height="65.403" style="fill:rgb(235,117,130);"/>
         </g>
         <g transform="matrix(2.87566,0,0,2.87566,-353.611,143.318)">
-            <text x="278.426px" y="29.013px" style="font-family:'Futura-Bold', 'Futura', sans-serif;font-weight:700;font-size:12px;fill:rgb(53,74,84);">Kini</text>
-            <text x="278.426px" y="41.373px" style="font-family:'Futura-Bold', 'Futura', sans-serif;font-weight:700;font-size:12px;fill:white;">Bind</text>
+            <g transform="matrix(1,0,0,1,278.426,29.013)">
+                <text x="0px" y="0px" style="font-family:'Futura-Bold', 'Futura', sans-serif;font-weight:700;font-size:12px;fill:rgb(53,74,84);">Kini</text>
+            </g>
+            <g transform="matrix(1,0,0,1,278.426,41.373)">
+                <text x="0px" y="0px" style="font-family:'Futura-Bold', 'Futura', sans-serif;font-weight:700;font-size:12px;fill:white;">Bind</text>
+            </g>
         </g>
         <g>
             <g transform="matrix(-0.192301,-2.355e-17,2.355e-17,-0.192301,467.094,301.815)">
                 <path d="M620.943,138.506L593.107,166.342L160.138,577.612L160.138,599.311L620.943,599.311L620.943,138.506Z" style="fill:rgb(30,166,212);"/>
             </g>
-            <g transform="matrix(1,0,0,1,5.40012e-13,-114.438)">
-                <g transform="matrix(0.34624,-0,-0,0.34624,347.662,300.98)">
-                    <use xlink:href="#_Image1" x="0" y="0" width="256px" height="256px"/>
+            <g transform="matrix(0.34624,0,0,0.34624,347.662,186.542)">
+                <g>
+                    <use id="_Image1_" serif:id="_Image1" xlink:href="#_Image1" x="0" y="0" width="256px" height="256px"/>
+                </g>
+            </g>
+        </g>
+        <g transform="matrix(0.34624,0,0,0.257938,347.663,215.69)">
+            <rect x="0" y="256" width="577" height="68.761" style="fill:rgb(235,117,130);"/>
+        </g>
+        <g transform="matrix(0.751671,0,0,0.751671,308.685,59.9404)">
+            <g>
+                <g transform="matrix(1,0,0,1,57.396,310.36)">
+                    <text x="0px" y="0px" style="font-family:'Futura-Bold', 'Futura', sans-serif;font-weight:700;font-size:12px;fill:white;">De</text>
+                </g>
+                <g transform="matrix(1,0,0,1,74.304,310.36)">
+                    <text x="0px" y="0px" style="font-family:'Futura-Bold', 'Futura', sans-serif;font-weight:700;font-size:12px;fill:white;">v<tspan x="7.536px 15.3px " y="0px 0px ">el</tspan>oped b</text>
+                </g>
+                <g transform="matrix(1,0,0,1,138.42,310.36)">
+                    <text x="0px" y="0px" style="font-family:'Futura-Bold', 'Futura', sans-serif;font-weight:700;font-size:12px;fill:white;">y Oxf</text>
+                </g>
+                <g transform="matrix(1,0,0,1,175.56,310.36)">
+                    <text x="0px" y="0px" style="font-family:'Futura-Bold', 'Futura', sans-serif;font-weight:700;font-size:12px;fill:white;">ord Inf</text>
+                </g>
+                <g transform="matrix(1,0,0,1,219.132,310.36)">
+                    <text x="0px" y="0px" style="font-family:'Futura-Bold', 'Futura', sans-serif;font-weight:700;font-size:12px;fill:white;">ormat</text>
+                </g>
+                <g transform="matrix(1,0,0,1,258.084,310.36)">
+                    <text x="0px" y="0px" style="font-family:'Futura-Bold', 'Futura', sans-serif;font-weight:700;font-size:12px;fill:white;">ion Labs</text>
                 </g>
             </g>
         </g>
