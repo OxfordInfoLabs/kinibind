@@ -18,10 +18,12 @@ let DefaultAdapter = {
 
 
             if (!desc || !(desc.get || desc.set || !desc.configurable)) {
+
                 value = obj[keypath];
 
                 // Observe this object
                 _this2.observeObject(value, _this2);
+
 
                 Object.defineProperty(obj, keypath, {
                     enumerable: true,
@@ -53,6 +55,7 @@ let DefaultAdapter = {
 
                     }
                 });
+
 
             }
 

@@ -54,8 +54,8 @@ export default class Kinibind {
      * @param element
      * @param params
      */
-    constructor(element, model = {}) {
-        this._boundContext = Kinibind.binder.bind(element, model);
+    constructor(element, model = {}, config = {}) {
+        this._boundContext = Kinibind.binder.bind(element, model, config);
     }
 
 
