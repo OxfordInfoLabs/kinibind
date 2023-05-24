@@ -28,24 +28,41 @@ export default class ArrayGrouper {
 
             // Loop through each item
             array.forEach(arrayItem => {
-                if (arrayItem[groupingMember]) {
 
-                    // If we have a split situation, split the member into multiple
-                    let keys = [];
-                    if (delimiter) {
+
+                // If we have a split situation, split the member into multiple
+                let keys = [];
+                if (delimiter) {
+                    if (arrayItem[groupingMember])
                         keys = arrayItem[groupingMember].split(delimiter);
-                    } else {
-                        keys = [arrayItem[groupingMember]];
-                    }
-
-                    // Loop through each key and process each one.
-                    keys.forEach(key => {
-                        if (!grouped[key]) {
-                            grouped[key] = [];
-                        }
-                        grouped[key].push(arrayItem);
+                } else {
+                    let splitMember = groupingMember.split(".");
+                    keys = [arrayItem];
+                    splitMember.forEach(memberPath => {
+                        let newItems = [];
+                        keys.forEach((currentItem, index) => {
+                            if (currentItem[memberPath]) {
+                                let subItems = currentItem[memberPath];
+                                if (subItems instanceof Array) {
+                                    newItems = newItems.concat(subItems);
+                                } else {
+                                    newItems.push(subItems);
+                                }
+                            }
+                        });
+                        keys = newItems;
                     });
+
                 }
+
+                // Loop through each key and process each one.
+                keys.forEach(key => {
+                    if (!grouped[key]) {
+                        grouped[key] = [];
+                    }
+                    grouped[key].push(arrayItem);
+                });
+
             });
         });
 

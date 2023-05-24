@@ -11,6 +11,9 @@ let LogicFormatters = {
         return value != otherValue;
     },
 
+    not: function (value) {
+        return !value;
+    },
 
     gt: function (value, otherValue) {
         return value > otherValue;

@@ -6,6 +6,7 @@ let DefaultAdapter = {
 
     observe: function observe(obj, keypath, callback) {
 
+
         var _this2 = this;
 
         var value;
@@ -103,6 +104,7 @@ let DefaultAdapter = {
                 }
                 return obj[propertyName];
             };
+
         }
 
         this.observeArray(obj[keypath], obj.__rv, keypath);

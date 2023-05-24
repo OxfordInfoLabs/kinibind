@@ -316,4 +316,125 @@ describe('Array formatter tests', function () {
     });
 
 
+    it('Should be able to group array of objects using nested property', () => {
+
+
+        let data = [
+            {
+                "name": "Mark",
+                "age": 33,
+                "categories": [
+                    {
+                        "title": "Admin"
+                    },
+                    {
+                        "title": "Management"
+                    }
+                ]
+            }, {
+                "name": "Bob",
+                "age": 40,
+                "categories": [
+                    {
+                        "title": "Technical"
+                    },
+                    {
+                        "title": "Management"
+                    }
+                ]
+            }, {
+                "name": "Joff",
+                "age": 60,
+                "categories": [
+                    {
+                        "title": "Admin"
+                    },
+                    {
+                        "title": "Management"
+                    }
+                ]
+            }
+        ];
+
+        expect(ArrayFormatters.group(data, "categories.title")).toEqual({
+
+            "Admin": [{
+                "name": "Mark",
+                "age": 33,
+                "categories": [
+                    {
+                        "title": "Admin"
+                    },
+                    {
+                        "title": "Management"
+                    }
+                ]
+            },
+                {
+                    "name": "Joff",
+                    "age": 60,
+                    "categories": [
+                        {
+                            "title": "Admin"
+                        },
+                        {
+                            "title": "Management"
+                        }
+                    ]
+                }],
+            "Management": [{
+                "name": "Mark",
+                "age": 33,
+                "categories": [
+                    {
+                        "title": "Admin"
+                    },
+                    {
+                        "title": "Management"
+                    }
+                ]
+            }, {
+                "name": "Bob",
+                "age": 40,
+                "categories": [
+                    {
+                        "title": "Technical"
+                    },
+                    {
+                        "title": "Management"
+                    }
+                ]
+            },
+                {
+                    "name": "Joff",
+                    "age": 60,
+                    "categories": [
+                        {
+                            "title": "Admin"
+                        },
+                        {
+                            "title": "Management"
+                        }
+                    ]
+                }],
+            "Technical": [{
+                "name": "Bob",
+                "age": 40,
+                "categories": [
+                    {
+                        "title": "Technical"
+                    },
+                    {
+                        "title": "Management"
+                    }
+                ]
+            }]
+
+
+        });
+
+
+    });
+
+
 });
