@@ -18,7 +18,7 @@ export default class ArrayFilterer {
      *
      * @param array
      */
-    public filterArray(array){
+    public filterArray(array) {
 
         let callback = item => {
             return this.filterArrayElement(item);
@@ -41,7 +41,7 @@ export default class ArrayFilterer {
         let matches = true;
 
         // If no filter object
-        if (this.filterObject == null){
+        if (this.filterObject == null) {
             return element;
         }
 
@@ -128,15 +128,9 @@ export default class ArrayFilterer {
 
         let filterType = filterDef.type ? filterDef.type : "equals";
 
+        // Handle special cases first and then allow for array member values for all of the others
         switch (filterType) {
-            case "equals":
-                match = (memberValue instanceof Array ? this.indexOf(memberValue, filterValue) >= 0 :
-                    memberValue == filterValue);
-                break;
-            case "notequals":
-                match = (memberValue instanceof Array ? this.indexOf(memberValue, filterValue) < 0 :
-                    memberValue != filterValue);
-                break;
+
             case "contains":
                 match = (memberValue instanceof Array ? this.indexOf(memberValue, filterValue) >= 0 :
                     false);
@@ -145,24 +139,7 @@ export default class ArrayFilterer {
                 match = (memberValue instanceof Array ? this.indexOf(memberValue, filterValue) < 0 :
                     false);
                 break;
-            case "like":
-                match = memberValue.toLowerCase().indexOf(filterValue.toLowerCase()) >= 0;
-                break;
-            case "startsWith":
-                match = memberValue.toLowerCase().startsWith(filterValue.toLowerCase());
-                break;
-            case "gte":
-                match = memberValue >= filterValue;
-                break;
-            case "gt":
-                match = memberValue > filterValue;
-                break;
-            case "lte":
-                match = memberValue <= filterValue;
-                break;
-            case "lt":
-                match = memberValue < filterValue;
-                break;
+
             case "in":
 
                 // Handle in case - this allows for the comparison to be an array in
@@ -183,6 +160,43 @@ export default class ArrayFilterer {
                 }
                 break;
 
+            default:
+
+                // Ensure we have an array of values to loop
+                let memberValues = (memberValue instanceof Array) ? memberValue : [memberValue];
+
+                for (var i = 0; i < memberValues.length && !match; i++) {
+
+                    let memberValue = memberValues[i];
+
+                    switch (filterType) {
+                        case "equals":
+                            match = (memberValue == filterValue);
+                            break;
+                        case "notequals":
+                            match = (memberValue != filterValue);
+                            break;
+                        case "like":
+                            match = memberValue.toLowerCase().indexOf(filterValue.toLowerCase()) >= 0;
+                            break;
+                        case "startsWith":
+                            match = memberValue.toLowerCase().startsWith(filterValue.toLowerCase());
+                            break;
+                        case "gte":
+                            match = memberValue >= filterValue;
+                            break;
+                        case "gt":
+                            match = memberValue > filterValue;
+                            break;
+                        case "lte":
+                            match = memberValue <= filterValue;
+                            break;
+                        case "lt":
+                            match = memberValue < filterValue;
+                            break;
+
+                    }
+                }
         }
         return match;
     }

@@ -199,6 +199,132 @@ describe('Array formatter tests', function () {
 
     });
 
+
+    it("Should be able to filter nested objects as well", () => {
+
+        let data = [
+            {
+                "name": "Mark",
+                "age": 33,
+                "category": {
+                    "title": "HR"
+                },
+                "tags": [{"title": "General"}]
+            }, {
+                "name": "Bob",
+                "age": 40,
+                "category": {
+                    "title": "Development"
+                },
+                "tags": [{"title": "General"}, {"title": "Director"}]
+            }, {
+                "name": "Joff",
+                "age": 60,
+                "category": {
+                    "title": "HR"
+                },
+                "tags": [{"title": "Director"}, {"title": "Long-server"}]
+            },
+            {
+                "name": "Markus",
+                "age": 45,
+                "category": {
+                    "title": "Admin"
+                },
+                "tags": [{"title": "Secretariat"}]
+            }
+        ];
+
+        expect(ArrayFormatters.filter(data, "category.title", "HR")).toEqual([
+            {
+                "name": "Mark",
+                "age": 33,
+                "category": {
+                    "title": "HR"
+                },
+                "tags": [{"title": "General"}]
+            }, {
+                "name": "Joff",
+                "age": 60,
+                "category": {
+                    "title": "HR"
+                },
+                "tags": [{"title": "Director"}, {"title": "Long-server"}]
+            }
+
+        ]);
+
+
+        expect(ArrayFormatters.filter(data, "category.title", "H", "like")).toEqual([
+            {
+                "name": "Mark",
+                "age": 33,
+                "category": {
+                    "title": "HR"
+                },
+                "tags": [{"title": "General"}]
+            }, {
+                "name": "Joff",
+                "age": 60,
+                "category": {
+                    "title": "HR"
+                },
+                "tags": [{"title": "Director"}, {"title": "Long-server"}]
+            }
+
+        ]);
+
+        expect(ArrayFormatters.filter(data, "tags.title", "General")).toEqual([
+            {
+                "name": "Mark",
+                "age": 33,
+                "category": {
+                    "title": "HR"
+                },
+                "tags": [{"title": "General"}]
+            }, {
+                "name": "Bob",
+                "age": 40,
+                "category": {
+                    "title": "Development"
+                },
+                "tags": [{"title": "General"}, {"title": "Director"}]
+            }
+
+        ]);
+
+
+        expect(ArrayFormatters.filter(data, "tags.title,category.title", "D", "like")).toEqual([
+            {
+                "name": "Bob",
+                "age": 40,
+                "category": {
+                    "title": "Development"
+                },
+                "tags": [{"title": "General"}, {"title": "Director"}]
+            }, {
+                "name": "Joff",
+                "age": 60,
+                "category": {
+                    "title": "HR"
+                },
+                "tags": [{"title": "Director"}, {"title": "Long-server"}]
+            },
+            {
+                "name": "Markus",
+                "age": 45,
+                "category": {
+                    "title": "Admin"
+                },
+                "tags": [{"title": "Secretariat"}]
+            }
+
+        ]);
+
+
+    });
+
+
     it('Should be able to group array of objects', () => {
 
         let data = [
