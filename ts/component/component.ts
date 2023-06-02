@@ -1,10 +1,8 @@
 /**
  * Component class
  */
-import tinybind from "tinybind";
 
 export default abstract class Component {
-
 
     /**
      *
@@ -19,22 +17,33 @@ export default abstract class Component {
     private _element: HTMLElement;
 
     /**
+     * Specific model for this component - isolated from other components on the page
      *
      * @private
      */
-    private _model: any;
+    private _componentModel: any;
+
 
     /**
-     * Construct with an element and a model
+     * Parent model for outer context at the point the component was added
+     *
+     * @private
+     */
+    private _parentModel: any;
+
+
+    /**
+     * Construct with an element and a componentModel
      *
      * @param element
-     * @param model
+     * @param componentModel
      */
-    constructor(element: HTMLElement, model: any, document: Document) {
+    constructor(element: HTMLElement, componentModel: any, parentModel: any = null, document: Document) {
         this._element = element;
-        this._model = model;
+        this._componentModel = componentModel;
+        this._parentModel = parentModel;
         this._document = document;
-        this.initialise(element, this._model, document);
+        this.initialise(element, this._componentModel, this._parentModel, document);
     }
 
 
@@ -46,21 +55,28 @@ export default abstract class Component {
     }
 
     /**
-     * Convenience getter for model
+     * Convenience getter for component model
      */
-    get model(): any {
-        return this._model;
+    get componentModel(): any {
+        return this._componentModel;
     }
 
+    /**
+     * Getter for parent model
+     */
+    get parentModel(): any {
+        return this._parentModel;
+    }
 
     /**
-     * Only required method, receives the element and kinibind instance as arguments
+     * Initialise method
      *
      * @param element
-     * @param kinibind
+     * @param componentModel
+     * @param parentModel
+     * @param document
      */
-    public abstract initialise(element: HTMLElement, model: any, document: Document);
-
+    public abstract initialise(element: HTMLElement, componentModel: any, parentModel: any, document: Document);
 
 
 }

@@ -89,7 +89,7 @@ export default class Kinibind {
         modelObject[propertyName] = propertyValue;
 
         // Observe the new property
-        this.observePropertyChanges(modelObject, propertyName);
+        Kinibind.observeObjectPropertyChanges(modelObject, propertyName);
 
     }
 
@@ -97,18 +97,39 @@ export default class Kinibind {
     /**
      * Observe property changes to a model object property
      *
-     * @param modelObject
+     * @param object
      * @param propertyName
      */
-    public observePropertyChanges(modelObject, propertyName, callbackFunction = null) {
+    public static observeObjectPropertyChanges(object, propertyName, callbackFunction = null) {
         // Observe the new property
-        tinybind.adapters[tinybind.rootInterface].observe(modelObject, propertyName, {
+        tinybind.adapters[tinybind.rootInterface].observe(object, propertyName, {
             sync: () => {
                 if (callbackFunction)
-                    callbackFunction(modelObject[propertyName]);
+                    callbackFunction(object[propertyName]);
             }
         });
     }
+
+    /**
+     * Synchronously wait for an object property to become available.  Very useful when
+     * asynchronous calls are being made in e.g. components.
+     *
+     * @param object
+     * @param propertyName
+     * @param maxTimeoutSeconds
+     */
+    public static async awaitObjectProperty(object, propertyName, maxTimeoutSeconds = 1) {
+        let attempts = 0;
+        while ((attempts < maxTimeoutSeconds * 20) && object[propertyName] === undefined) {
+            await new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve(50)
+                }, 50)
+            });
+            attempts++;
+        }
+        return object[propertyName];
+    };
 
 
     /**
@@ -133,6 +154,9 @@ export default class Kinibind {
 
         // Set configured flag
         this._config = config;
+
+        // Attach the tinybind object to the window for interoperability purposes
+        window["tinybind"] = tinybind;
     }
 
     /**
@@ -166,7 +190,6 @@ export default class Kinibind {
 
     // Initialise binder with extra stuff
     private static initialise() {
-
 
         // Initialise formatters
         this.initialiseFormatters();
@@ -215,6 +238,10 @@ export default class Kinibind {
             ...DefaultAdapter
         };
 
+
+//        tinybind.adapters[tinybind.rootInterface] = DefaultAdapterExtension;
+
+        // Add in an array adapter
         tinybind.adapters['['] = ArrayAdapter;
     }
 

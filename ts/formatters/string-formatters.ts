@@ -40,6 +40,10 @@ let StringFormatters = {
         return value ? value.toLowerCase() : '';
     },
 
+    trim: function (value) {
+        return value ? value.trim() : '';
+    },
+
     initialCaps: function (value) {
         return value && value.length > 1 ? value.substring(0, 1).toUpperCase() + value.substring(1).toLowerCase() :
             value.toUpperCase();
@@ -88,7 +92,7 @@ let StringFormatters = {
             return value.replace(find, replace);
 
         } else {
-           return value.replaceAll(find, replace);
+            return value.replaceAll(find, replace);
         }
     },
 

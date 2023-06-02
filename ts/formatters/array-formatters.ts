@@ -8,7 +8,7 @@ import ArrayGrouper from "../util/array-grouper";
 let ArrayFormatters = {
 
     // Extract item from array at index
-    item: function (value, index) {
+    item: function (value: any, index: number) {
 
         if (ArrayFormatters.__checkArray(value)) {
 
@@ -22,7 +22,7 @@ let ArrayFormatters = {
     },
 
     // Join an array to produce a string using the join string argument
-    join: function (value, joinString) {
+    join: function (value: any, joinString: string) {
         if (ArrayFormatters.__checkArray(value)) {
             return value.join(joinString);
         } else {
@@ -31,7 +31,7 @@ let ArrayFormatters = {
     },
 
     // Concatenate arrays together
-    concat: function (value, otherArray) {
+    concat: function (value: any, otherArray: any) {
         if (ArrayFormatters.__checkArray(value) && ArrayFormatters.__checkArray(otherArray)) {
             return value.concat(otherArray);
         }
@@ -40,7 +40,7 @@ let ArrayFormatters = {
     },
 
     // Get a slice of an array
-    slice: function (value, from, length?) {
+    slice: function (value: any, from: number, length?:number) {
 
         // Convert to numbers
         from = Number(from);

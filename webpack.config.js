@@ -2,13 +2,20 @@ const path = require('path');
 const webpack = require('webpack');
 const ROOT = path.resolve(__dirname, 'ts');
 const DESTINATION = path.resolve(__dirname, 'dist');
+const LowerCaseNamePlugin = require('webpack-lowercase-name');
 
 module.exports = {
     context: ROOT,
 
     entry: {
-        'Kinibind': 'kinibind.ts'
+        'Kinibind': 'kinibind.ts',
+        'KinibindStatic': 'kinibind-static.ts'
     },
+
+
+    plugins: [
+        new LowerCaseNamePlugin()
+    ],
 
     module: {
         rules: [
@@ -19,7 +26,7 @@ module.exports = {
                     options: {
                         "allowTsInNodeModules": true,
                         'configFile': 'tsconfig.webpack.json'
-                    }
+                    },
 
                 },
                     'uglify-template-string-loader']
@@ -28,10 +35,10 @@ module.exports = {
     },
 
     output: {
-        library: 'Kinibind',
+        library: '[name]',
         libraryTarget: 'umd',
         libraryExport: 'default',
-        filename: 'kinibind.js',
+        filename: '[lc-name].js',
         path: DESTINATION
     },
     resolve: {

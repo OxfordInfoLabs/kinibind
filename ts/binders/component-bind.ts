@@ -12,11 +12,16 @@ let ComponentBind = {
 
     // Call bind logic and
     bind: function (el) {
-        let model = Bind.bind.call(this, el);
+        let componentModel = Bind.bind.call(this, el);
+
+        // Capture parent model and remove to clean component model
+        let parentModel = componentModel.parent;
+        componentModel['$parent'] = parentModel;
+        delete componentModel.parent;
 
         if (Kinibind.components[this.arg] && el.ownerDocument) {
             let constructor = Kinibind.components[this.arg];
-            new constructor(el, model, el.ownerDocument);
+            new constructor(el, componentModel, parentModel, el.ownerDocument);
         }
     }
 

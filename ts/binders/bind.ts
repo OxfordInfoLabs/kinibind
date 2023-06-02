@@ -11,7 +11,7 @@ let Bind = {
     priority: 4000,
 
     bind: function (el) {
-        let model = {parent: this.view.models, ...this.view.models};
+        let model = {parent: this.view.models};
         tinybind.bind(el, model);
         return model;
     }
