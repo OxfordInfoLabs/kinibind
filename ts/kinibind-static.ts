@@ -99,10 +99,19 @@ export default class KinibindStatic {
 
         // Find all possible distinct prefix attributes
         let attributeMatch;
+        let lastIndex = -1;
         do {
             attributeMatch = domElement.toString().match(new RegExp(prefix + "-(each-.*?|if|set-.*?)="));
             if (attributeMatch) {
+
+                // prevent infinite looping
+                if (attributeMatch.index == lastIndex)
+                    break;
+
+                lastIndex = attributeMatch.index;
+
                 let element = domElement.querySelector("[" + prefix + "-" + attributeMatch[1] + "]");
+
 
                 let evaluatedExpression = this._processExpression(element.getAttribute(prefix + "-" + attributeMatch[1]), model);
 
@@ -144,6 +153,7 @@ export default class KinibindStatic {
 
                 }
             }
+
         } while (attributeMatch);
 
 
