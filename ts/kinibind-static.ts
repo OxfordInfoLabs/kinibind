@@ -104,14 +104,9 @@ export default class KinibindStatic {
             attributeMatch = domElement.toString().match(new RegExp(prefix + "-(each-.*?|if|set-.*?)="));
             if (attributeMatch) {
 
-                // prevent infinite looping
-                if (attributeMatch.index == lastIndex)
-                    break;
-
                 lastIndex = attributeMatch.index;
 
                 let element = domElement.querySelector("[" + prefix + "-" + attributeMatch[1] + "]");
-
 
                 let evaluatedExpression = this._processExpression(element.getAttribute(prefix + "-" + attributeMatch[1]), model);
 
