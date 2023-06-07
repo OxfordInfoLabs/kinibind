@@ -11,7 +11,9 @@ let Bind = {
     priority: 4000,
 
     bind: function (el) {
-        let model = {parent: this.view.models};
+
+        // Assign parent and take a copy of the outer model at point of copy
+        let model = {parent: this.view.models, ...this.view.models};
         tinybind.bind(el, model);
 
         // Sort out parent model
