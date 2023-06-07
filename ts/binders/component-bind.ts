@@ -15,9 +15,7 @@ let ComponentBind = {
         let componentModel = Bind.bind.call(this, el);
 
         // Capture parent model and remove to clean component model
-        let parentModel = componentModel.parent;
-        componentModel['$parent'] = parentModel;
-        delete componentModel.parent;
+        let parentModel = componentModel.$parent;
 
         if (Kinibind.components[this.arg] && el.ownerDocument) {
             let constructor = Kinibind.components[this.arg];
