@@ -2,7 +2,6 @@
  * Toggle class
  */
 
-import Bind from "./bind";
 import Kinibind from "../kinibind";
 
 let ComponentBind = {
@@ -12,15 +11,19 @@ let ComponentBind = {
 
     // Call bind logic and
     bind: function (el) {
-        let componentModel = Bind.bind.call(this, el);
 
-        // Capture parent model and remove to clean component model
-        let parentModel = componentModel.$parent;
+        // Create a clean model
+        let model = {};
+        // Sort out parent model
+        model['$parent'] = this.view.models;
 
         if (Kinibind.components[this.arg] && el.ownerDocument) {
             let constructor = Kinibind.components[this.arg];
-            new constructor(el, componentModel, parentModel, el.ownerDocument);
+            new constructor(el, model, model['$parent'], el.ownerDocument);
         }
+
+        window["tinybind"].bind(el, model);
+
     }
 
 }

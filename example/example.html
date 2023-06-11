@@ -133,119 +133,155 @@
         {blogart.title}
     </div>
 
+<hr>
 
-    <div id="sub-bound">
+    <h2 kb-set-properties="1 | blankObject">Dynamic Properties</h2>
+    <p kb-each-property="properties | keys">
+        <span>{property}: {properties | member property}</span>
+    </p>
 
-        <h2>Sub bound element</h2>
+    <p>Name: <input kb-value="properties.name" /></p>
+    <p>Phone: <input kb-value="properties.phone" /></p>
+    <p>Job: <input kb-value="properties.job" /></p>
 
 
-        <h4>Blog articles</h4>
-        <ul>
-            <li kb-each-blogarticle="blog">
-                {blogarticle.title}
-            </li>
-        </ul>
+    <h2>Sub bind example (separate context)</h2>
+    <div kb-bind>
+        <p>Number of blogs from parent search = <b>{$parent.blog | filter 'title,description' $parent.multiSearch 'like' | length}</b></p>
 
-        <h4>Local Scope Title: {title}</h4>
+        <p kb-set-properties="1 | blankObject">Dynamic Properties inside component</p>
+        <p kb-each-property="properties | keys">
+            <span>{property}: {properties | member property}</span>
+        </p>
 
+        <p>Name: <input kb-value="properties.name" /></p>
+        <p>Phone: <input kb-value="properties.phone" /></p>
+        <p>Job: <input kb-value="properties.job" /></p>
+    </div>
+
+    <h2>Component example</h2>
+    <div kb-component-example>
+
+        <p>Number of blogs from parent search = <b>{$parent.blog | filter 'title,description' $parent.multiSearch 'like' | length}</b></p>
+
+        <p>Enter Name <input kb-value="fields.name"></p>
+        <p>Enter Phone <input kb-value="fields.phone"></p>
+
+        <h3>Fields</h3>
+        <p kb-each-field="fields | keys">
+            {field}: {fields | member field}
+        </p>
+
+        <h3>First 3 blogs</h3>
+        <p kb-each-item="blog">
+            {item.title}
+        </p>
 
     </div>
 
 
-</div>
+    <script type="text/javascript" src="../dist/kinibind.js"></script>
 
 
-<script type="text/javascript" src="../dist/kinibind.js"></script>
+    <script type="text/javascript">
 
+        class Example extends Kinibind.Component {
 
-<script type="text/javascript">
-
-    let bind = new Kinibind(document.getElementById("bound"), {
-        "title": "Welcome to the colour machine",
-        "items": {
-            "Green": {
-                "Fruit": "Apple"
-            },
-            "Red": {
-                "Fruit": "Strawberry"
-            },
-            "Yellow": {
-                "Fruit": "Banana"
+            initialise(element, componentModel, parentModel, document) {
+                componentModel.fields = {};
+                componentModel.blog = parentModel.blog.slice(0, 3);
             }
-        },
-        "blog": [
-            {
-                "title": "Hello world",
-                "description": "I am a new log article",
-                "category": ["Maths", "English"],
-                "date": "2012-01-01"
-            }, {
-                "title": "Goodbye Sun",
-                "description": "The weather is important here as well",
-                "category": ["Science", "English"],
-                "date": "2014-01-01"
-            }, {
-                "title": "Calculus",
-                "description": "Maths and other trigonometry pale into insignificance",
-                "category": ["Maths"],
-                "date": "2011-01-01"
-            }, {
-                "title": "Finkle",
-                "description": "Random musings of weather and maths",
-                "category": ["English", "Science"],
-                "date": "2013-01-01"
-            }, {
-                "title": "Hello moon",
-                "description": "Evening calls and the weather is bright",
-                "category": ["Science"],
-                "date": "2012-01-01"
-            }
-
-        ],
-        "blogFilters": {
-            "titleSearch": {
-                "member": "title",
-                "type": "like"
-            },
-            "category": {},
-            "fromDate": {
-                "member": "date",
-                "type": "gte"
-            },
-            "toDate": {
-                "member": "date",
-                "type": "lte"
-            }
-        },
-
-        "sortmember": "title asc",
-
-        "array": [
-            "Purple",
-            "Pink",
-            "Lilac"
-        ],
-        "update": () => {
-            bind.model.items.Green.Fruit = "Lime";
-            bind.addNewProperty(bind.model.items, "Orange", {
-                Fruit: "Orange", "Text": {
-                    "Paragraph": "Pooch"
-                }
-            });
-            bind.model.items.Orange.Text.Paragraph = "Doggy";
-            bind.model.array.push("Indigo");
-            console.log(bind.model);
-
         }
-    });
 
 
-    let subBind = new Kinibind(document.getElementById("sub-bound"), {
-        "title": "Sub Bound title is set specifically for this bind"
-    });
+        Kinibind.config = {
+            "components": {
+                "example": Example
+            }
+        }
+
+        let bind = new Kinibind(document.getElementById("bound"), {
+            "title": "Welcome to the colour machine",
+            "items": {
+                "Green": {
+                    "Fruit": "Apple"
+                },
+                "Red": {
+                    "Fruit": "Strawberry"
+                },
+                "Yellow": {
+                    "Fruit": "Banana"
+                }
+            },
+            "blog": [
+                {
+                    "title": "Hello world",
+                    "description": "I am a new log article",
+                    "category": ["Maths", "English"],
+                    "date": "2012-01-01"
+                }, {
+                    "title": "Goodbye Sun",
+                    "description": "The weather is important here as well",
+                    "category": ["Science", "English"],
+                    "date": "2014-01-01"
+                }, {
+                    "title": "Calculus",
+                    "description": "Maths and other trigonometry pale into insignificance",
+                    "category": ["Maths"],
+                    "date": "2011-01-01"
+                }, {
+                    "title": "Finkle",
+                    "description": "Random musings of weather and maths",
+                    "category": ["English", "Science"],
+                    "date": "2013-01-01"
+                }, {
+                    "title": "Hello moon",
+                    "description": "Evening calls and the weather is bright",
+                    "category": ["Science"],
+                    "date": "2012-01-01"
+                }
+
+            ],
+            "blogFilters": {
+                "titleSearch": {
+                    "member": "title",
+                    "type": "like"
+                },
+                "category": {},
+                "fromDate": {
+                    "member": "date",
+                    "type": "gte"
+                },
+                "toDate": {
+                    "member": "date",
+                    "type": "lte"
+                }
+            },
+
+            "sortmember": "title asc",
+
+            "array": [
+                "Purple",
+                "Pink",
+                "Lilac"
+            ],
+            "update": () => {
+                bind.model.items.Green.Fruit = "Lime";
+                bind.addNewProperty(bind.model.items, "Orange", {
+                    Fruit: "Orange", "Text": {
+                        "Paragraph": "Pooch"
+                    }
+                });
+                bind.model.items.Orange.Text.Paragraph = "Doggy";
+                bind.model.array.push("Indigo");
+                console.log(bind.model);
+
+            }
+        });
 
 
-</script>
+
+    </script>
 
 </body>
 

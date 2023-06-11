@@ -6,7 +6,6 @@ let DefaultAdapter = {
 
     observe: function observe(obj, keypath, callback) {
 
-
         var _this2 = this;
 
         var value;
@@ -17,14 +16,12 @@ let DefaultAdapter = {
             callbacks[keypath] = [];
             var desc = Object.getOwnPropertyDescriptor(obj, keypath);
 
-
             if (!desc || !(desc.get || desc.set || !desc.configurable)) {
 
                 value = obj[keypath];
 
                 // Observe this object
                 _this2.observeObject(value, _this2);
-
 
                 Object.defineProperty(obj, keypath, {
                     enumerable: true,
@@ -49,6 +46,7 @@ let DefaultAdapter = {
                                 // Observe array for new values
                                 _this2.observeArray(newValue, obj.__rv, keypath);
                             }
+
 
                             // Observe recursively
                             _this2.observeObject(newValue, _this2);
@@ -78,7 +76,6 @@ let DefaultAdapter = {
         if (callbacks[keypath] && callbacks[keypath]["indexOf"] && (callbacks[keypath].indexOf(callback) === -1)) {
             callbacks[keypath].push(callback);
         }
-
 
         this.observeArray(obj[keypath], obj.__rv, keypath);
 

@@ -21,7 +21,6 @@ import Component from "./component/component";
 import ComponentBind from "./binders/component-bind";
 import MultiCheck from "./binders/multicheck";
 
-
 /**
  * Kinibind base class
  */
@@ -145,7 +144,7 @@ export default class Kinibind {
 
         // If components set, stash these
         if (config.components) {
-            Kinibind._components = config.components;
+            this._components = config.components;
         }
 
         config = {...defaultConfig, ...config};
@@ -157,6 +156,7 @@ export default class Kinibind {
 
         // Attach the tinybind object to the window for interoperability purposes
         window["tinybind"] = tinybind;
+
     }
 
     /**
@@ -173,9 +173,14 @@ export default class Kinibind {
      */
     static get binder() {
 
+        // if not configured pass through
+        if (!this._config)
+            this.config = {};
+        
         if (!this.initialised)
             this.initialise();
-
+        
+        
         return tinybind;
     }
 
@@ -238,8 +243,6 @@ export default class Kinibind {
             ...DefaultAdapter
         };
 
-
-//        tinybind.adapters[tinybind.rootInterface] = DefaultAdapterExtension;
 
         // Add in an array adapter
         tinybind.adapters['['] = ArrayAdapter;
