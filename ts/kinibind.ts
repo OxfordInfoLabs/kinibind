@@ -82,7 +82,7 @@ export default class Kinibind {
      * @param propertyName
      * @param propertyValue
      */
-    public addNewProperty(modelObject, propertyName, propertyValue) {
+    public static addNewProperty(modelObject, propertyName, propertyValue) {
 
         // Set the value
         modelObject[propertyName] = propertyValue;

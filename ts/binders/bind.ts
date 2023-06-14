@@ -17,6 +17,9 @@ let Bind = {
         // Sort out parent model
         model['$parent'] = this.view.models;
 
+        el.dataset.kinibound = "1";
+        el.boundModel = model;
+
         return model;
     }
 

@@ -1,6 +1,7 @@
 /**
  * Component class
  */
+import Kinibind from "../kinibind";
 
 export default abstract class Component {
 
@@ -67,6 +68,18 @@ export default abstract class Component {
     get parentModel(): any {
         return this._parentModel;
     }
+
+    /**
+     * Add a component model property for convenience
+     *
+     * @param propertyName
+     * @param propertyValue
+     * @protected
+     */
+    protected addComponentModelProperty(propertyName, propertyValue) {
+        Kinibind.addNewProperty(this.componentModel, propertyName, propertyValue);
+    }
+
 
     /**
      * Initialise method

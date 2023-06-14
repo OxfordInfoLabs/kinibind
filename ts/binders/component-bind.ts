@@ -14,15 +14,20 @@ let ComponentBind = {
 
         // Create a clean model
         let model = {};
+
+        window["tinybind"].bind(el, model);
+
         // Sort out parent model
         model['$parent'] = this.view.models;
 
         if (Kinibind.components[this.arg] && el.ownerDocument) {
             let constructor = Kinibind.components[this.arg];
-            new constructor(el, model, model['$parent'], el.ownerDocument);
+            new constructor(el, model, this.view.models, el.ownerDocument);
         }
 
-        window["tinybind"].bind(el, model);
+
+        el.dataset.kinibound = "1";
+        el.boundModel = model;
 
     }
 
