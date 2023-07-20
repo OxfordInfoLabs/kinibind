@@ -83,6 +83,12 @@
 
     </div>
 
+    <h2>Has examples</h2>
+
+    <div>
+        Click me to disable text box: <input type="checkbox" kb-checked="has1">
+    </div>
+    <textarea kb-has-disabled="has1">Some text which should get disabled on click of above button</textarea>
 
     <h2>Set example</h2>
 
@@ -201,7 +207,7 @@
         }
 
         let bind = new Kinibind(document.getElementById("bound"), {
-            "title": "Welcome to the colour machine",
+            "title": "Welcome to Kinibind Example",
             "items": {
                 "Green": {
                     "Fruit": "Apple"

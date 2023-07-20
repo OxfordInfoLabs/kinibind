@@ -66,6 +66,15 @@ describe('Kinibind static tests: ', function () {
         expect(kinibind.parse("<p>{name | append ',' name | uppercase}</p>", {"name": "spongebob"})).toEqual("<p>SPONGEBOB,SPONGEBOB</p>");
     });
 
+    it('Should evaluate has attribute clauses correctly', function(){
+        let text = '<p><span k-has-disabled="disabled"></span></p>';
+        let evaluated = kinibind.parse(text, {disabled: true});
+        expect(evaluated).toEqual('<p><span disabled=""></span></p>');
+        evaluated = kinibind.parse(text, {disabled: false});
+        expect(evaluated).toEqual('<p><span></span></p>')
+    });
+
+
     it('Should evaluate adhoc attributes correctly with prefix', function () {
 
         let text = '<p><span k-class="classes" k-id="id | lowercase"></span><a k-href="\'https://\' | append url" k-id="\'mark\'">Test</a></p>';

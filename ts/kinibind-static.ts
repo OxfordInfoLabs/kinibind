@@ -197,7 +197,14 @@ export default class KinibindStatic {
 
                             // if we start with class- we assume this is a class
                             // related attribute
-                            if (newAttribute.startsWith("class-")) {
+                            if (newAttribute.startsWith("has-")) {
+                                let attributeName = newAttribute.substr(4);
+                                if (evaluatedAttributeValue) {
+                                    element.setAttribute(attributeName, "");
+                                } else {
+                                    element.removeAttribute(attributeName);
+                                }
+                            } else if (newAttribute.startsWith("class-")) {
                                 let className = newAttribute.substr(6);
                                 let classes = element.getAttribute("class") ? element.getAttribute("class").split(" ") : [];
                                 let existingIndex = classes.indexOf(className);

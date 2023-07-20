@@ -20,6 +20,7 @@ import Bind from "./binders/bind";
 import Component from "./component/component";
 import ComponentBind from "./binders/component-bind";
 import MultiCheck from "./binders/multicheck";
+import Has from "./binders/has";
 
 /**
  * Kinibind base class
@@ -260,6 +261,8 @@ export default class Kinibind {
         // Extends value binder to allow for one way binding
         tinybind.binders["value"] = Value(tinybind.binders["value"]);
 
+        // Has binder
+        tinybind.binders["has-*"] = Has;
 
         // Set binding sets interim values
         tinybind.binders["set-*"] = tinybind.binders["set-*"] ? tinybind.binders["set-*"] : Set;
