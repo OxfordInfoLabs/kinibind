@@ -13,17 +13,19 @@ let ComponentBind = {
     bind: function (el) {
 
         // Create a clean model
-        let model = {};
+        let model = {'$global': this.view.models['$global'] || this.view.models};
 
         window["tinybind"].bind(el, model);
 
-        // Sort out parent model
+        // Sort out parent and global models
         model['$parent'] = this.view.models;
 
         if (Kinibind.components[this.arg] && el.ownerDocument) {
             let constructor = Kinibind.components[this.arg];
             new constructor(el, model, this.view.models, el.ownerDocument);
         }
+
+        console.log("Model: ", model);
 
 
         el.dataset.kinibound = "1";
