@@ -141,6 +141,7 @@ export default class ArrayFilterer {
                 break;
 
             case "in":
+            case "notin":
 
                 // Handle in case - this allows for the comparison to be an array in
                 // which case an array intersection is performed.
@@ -158,7 +159,14 @@ export default class ArrayFilterer {
                 } else {
                     match = false;
                 }
+
+                // Not in is the inverse of in.
+                if (filterType == "notin")
+                    match = !match;
+
                 break;
+
+
 
             default:
 

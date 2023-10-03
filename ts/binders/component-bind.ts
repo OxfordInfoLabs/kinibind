@@ -25,9 +25,6 @@ let ComponentBind = {
             new constructor(el, model, this.view.models, el.ownerDocument);
         }
 
-        console.log("Model: ", model);
-
-
         el.dataset.kinibound = "1";
         el.boundModel = model;
 
