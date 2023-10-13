@@ -36,14 +36,7 @@ let ObjectFormatters = {
         return object;
     },
 
-    // Wrap an object as an array
-    wrapAsArray: function (value) {
-        if (value instanceof Array) {
-            return value;
-        } else {
-            return [value];
-        }
-    },
+
 
     // Create a blank object from any input
     blankObject: function (value) {

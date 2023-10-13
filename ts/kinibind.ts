@@ -21,6 +21,7 @@ import Component from "./component/component";
 import ComponentBind from "./binders/component-bind";
 import MultiCheck from "./binders/multicheck";
 import Has from "./binders/has";
+import SetContext from "./binders/set-context";
 
 /**
  * Kinibind base class
@@ -177,11 +178,11 @@ export default class Kinibind {
         // if not configured pass through
         if (!this._config)
             this.config = {};
-        
+
         if (!this.initialised)
             this.initialise();
-        
-        
+
+
         return tinybind;
     }
 
@@ -266,6 +267,9 @@ export default class Kinibind {
 
         // Set binding sets interim values
         tinybind.binders["set-*"] = tinybind.binders["set-*"] ? tinybind.binders["set-*"] : Set;
+
+        // Context for a set binding - this is used if set by the set operation
+        tinybind.binders["setcontext-*"] = tinybind.binders["setcontext-*"] ? tinybind.binders["setcontext-*"] : SetContext;
 
         // Toggle binding allows for elements to set model on click.
         tinybind.binders["toggle"] = Toggle;

@@ -228,6 +228,18 @@ let ArrayFormatters = {
         }
     },
 
+    // Wrap one or more items as an array
+    wrapAsArray: function (value, ...otherValues) {
+        if (!(value instanceof Array)) {
+            value = [value];
+        }
+        if (!otherValues)
+            otherValues = [];
+
+        return value.concat(otherValues);
+    },
+
+
     /**
      * Ensure value is an array
      *
