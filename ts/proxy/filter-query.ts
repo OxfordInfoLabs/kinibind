@@ -34,7 +34,7 @@ export default class FilterQuery {
         let filterString =  JSON.stringify(this.filters);
 
         let sortString = "";
-        this.sortOrders.forEach(sort => {
+        this.sortOrders.forEach((sort: any) => {
             sortString += sort.member + sort.direction + "|";
         });
 

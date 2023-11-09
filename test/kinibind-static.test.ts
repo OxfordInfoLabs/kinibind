@@ -33,8 +33,6 @@ describe('Kinibind static tests: ', function () {
         expect(parsed).toEqual("<p>Test String - <span>4</span></p>");
 
 
-
-
     });
 
     it('Should evaluate nested model properties', function () {
@@ -58,15 +56,55 @@ describe('Kinibind static tests: ', function () {
         expect(parsed).toEqual("<p>Mark - <span>Second Note</span> Bingo</p>");
 
 
+        content = "<p>[[author.name]] - <span>[[notes[1] ]]</span> [[author.notes[0].text]]</p>";
+
+        parsed = kinibind.parse(content, {
+            author: {
+                name: "Mark",
+                notes: [
+                    {
+                        "text": "Bingo"
+                    }
+                ]
+            },
+            notes: [
+                "First Note",
+                "Second Note"
+            ]
+        }, "k", ["[[", "]]"]);
+        expect(parsed).toEqual("<p>Mark - <span>Second Note</span> Bingo</p>");
+
+
     });
 
     it('Should call built in formatters correctly', function () {
         expect(kinibind.parse("<p>{name | uppercase}</p>", {"name": "spongebob"})).toEqual("<p>SPONGEBOB</p>");
         expect(kinibind.parse("<p>{name | append ',' name}</p>", {"name": "spongebob"})).toEqual("<p>spongebob,spongebob</p>");
         expect(kinibind.parse("<p>{name | append ',' name | uppercase}</p>", {"name": "spongebob"})).toEqual("<p>SPONGEBOB,SPONGEBOB</p>");
+
+
+        let content = "<p>[[author | member 'name']] - <span>[[notes | item 1 ]]</span> [[author | member 'notes' | item 0 | member 'text']]</p>";
+
+        let parsed = kinibind.parse(content, {
+            author: {
+                name: "Mark",
+                notes: [
+                    {
+                        "text": "Bingo"
+                    }
+                ]
+            },
+            notes: [
+                "First Note",
+                "Second Note"
+            ]
+        }, "k", ["[[", "]]"]);
+        expect(parsed).toEqual("<p>Mark - <span>Second Note</span> Bingo</p>");
+
+
     });
 
-    it('Should evaluate has attribute clauses correctly', function(){
+    it('Should evaluate has attribute clauses correctly', function () {
         let text = '<p><span k-has-disabled="disabled"></span></p>';
         let evaluated = kinibind.parse(text, {disabled: true});
         expect(evaluated).toEqual('<p><span disabled=""></span></p>');
@@ -113,7 +151,7 @@ describe('Kinibind static tests: ', function () {
 
     });
 
-    it('Should be able to evaluate if inside each with set', function(){
+    it('Should be able to evaluate if inside each with set', function () {
 
         let text = '<p k-each-item="items" k-set-index="$index"><span k-if="index | equals 1">{$index}</span></p>';
         expect(kinibind.parse(text, {"items": ["a", "b", "c"]})).toEqual('<p></p><p><span>1</span></p><p></p>');
@@ -187,18 +225,36 @@ describe('Kinibind static tests: ', function () {
 
     });
 
-    it ('Can cope with complex formatting expressions with values containing spaces, pipes, etc', function(){
+    it('Can cope with complex formatting expressions with values containing spaces, pipes, etc', function () {
 
         let text = '<p k-text="1 | append \' \' \'|\' \'-prefixed\'"></p>'
         expect(kinibind.parse(text, {})).toEqual('<p>1 |-prefixed</p>');
     });
 
-    it('Can set scoped values on element with each directive', function(){
+    it('Can set scoped values on element with each directive', function () {
 
         let text = '<p k-each-item="items" k-set-square="item | multiply item">{square}</p>';
-        expect(kinibind.parse(text, {"items": [1,2,3]})).toEqual('<p>1</p><p>4</p><p>9</p>')
+        expect(kinibind.parse(text, {"items": [1, 2, 3]})).toEqual('<p>1</p><p>4</p><p>9</p>')
     });
 
+
+    it('Can add custom binder which is evaluated before adhoc attributes', function () {
+        KinibindStatic.addBinders({
+            "custom": function (element, value) {
+                element.innerHTML = "Custom " + value + " Injected";
+            }
+        });
+
+        let text = '<p k-custom="author.name | uppercase"></p>';
+        let model = {
+            "author": {
+                "name": "Joe Bloggs"
+            }
+        };
+
+        expect(kinibind.parse(text, model)).toEqual('<p>Custom JOE BLOGGS Injected</p>');
+
+    });
 
 
 });

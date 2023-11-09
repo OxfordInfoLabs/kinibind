@@ -1,20 +1,20 @@
 /**
  * Multi Check class
  */
-let MultiCheck = {
+let MultiCheck: any = {
 
 
     publishes: true,
 
 
-    bind: function (el) {
+    bind: function (el: any) {
 
         let observer = this.observer;
 
         if (!this.callback) {
-            this.callback = function (event) {
-                let checkedValues = [];
-                el.querySelectorAll("input[type='checkbox']").forEach((checkbox) => {
+            this.callback = function (event: any) {
+                let checkedValues: any = [];
+                el.querySelectorAll("input[type='checkbox']").forEach((checkbox: any) => {
                     if (checkbox.checked && checkbox.dataset.value) {
                         checkedValues.push(checkbox.dataset.value);
                     }
@@ -26,14 +26,14 @@ let MultiCheck = {
 
         // Initialise values
         let checkedValues = observer.value() || [];
-        el.querySelectorAll("input[type='checkbox']").forEach((checkbox) => {
+        el.querySelectorAll("input[type='checkbox']").forEach((checkbox: any) => {
             checkbox.checked = checkedValues.includes(checkbox.dataset.value);
         });
 
         // Ensure we update checked items on dom modifications
-        el.addEventListener("DOMSubtreeModified", (event => {
+        el.addEventListener("DOMSubtreeModified", ((event: any) => {
             let checkedValues = observer.value() || [];
-            el.querySelectorAll("input[type='checkbox']").forEach((checkbox) => {
+            el.querySelectorAll("input[type='checkbox']").forEach((checkbox: any) => {
                 checkbox.checked = checkedValues.includes(checkbox.dataset.value);
             });
         }));
@@ -42,7 +42,7 @@ let MultiCheck = {
 
     },
 
-    unbind: function (el) {
+    unbind: function (el: any) {
         el.removeEventListener("change", this.callback);
     }
 

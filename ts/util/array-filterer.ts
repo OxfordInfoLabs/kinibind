@@ -9,7 +9,7 @@ export default class ArrayFilterer {
     /**
      * Construct with filter object
      */
-    constructor(filterObject) {
+    constructor(filterObject: any) {
         this.filterObject = filterObject;
     }
 
@@ -18,9 +18,9 @@ export default class ArrayFilterer {
      *
      * @param array
      */
-    public filterArray(array) {
+    public filterArray(array: any) {
 
-        let callback = item => {
+        let callback: any = (item: any) => {
             return this.filterArrayElement(item);
         };
 
@@ -36,7 +36,7 @@ export default class ArrayFilterer {
      *
      * @param element any
      */
-    public filterArrayElement(element) {
+    public filterArrayElement(element: any) {
 
         let matches = true;
 
@@ -48,7 +48,7 @@ export default class ArrayFilterer {
         /**
          * Loop through the keys
          */
-        Object.keys(this.filterObject).forEach(filterKey => {
+        Object.keys(this.filterObject).forEach((filterKey: any) => {
 
             let filterDef = this.filterObject[filterKey];
 
@@ -60,19 +60,19 @@ export default class ArrayFilterer {
             let filterMatch = false;
 
             // Loop through each key
-            filterMemberKeys.forEach(filterMemberKey => {
+            filterMemberKeys.forEach((filterMemberKey: any) => {
 
                 let splitMember = filterMemberKey.split(" SPLIT ");
                 filterMemberKey = splitMember[0];
 
                 filterMemberKey = filterMemberKey.split(".");
 
-                let memberValue = element;
+                let memberValue: any = element;
 
-                filterMemberKey.forEach(segment => {
+                filterMemberKey.forEach((segment: any) => {
 
                     if (memberValue instanceof Array) {
-                        let newValue = [];
+                        let newValue: any = [];
                         memberValue.forEach(item => {
                             if (item)
                                 newValue.push(item[segment]);
@@ -122,7 +122,7 @@ export default class ArrayFilterer {
     }
 
 
-    private filterMatch(filterDef, memberValue, filterValue) {
+    private filterMatch(filterDef: any, memberValue: any, filterValue: any) {
 
         let match = false;
 
@@ -165,7 +165,6 @@ export default class ArrayFilterer {
                     match = !match;
 
                 break;
-
 
 
             default:
@@ -211,7 +210,7 @@ export default class ArrayFilterer {
 
 
     // Index of which tolerates object value comparisons but still returns efficiently if not object
-    private indexOf(sourceArray, targetValue) {
+    private indexOf(sourceArray: any, targetValue: any) {
         if (typeof targetValue == "object") {
             let stringTarget = JSON.stringify(targetValue);
             for (let i = 0; i < sourceArray.length; i++) {

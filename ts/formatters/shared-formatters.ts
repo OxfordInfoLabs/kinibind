@@ -3,7 +3,7 @@
  */
 let SharedFormatters = {
 
-    contains: function (value, contains) {
+    contains: function (value: any, contains: any) {
         if (value) {
             return value.indexOf(contains) >= 0
         } else {
@@ -11,7 +11,7 @@ let SharedFormatters = {
         }
     },
 
-    length: function (value, contains) {
+    length: function (value: any) {
         if (value instanceof Array)
             return value.length;
         else if (value) {

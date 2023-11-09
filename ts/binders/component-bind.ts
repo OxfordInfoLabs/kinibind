@@ -4,25 +4,25 @@
 
 import Kinibind from "../kinibind";
 
-let ComponentBind = {
+let ComponentBind: any = {
 
     block: true,
     priority: 4000,
 
     // Call bind logic and
-    bind: function (el) {
+    bind: function (el: any) {
 
         // Create a clean model
-        let model = {'$global': this.view.models['$global'] || this.view.models};
+        let model: any = {'$global': (<any>this).view.models['$global'] || (<any>this).view.models};
 
-        window["tinybind"].bind(el, model);
+        (<any>window)["tinybind"].bind(el, model);
 
         // Sort out parent and global models
-        model['$parent'] = this.view.models;
+        model['$parent'] = (<any>this).view.models;
 
-        if (Kinibind.components[this.arg] && el.ownerDocument) {
-            let constructor = Kinibind.components[this.arg];
-            new constructor(el, model, this.view.models, el.ownerDocument);
+        if ((<any>Kinibind.components)[this.arg] && el.ownerDocument) {
+            let constructor = (<any>Kinibind.components)[this.arg];
+            new constructor(el, model, (<any>this).view.models, el.ownerDocument);
         }
 
         el.dataset.kinibound = "1";

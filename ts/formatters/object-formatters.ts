@@ -5,18 +5,18 @@
 let ObjectFormatters = {
 
     member: {
-        read: function (value, member) {
+        read: function (value: any, member: any) {
             return value ? value[member] : null;
         }
     },
 
-    keys: function (value) {
+    keys: function (value: any) {
         return value ? Object.keys(value) : [];
     },
 
-    values: function (value) {
+    values: function (value:any) {
         if (value) {
-            let values = [];
+            let values: any = [];
             Object.keys(value).forEach(key => {
                 values.push(value[key]);
             })
@@ -27,7 +27,7 @@ let ObjectFormatters = {
     },
 
     // Combine multiple objects using their members via the spread operator
-    combine: function (value) {
+    combine: function (value:any) {
         let object = {...value};
         for (var arg = 1; arg < arguments.length; arg++) {
             if (typeof arguments[arg] == "object")
@@ -37,9 +37,8 @@ let ObjectFormatters = {
     },
 
 
-
     // Create a blank object from any input
-    blankObject: function (value) {
+    blankObject: function (value:any) {
         return {};
     }
 

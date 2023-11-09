@@ -3,70 +3,70 @@
  */
 let LogicFormatters = {
 
-    equals: function (value, otherValue) {
+    equals: function (value: any, otherValue: any) {
         return value == otherValue;
     },
 
-    notequals: function (value, otherValue) {
+    notequals: function (value: any, otherValue: any) {
         return value != otherValue;
     },
 
-    not: function (value) {
+    not: function (value: any) {
         return !value;
     },
 
-    gt: function (value, otherValue) {
+    gt: function (value: any, otherValue: any) {
         return value > otherValue;
     },
 
 
-    gte: function (value, otherValue) {
+    gte: function (value: any, otherValue: any) {
         return value >= otherValue;
     },
 
-    lt: function (value, otherValue) {
+    lt: function (value: any, otherValue: any) {
         return value < otherValue;
     },
 
-    lte: function (value, otherValue) {
+    lte: function (value: any, otherValue: any) {
         return value <= otherValue;
     },
 
-    between: function (value, lowValue, highValue) {
+    between: function (value: any, lowValue: any, highValue: any) {
         return value >= lowValue && value <= highValue;
     },
 
-    and: function (value, otherValue) {
+    and: function (value: any, otherValue: any) {
         return value && otherValue;
     },
 
-    or: function (value, otherValue) {
+    or: function (value: any, otherValue: any) {
         return value || otherValue;
     },
 
 
     // Combined convenience functions
-    andNot: function (value, otherValue) {
+    andNot: function (value: any, otherValue: any) {
         return value && !otherValue;
     },
 
     // Or-not logic
-    orNot: function (value, otherValue) {
+    orNot: function (value: any, otherValue: any) {
         return value || !otherValue;
     },
 
     // Ternary expression
-    ternary: function (expression, trueValue, falseValue) {
+    ternary: function (expression: any, trueValue: any, falseValue: any) {
         return expression ? trueValue : falseValue;
     },
 
     // If not expression - i.e. if argument not set use alternative
-    ifNot: function (value, otherValue) {
+    ifNot: function (value: any, otherValue: any) {
         return value ? value : otherValue;
     },
 
     // Case expression, accepts key value pairs and matches the first one
-    "case": function (value) {
+    "case": function (value: any) {
 
         // Loop through pairs of values to check
         for (var arg = 1; arg < arguments.length; arg += 2) {
@@ -88,8 +88,8 @@ let LogicFormatters = {
 
     // Fill an array with numbers from the from to the to
     // for looping purposes
-    countArray: function (from, to) {
-        let countArray = [];
+    countArray: function (from: any, to: any) {
+        let countArray: any = [];
         for (var i = from; i <= to; i++) {
             countArray.push(i);
         }

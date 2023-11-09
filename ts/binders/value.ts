@@ -4,12 +4,12 @@
  * @param valueBinder
  * @constructor
  */
-export default function Value(valueBinder) {
+export default function Value(valueBinder: any) {
 
     valueBinder.coreBind = valueBinder.bind;
 
 
-    valueBinder.bind = function (el) {
+    valueBinder.bind = function (el: any) {
 
         if (el.hasAttribute('one-way')) {
             return;
@@ -22,7 +22,7 @@ export default function Value(valueBinder) {
 
                 var self = this;
 
-                let values = [];
+                let values: any = [];
 
                 // Add getter for value
                 Object.defineProperty(el, "value", {
@@ -58,7 +58,7 @@ export default function Value(valueBinder) {
                                             size: file.size,
                                             type: file.type,
                                             lastModified: file.lastModified,
-                                            content: loadedEvent.target.result
+                                            content: (<any>loadedEvent).target.result
                                         });
                                         completedFiles++;
                                         if (completedFiles == totalFiles)

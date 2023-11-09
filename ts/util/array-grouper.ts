@@ -15,12 +15,12 @@ export default class ArrayGrouper {
             return {};
 
         // Loop through each grouping member
-        let grouped = {};
-        groupingMembers.forEach(groupingMember => {
+        let grouped: any = {};
+        groupingMembers.forEach((groupingMember: any) => {
 
             // Check to see if we need to split the data on a delimiter
             let splitMember = groupingMember.split(" SPLIT ");
-            let delimiter = null;
+            let delimiter:any = null;
             if (splitMember.length > 1) {
                 groupingMember = splitMember[0];
                 delimiter = splitMember[1];
@@ -31,16 +31,16 @@ export default class ArrayGrouper {
 
 
                 // If we have a split situation, split the member into multiple
-                let keys = [];
+                let keys: any = [];
                 if (delimiter) {
                     if (arrayItem[groupingMember])
                         keys = arrayItem[groupingMember].split(delimiter);
                 } else {
                     let splitMember = groupingMember.split(".");
                     keys = [arrayItem];
-                    splitMember.forEach(memberPath => {
-                        let newItems = [];
-                        keys.forEach((currentItem, index) => {
+                    splitMember.forEach((memberPath: any) => {
+                        let newItems: any = [];
+                        keys.forEach((currentItem: any, index: number) => {
                             if (currentItem[memberPath]) {
                                 let subItems = currentItem[memberPath];
                                 if (subItems instanceof Array) {
@@ -56,7 +56,7 @@ export default class ArrayGrouper {
                 }
 
                 // Loop through each key and process each one.
-                keys.forEach(key => {
+                keys.forEach((key: any) => {
                     if (!grouped[key]) {
                         grouped[key] = [];
                     }

@@ -1,5 +1,5 @@
 import './util/polyfills';
-import tinybind from "tinybind";
+import * as tinybind from "tinybind";
 import Checked from "./binders/checked";
 import Toggle from "./binders/toggle";
 import ArrayAdapter from "./adapters/array-adapter";
@@ -55,7 +55,7 @@ export default class Kinibind {
      * @param element
      * @param params
      */
-    constructor(element, model = {}, config = {}) {
+    constructor(element: any, model: any = {}, config: any = {}) {
         this._boundContext = Kinibind.binder.bind(element, model, config);
     }
 
@@ -73,7 +73,7 @@ export default class Kinibind {
      * @return Object
      */
     public get model() {
-        return this._boundContext.models;
+        return (<any>this)._boundContext.models;
     }
 
 
@@ -84,7 +84,7 @@ export default class Kinibind {
      * @param propertyName
      * @param propertyValue
      */
-    public static addNewProperty(modelObject, propertyName, propertyValue) {
+    public static addNewProperty(modelObject: any, propertyName: string, propertyValue: any) {
 
         // Set the value
         modelObject[propertyName] = propertyValue;
@@ -101,7 +101,7 @@ export default class Kinibind {
      * @param object
      * @param propertyName
      */
-    public static observeObjectPropertyChanges(object, propertyName, callbackFunction = null) {
+    public static observeObjectPropertyChanges(object: any, propertyName: string, callbackFunction: any = null) {
         // Observe the new property
         tinybind.adapters[tinybind.rootInterface].observe(object, propertyName, {
             sync: () => {
@@ -119,7 +119,7 @@ export default class Kinibind {
      * @param propertyName
      * @param maxTimeoutSeconds
      */
-    public static async awaitObjectProperty(object, propertyName, maxTimeoutSeconds = 1) {
+    public static async awaitObjectProperty(object: any, propertyName: string, maxTimeoutSeconds: number = 1) {
         let attempts = 0;
         while ((attempts < maxTimeoutSeconds * 20) && object[propertyName] === undefined) {
             await new Promise((resolve, reject) => {
@@ -157,7 +157,7 @@ export default class Kinibind {
         this._config = config;
 
         // Attach the tinybind object to the window for interoperability purposes
-        window["tinybind"] = tinybind;
+        (<any>window)["tinybind"] = tinybind;
 
     }
 

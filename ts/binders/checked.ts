@@ -4,12 +4,12 @@
  * @param checkedBinder
  * @constructor
  */
-export default function Checked(checkedBinder) {
+export default function Checked(checkedBinder: any) {
 
     checkedBinder.coreBind = checkedBinder.bind;
 
 
-    checkedBinder.bind = function (el) {
+    checkedBinder.bind = function (el: any) {
 
         if (el.hasAttribute('one-way')) {
             return;

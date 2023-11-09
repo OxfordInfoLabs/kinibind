@@ -3,7 +3,7 @@
  */
 let DebugFormatters = {
 
-    dump: function (value) {
+    dump: function (value: any) {
         try {
             return JSON.stringify(value);
         } catch (e){

@@ -1,25 +1,25 @@
 /**
  * Toggle class
  */
-let Toggle = {
+let Toggle: any = {
 
 
     publishes: true,
 
 
-    bind: function (el) {
+    bind: function (el: any) {
 
-        let observer = this.observer;
+        let observer: any = this.observer;
 
         if (!this.callback) {
-            this.callback = function (event) {
+            this.callback = function (event: any) {
 
                 // if special initialise object toggle mode initialise the object
                 if (el.getAttribute("initialise-object")) {
                     observer.setValue({});
                 } else {
 
-                    let toggleValues = null;
+                    let toggleValues:any = null;
                     if (el.getAttribute("toggle-values")) {
                         toggleValues = el.getAttribute("toggle-values").split(",");
                     }
@@ -50,7 +50,7 @@ let Toggle = {
 
     },
 
-    unbind: function (el) {
+    unbind: function (el: any) {
         el.removeEventListener("click", this.callback);
     }
 

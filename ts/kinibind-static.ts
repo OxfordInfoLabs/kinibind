@@ -27,6 +27,9 @@ export default class KinibindStatic {
         ...DebugFormatters
     };
 
+    // Binder collection
+    protected static BINDERS = {};
+
 
     /**
      * Parse some html with an associated model
@@ -40,6 +43,8 @@ export default class KinibindStatic {
      * @return string
      */
     public parse(html: string, model: any = {}, prefix: string = "k", delimiters: string[] = ["{", "}"], stripTags: boolean = false) {
+
+        delimiters = [delimiters[0].replace(/\[/g, "\\["), delimiters[1]];
 
         // Escape HTML quotes
         html = html.replace(/&quot;/g, '##ESCAPEQUOTE');
@@ -63,8 +68,23 @@ export default class KinibindStatic {
      *
      * @param object formatters
      */
-    public static addFormatters(formatters) {
+    public static addFormatters(formatters: any) {
         this.FORMATTERS = {...this.FORMATTERS, ...formatters};
+    }
+
+
+    /**
+     * Add binders to be processed before any attributes are processed.
+     * This should be an object of functions keyed in by binder key.
+     *
+     * The function spec should be
+     *
+     * function (el: any, value: any)
+     *
+     * @param binders
+     */
+    public static addBinders(binders: any) {
+        this.BINDERS = {...this.BINDERS, ...binders};
     }
 
 
@@ -160,25 +180,25 @@ export default class KinibindStatic {
 
 
         // Find all possible distinct prefix attributes
-        let attributeMatches = domElement.toString().match(new RegExp(prefix + "-.*?=", "g"));
+        let attributeMatches = domElement.toString().match(new RegExp(prefix + "-[0-9a-z-]+?=", "g"));
 
         // If matches
         if (attributeMatches) {
 
             // Ensure matches are distinct
-            attributeMatches = attributeMatches.filter((item, index, self) => {
+            attributeMatches = attributeMatches.filter((item: any, index: number, self: any) => {
                 return self.indexOf(item) === index;
             });
 
 
             // Evaluate all attributes
-            attributeMatches.forEach((matchingAttribute) => {
+            attributeMatches.forEach((matchingAttribute: any) => {
                 matchingAttribute = matchingAttribute.substr(0, matchingAttribute.length - 1);
 
                 let newAttribute = matchingAttribute.substr(prefix.length + 1);
                 let elements = domElement.querySelectorAll("[" + matchingAttribute + "]");
 
-                elements.forEach(element => {
+                elements.forEach((element: any) => {
 
                     let evaluatedAttributeValue = this._processExpression(element.getAttribute(matchingAttribute), model);
 
@@ -214,6 +234,8 @@ export default class KinibindStatic {
                                     if (existingIndex >= 0) classes.splice(existingIndex, 1);
                                 }
                                 element.setAttribute("class", classes.join(" "));
+                            } else if ((<any>KinibindStatic).BINDERS[newAttribute]) {
+                                (<any>KinibindStatic).BINDERS[newAttribute].apply((<any>KinibindStatic).BINDERS, [element, evaluatedAttributeValue]);
                             } else
                                 element.setAttribute(newAttribute, evaluatedAttributeValue);
 
@@ -229,7 +251,7 @@ export default class KinibindStatic {
 
 
     // Replace literals in a passed string
-    private _replaceLiterals(string, model, delimiters) {
+    private _replaceLiterals(string: string, model: any, delimiters: any) {
         let regExp = new RegExp(delimiters[0] + "(.*?)" + delimiters[1], "g");
         return string.replace(regExp, (fullMatch, content) => {
             return this._processExpression(content, model);
@@ -238,11 +260,11 @@ export default class KinibindStatic {
 
 
     // Process an expression using the passed model
-    private _processExpression(expression, model) {
+    private _processExpression(expression: any, model: any) {
 
         // Substitute expressions in '' to avoid problems with the split
-        let captured = [];
-        expression = expression.replace(/['"].*?['"]/g, (match) => {
+        let captured: any[] = [];
+        expression = String(expression).replace(/['"].*?['"]/g, (match: any) => {
             captured.push(match);
             return '#' + (captured.length - 1);
         });
@@ -258,7 +280,7 @@ export default class KinibindStatic {
         let value = this._evaluateValue(firstItem, model);
 
         // Now process each expression
-        expressions.forEach(expression => {
+        expressions.forEach((expression: any) => {
 
             let components = expression.split(' ');
 
@@ -267,14 +289,18 @@ export default class KinibindStatic {
             let formatterArgs = [value];
 
             // Evaluate each component first substituting any # substitutions from earlier.
-            components.forEach(component => {
+            components.forEach((component: any) => {
                 if (component.substr(0, 1) == "#")
                     component = captured[Number(component.substr(1))];
                 if (component) component.trim();
                 formatterArgs.push(this._evaluateValue(component, model));
             });
 
-            let formatterMethod = KinibindStatic.FORMATTERS[formatter];
+            let formatterMethod: any = (<any>KinibindStatic.FORMATTERS)[formatter];
+
+            // If a nested read method, use this
+            if (formatterMethod && formatterMethod.read) formatterMethod = formatterMethod.read;
+
             if (formatterMethod && formatterMethod.apply) {
                 value = formatterMethod.apply(KinibindStatic.FORMATTERS, formatterArgs);
             }
@@ -290,7 +316,7 @@ export default class KinibindStatic {
     // 1) a string enclosed in single or double quotes
     // 2) a number literal
     // 3) another string which will be assumed to be a path into the model
-    private _evaluateValue(value, model) {
+    private _evaluateValue(value: any, model: any) {
 
         if (value === undefined)
             return '';
@@ -310,7 +336,7 @@ export default class KinibindStatic {
         // Else assume model path
         let splitModelPath = value.split(/[\.\[\]]/);
         let returnValue = model;
-        splitModelPath.forEach(pathElement => {
+        splitModelPath.forEach((pathElement: any) => {
             if (pathElement == "") return;
             returnValue = returnValue ? returnValue[pathElement] : null;
         });

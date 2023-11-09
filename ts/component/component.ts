@@ -76,8 +76,8 @@ export default abstract class Component {
      * @param propertyValue
      * @protected
      */
-    protected addComponentModelProperty(propertyName, propertyValue) {
-        Kinibind.addNewProperty(this.componentModel, propertyName, propertyValue);
+    protected addComponentModelProperty(propertyName: string, propertyValue: any, parentObject: any = null) {
+        Kinibind.addNewProperty(parentObject ? parentObject : this.componentModel, propertyName, propertyValue);
     }
 
 
@@ -88,8 +88,9 @@ export default abstract class Component {
      * @param componentModel
      * @param parentModel
      * @param document
+     *
      */
-    public abstract initialise(element: HTMLElement, componentModel: any, parentModel: any, document: Document);
+    public abstract initialise(element: HTMLElement, componentModel: any, parentModel: any, document: Document): void;
 
 
 }

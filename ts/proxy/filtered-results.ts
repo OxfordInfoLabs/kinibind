@@ -9,7 +9,7 @@ export default class FilteredResults {
      * @param results
      * @param totalCount
      */
-    constructor(results: any[], totalCount) {
+    constructor(results: any[], totalCount: any) {
         this._results = results;
         this._totalCount = totalCount;
     }

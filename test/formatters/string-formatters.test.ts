@@ -16,4 +16,8 @@ describe('String formatter tests', function () {
 
     });
 
+    it('Should be able to convert html to text', function (): void {
+        expect(StringFormatters.htmlToText("<p>Hello world</p>")).toEqual("Hello world");
+    });
+
 });

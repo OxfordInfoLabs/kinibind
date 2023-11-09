@@ -4,17 +4,17 @@
  */
 let DefaultAdapter = {
 
-    observe: function observe(obj, keypath, callback) {
+    observe: function observe(obj: any, keypath: any, callback: any) {
 
-        var _this2 = this;
+        var _this2: any = this;
 
-        var value;
-        var callbacks = this.weakReference(obj).callbacks;
+        var value: any;
+        var callbacks: any = (<any>this).weakReference(obj).callbacks;
 
         if (!callbacks[keypath]) {
 
             callbacks[keypath] = [];
-            var desc = Object.getOwnPropertyDescriptor(obj, keypath);
+            var desc: any = Object.getOwnPropertyDescriptor(obj, keypath);
 
             if (!desc || !(desc.get || desc.set || !desc.configurable)) {
 
@@ -65,7 +65,7 @@ let DefaultAdapter = {
         if (typeof (obj[keypath]) === 'object' && !(obj[keypath] instanceof Array) && obj[keypath] !== null) {
 
             if (keypath.substr(0, 8) != "__parent") {
-                let data = this.weakReference(obj[keypath]);
+                let data: any = (<any>this).weakReference(obj[keypath]);
                 if (!data.parentObject) {
                     data.parentObject = obj;
                     data.keypath = keypath;
@@ -77,10 +77,10 @@ let DefaultAdapter = {
             callbacks[keypath].push(callback);
         }
 
-        this.observeArray(obj[keypath], obj.__rv, keypath);
+        (<any>this).observeArray(obj[keypath], obj.__rv, keypath);
 
     },
-    observeObject: function (object, observer) {
+    observeObject: function (object: any, observer: any) {
 
         // Recursively observe new items.
         if ((typeof object === 'object') && object && !object.__rv) {
@@ -106,9 +106,9 @@ let DefaultAdapter = {
         }
     }
     ,
-    runCallbacks: function (object, keypath, observer, processed = []) {
+    runCallbacks: function (object: any, keypath: any, observer: any, processed: any = []) {
 
-        var data = observer.weakmap[object.__rv];
+        var data: any = observer.weakmap[object.__rv];
 
         // Ensure we don't get unnecesary recursion
         if (processed.includes(data))
@@ -119,7 +119,7 @@ let DefaultAdapter = {
         var _callbacks = data && data.callbacks && data.callbacks[keypath] ? data.callbacks[keypath] : [];
 
         if (_callbacks) {
-            _callbacks.forEach(function (cb) {
+            _callbacks.forEach(function (cb: any) {
                 cb.sync();
             });
         }

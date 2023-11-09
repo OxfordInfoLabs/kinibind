@@ -8,7 +8,7 @@ import ArrayGrouper from "../util/array-grouper";
 let ArrayFormatters = {
 
     // Extract item from array at index
-    item: function (value, index) {
+    item: function (value: any, index: any) {
 
         if (ArrayFormatters.__checkArray(value)) {
 
@@ -22,7 +22,7 @@ let ArrayFormatters = {
     },
 
     // Join an array to produce a string using the join string argument
-    join: function (value, joinString) {
+    join: function (value: any, joinString: any) {
         if (ArrayFormatters.__checkArray(value)) {
             return value.join(joinString);
         } else {
@@ -31,7 +31,7 @@ let ArrayFormatters = {
     },
 
     // Concatenate arrays together
-    concat: function (value, otherArray) {
+    concat: function (value: any, otherArray: any) {
         if (ArrayFormatters.__checkArray(value) && ArrayFormatters.__checkArray(otherArray)) {
             return value.concat(otherArray);
         }
@@ -40,7 +40,7 @@ let ArrayFormatters = {
     },
 
     // Get a slice of an array
-    slice: function (value, from, length?) {
+    slice: function (value: any, from: any, length?: any) {
 
         // Convert to numbers
         from = Number(from);
@@ -58,10 +58,10 @@ let ArrayFormatters = {
     },
 
     // Produce array of values from an array of objects
-    memberValues: function (value, member) {
-        let values = [];
+    memberValues: function (value: any, member: any) {
+        let values: any = [];
         if (ArrayFormatters.__checkArray(value)) {
-            value.forEach(value => {
+            value.forEach((value: any) => {
                 if (value instanceof Object) {
                     values.push(value[member]);
                 }
@@ -72,10 +72,10 @@ let ArrayFormatters = {
 
 
     // Merge all values in an array (assumed to be arrays) into a single array
-    mergeValues: function (value) {
-        let values = [];
+    mergeValues: function (value: any) {
+        let values: any = [];
         if (ArrayFormatters.__checkArray(value)) {
-            value.forEach(arrayItem => {
+            value.forEach((arrayItem: any) => {
                 if (arrayItem instanceof Array) {
                     values = values.concat(arrayItem);
                 }
@@ -86,15 +86,15 @@ let ArrayFormatters = {
     },
 
     // Get distinct items in an array
-    distinct: function (value, compareMember = null) {
+    distinct: function (value: any, compareMember = null) {
         if (ArrayFormatters.__checkArray(value)) {
 
-            let compareValues = [];
+            let compareValues: any = [];
             if (compareMember) {
                 compareValues = ArrayFormatters.memberValues(value, compareMember);
             }
 
-            return value.filter((value, index, self) => {
+            return value.filter((value: any, index: any, self: any) => {
                 if (compareMember) {
                     return compareValues.indexOf(value[compareMember]) === index;
                 } else
@@ -106,11 +106,11 @@ let ArrayFormatters = {
     },
 
     // Filter an array based upon a filter member / value and filter type
-    filter: function (value, filter, filterValue = null, filterType = "equals") {
+    filter: function (value: any, filter: any, filterValue = null, filterType = "equals") {
 
         if (ArrayFormatters.__checkArray(value)) {
 
-            let filterObject = {};
+            let filterObject: any = {};
             if (typeof filter == "string") {
                 filterObject[filter] = {
                     value: filterValue,
@@ -132,12 +132,12 @@ let ArrayFormatters = {
     },
 
     // Sort an array by a member and ASC / DESC
-    sort: function (value, sortBy) {
+    sort: function (value: any, sortBy: any) {
 
         if (ArrayFormatters.__checkArray(value)) {
 
             // Determine sort mode
-            let sortData = [];
+            let sortData: any = [];
             if (typeof sortBy == "string") {
 
                 for (var i = 1; i < arguments.length; i += 2) {
@@ -160,9 +160,9 @@ let ArrayFormatters = {
             }
 
 
-            let sortCallback = (firstElement, secondElement) => {
+            let sortCallback: any = (firstElement: any, secondElement: any) => {
                 for (var i = 0; i < sortData.length; i++) {
-                    let item = sortData[i];
+                    let item: any = sortData[i];
 
                     // Skip this check if the two match
                     if (firstElement[item.member] == secondElement[item.member])
@@ -190,13 +190,13 @@ let ArrayFormatters = {
     },
 
     // Group by one or more members
-    group: function (value, ...arg) {
+    group: function (value: any, ...arg: any) {
         let grouper = new ArrayGrouper();
         return grouper.groupArray(value, arg);
     },
 
     // Get all values of an array (designed for when a proxy)
-    values: function (value) {
+    values: function (value: any) {
         if (value instanceof ArrayProxy) {
             return value.values;
         } else {
@@ -209,9 +209,9 @@ let ArrayFormatters = {
      *
      * @param value
      */
-    sum: function (value) {
+    sum: function (value: any) {
         let sum = 0;
-        value.forEach((valueEntry) => {
+        value.forEach((valueEntry: any) => {
             sum += Number(valueEntry);
         });
         return sum;
@@ -222,14 +222,14 @@ let ArrayFormatters = {
      *
      * @param value
      */
-    totalCount: function (value) {
+    totalCount: function (value: any) {
         if (value instanceof ArrayProxy) {
             return value.totalCount;
         }
     },
 
     // Wrap one or more items as an array
-    wrapAsArray: function (value, ...otherValues) {
+    wrapAsArray: function (value: any, ...otherValues: any) {
         if (!(value instanceof Array)) {
             value = [value];
         }
@@ -245,11 +245,11 @@ let ArrayFormatters = {
      *
      * @param value
      */
-    ensureArray: function (value) {
+    ensureArray: function (value: any) {
         return ArrayFormatters.__checkArray(value) ? value : [];
     },
 
-    __checkArray: function (value) {
+    __checkArray: function (value: any) {
         return value instanceof Array || value instanceof ArrayProxy
     }
 

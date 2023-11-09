@@ -4,41 +4,41 @@
 let MathsFormatters = {
 
 
-    add: function (value, otherModel) {
+    add: function (value: any, otherModel: any) {
         return Number(value) + Number(otherModel);
     },
 
-    subtract: function (value, otherModel) {
+    subtract: function (value: any, otherModel: any) {
         return Number(value) - Number(otherModel);
     },
 
-    multiply: function (value, otherModel) {
+    multiply: function (value: any, otherModel: any) {
         return Number(value) * Number(otherModel);
     },
 
-    divide: function (value, otherModel) {
+    divide: function (value: any, otherModel: any) {
         return Number(value) / Number(otherModel);
     },
 
-    modulo: function (value, otherModel) {
+    modulo: function (value: any, otherModel: any) {
         return Number(value) % Number(otherModel);
     },
 
-    decimalplaces: function (value, dp) {
+    decimalplaces: function (value: any, dp: any) {
         return Number(value).toFixed(dp);
     },
 
-    commaseparatedthousands: function (value) {
+    commaseparatedthousands: function (value: any) {
         return Number(value).toLocaleString("en-US");
     },
 
-    floor: function (value) {
+    floor: function (value: any) {
         return Math.floor(Number(value));
     },
-    ceil: function (value) {
+    ceil: function (value: any) {
         return Math.ceil(Number(value));
     },
-    round: function (value) {
+    round: function (value: any) {
         return Math.round(Number(value));
     }
 

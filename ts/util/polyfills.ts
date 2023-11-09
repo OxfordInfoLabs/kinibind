@@ -1,21 +1,23 @@
-import 'promise-polyfill/src/polyfill';
+
 
 // Matches function
 if (!Element.prototype.matches) {
-    Element.prototype.matches = Element.prototype['msMatchesSelector'] ||
+    Element.prototype.matches = (<any>Element).prototype['msMatchesSelector'] ||
         Element.prototype['webkitMatchesSelector'];
 }
 
 // Closest function
 if ((<any>window).Element && !Element.prototype.closest) {
     Element.prototype.closest =
-        function(s) {
-            var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+        function (s: any) {
+            var matches = ((<any>this).document || this.ownerDocument).querySelectorAll(s),
                 i,
-                el = this;
+                el: any = this;
             do {
                 i = matches.length;
-                while (--i >= 0 && matches.item(i) !== el) {};
+                while (--i >= 0 && matches.item(i) !== el) {
+                }
+                ;
             } while ((i < 0) && (el = el.parentElement));
             return el;
         };
@@ -39,4 +41,4 @@ if ((<any>window).NodeList && !NodeList.prototype.forEach) {
 
 // Object values polyfill
 // @ts-ignore
-if (!Object.values) Object.values = o=>Object.keys(o).map(k=>o[k]);
+if (!Object.values) Object.values = o => Object.keys(o).map(k => o[k]);

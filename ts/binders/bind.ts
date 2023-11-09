@@ -8,15 +8,15 @@ let Bind = {
     block: true,
     priority: 4000,
 
-    bind: function (el) {
+    bind: function (el: any) {
 
         // Create a clean model
-        let model = {'$global': this.view.models['$global'] || this.view.models};
+        let model: any = {'$global': (<any>this).view.models['$global'] || (<any>this).view.models};
 
-        window["tinybind"].bind(el, model);
+        (<any>window)["tinybind"].bind(el, model);
 
         // Sort out parent and global model
-        model['$parent'] = this.view.models;
+        model['$parent'] = (<any>this).view.models;
 
         el.dataset.kinibound = "1";
         el.boundModel = model;

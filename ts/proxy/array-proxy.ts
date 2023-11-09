@@ -3,7 +3,7 @@
  */
 import FilteredResults from "./filtered-results";
 import FilterQuery from "./filter-query";
-import {filter} from "minimatch";
+
 
 export default abstract class ArrayProxy {
 
@@ -11,7 +11,7 @@ export default abstract class ArrayProxy {
     protected filterQuery: FilterQuery = new FilterQuery();
 
     // Parent proxy
-    protected __parentProxy: ArrayProxy = null;
+    protected __parentProxy: any = null;
 
     /**
      * Array of forward proxies for this proxy
@@ -54,7 +54,7 @@ export default abstract class ArrayProxy {
      *
      * @param callback
      */
-    public filter(callback) {
+    public filter(callback: any) {
 
         let newFilterData = {filters: {...this.filterQuery.filters, ...callback.filters}};
         return this.getProxy(newFilterData);
@@ -67,7 +67,7 @@ export default abstract class ArrayProxy {
      *
      * @param callback
      */
-    public sort(callback) {
+    public sort(callback: any) {
         let newFilterData: any = {
             sortOrders: this.filterQuery.sortOrders.concat(callback.sortData)
         };
@@ -92,7 +92,7 @@ export default abstract class ArrayProxy {
      *
      * @param otherArray
      */
-    public concat(otherArray) {
+    public concat(otherArray: any) {
         if (otherArray instanceof ArrayProxy) {
             return this.values.concat(otherArray.values);
         } else {
@@ -161,7 +161,7 @@ export default abstract class ArrayProxy {
 
             let parentProxy = this.__parentProxy ? this.__parentProxy : this;
 
-            parentProxy.filterResults(this.filterQuery).then((filteredResults => {
+            parentProxy.filterResults(this.filterQuery).then(((filteredResults: any) => {
                 this.status = "LOADED";
                 this.results = filteredResults;
                 parentProxy.version = parentProxy.version + 1;
