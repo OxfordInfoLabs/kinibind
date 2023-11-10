@@ -195,6 +195,12 @@ let ArrayFormatters = {
         return grouper.groupArray(value, arg);
     },
 
+    // Group by one or more members but only include each item once (in a single group)
+    groupUnique: function (value: any, ...arg: any) {
+        let grouper = new ArrayGrouper();
+        return grouper.groupArray(value, arg, true);
+    },
+
     // Get all values of an array (designed for when a proxy)
     values: function (value: any) {
         if (value instanceof ArrayProxy) {
