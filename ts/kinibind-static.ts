@@ -202,44 +202,48 @@ export default class KinibindStatic {
 
                     let evaluatedAttributeValue = this._processExpression(element.getAttribute(matchingAttribute), model);
 
-                    // Switch special cases
-                    switch (newAttribute) {
+                    try {
+                        // Switch special cases
+                        switch (newAttribute) {
 
-                        case "text":
-                            element.textContent = evaluatedAttributeValue;
-                            break;
+                            case "text":
+                                element.textContent = evaluatedAttributeValue;
+                                break;
 
-                        case "html":
-                            element.innerHTML = evaluatedAttributeValue;
-                            break;
+                            case "html":
+                                element.innerHTML = evaluatedAttributeValue;
+                                break;
 
-                        default:
+                            default:
 
-                            // if we start with class- we assume this is a class
-                            // related attribute
-                            if (newAttribute.startsWith("has-")) {
-                                let attributeName = newAttribute.substr(4);
-                                if (evaluatedAttributeValue) {
-                                    element.setAttribute(attributeName, "");
-                                } else {
-                                    element.removeAttribute(attributeName);
-                                }
-                            } else if (newAttribute.startsWith("class-")) {
-                                let className = newAttribute.substr(6);
-                                let classes = element.getAttribute("class") ? element.getAttribute("class").split(" ") : [];
-                                let existingIndex = classes.indexOf(className);
-                                if (evaluatedAttributeValue) {
-                                    if (existingIndex < 0) classes.push(className);
-                                } else {
-                                    if (existingIndex >= 0) classes.splice(existingIndex, 1);
-                                }
-                                element.setAttribute("class", classes.join(" "));
-                            } else if ((<any>KinibindStatic).BINDERS[newAttribute]) {
-                                (<any>KinibindStatic).BINDERS[newAttribute].apply((<any>KinibindStatic).BINDERS, [element, evaluatedAttributeValue]);
-                            } else
-                                element.setAttribute(newAttribute, evaluatedAttributeValue);
+                                // if we start with class- we assume this is a class
+                                // related attribute
+                                if (newAttribute.startsWith("has-")) {
+                                    let attributeName = newAttribute.substr(4);
+                                    if (evaluatedAttributeValue) {
+                                        element.setAttribute(attributeName, "");
+                                    } else {
+                                        element.removeAttribute(attributeName);
+                                    }
+                                } else if (newAttribute.startsWith("class-")) {
+                                    let className = newAttribute.substr(6);
+                                    let classes = element.getAttribute("class") ? element.getAttribute("class").split(" ") : [];
+                                    let existingIndex = classes.indexOf(className);
+                                    if (evaluatedAttributeValue) {
+                                        if (existingIndex < 0) classes.push(className);
+                                    } else {
+                                        if (existingIndex >= 0) classes.splice(existingIndex, 1);
+                                    }
+                                    element.setAttribute("class", classes.join(" "));
+                                } else if ((<any>KinibindStatic).BINDERS[newAttribute]) {
+                                    (<any>KinibindStatic).BINDERS[newAttribute].apply((<any>KinibindStatic).BINDERS, [element, evaluatedAttributeValue, model]);
+                                } else
+                                    element.setAttribute(newAttribute, evaluatedAttributeValue);
 
-                            break;
+                                break;
+                        }
+                    } catch (e) {
+                        console.log(e);
                     }
 
                     element.removeAttribute(matchingAttribute);
