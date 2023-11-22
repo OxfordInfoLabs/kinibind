@@ -40,6 +40,9 @@ let MathsFormatters = {
     },
     round: function (value: any) {
         return Math.round(Number(value));
+    },
+    random: function (min: any, max: any) {
+        return min + Math.round(Math.random() * (max - min));
     }
 
 }
