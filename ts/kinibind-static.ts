@@ -9,6 +9,7 @@ import LogicFormatters from "./formatters/logic-formatters";
 import FunctionFormatters from "./formatters/function-formatters";
 import DebugFormatters from "./formatters/debug-formatters";
 
+
 /**
  * Static kinibind implementation for fast DOM parsing of static structures (mostly used in NodeJS)
  */
@@ -43,6 +44,7 @@ export default class KinibindStatic {
      * @return string
      */
     public parse(html: string, model: any = {}, prefix: string = "k", delimiters: string[] = ["{", "}"], stripTags: boolean = false) {
+
 
         delimiters = [delimiters[0].replace(/\[/g, "\\["), delimiters[1]];
 
@@ -177,7 +179,6 @@ export default class KinibindStatic {
 
     // Evaluate attributes for supplied prefix within the contained element using model
     private _evaluateAttributes(domElement: any, prefix: string, model: any) {
-
 
         // Find all possible distinct prefix attributes
         let attributeMatches = domElement.toString().match(new RegExp(prefix + "-[0-9a-z-]+?=", "g"));
