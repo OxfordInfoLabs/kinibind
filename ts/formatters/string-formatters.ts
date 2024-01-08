@@ -32,6 +32,15 @@ let StringFormatters = {
         return value ? value.substring(start, end) : '';
     },
 
+    substringIndex: function (value: any, substring: string, caseSensitive = false) {
+        // If not case sensitive, ensure this is conformed to
+        if (!caseSensitive) {
+            value = value.toLowerCase();
+            substring = substring.toLowerCase();
+        }
+        return value ? value.indexOf(substring) : '';
+    },
+
     uppercase: function (value: any) {
         return value ? value.toUpperCase() : '';
     },
@@ -55,6 +64,20 @@ let StringFormatters = {
         } else {
             return 0;
         }
+    },
+
+    // Return the sentences around a location in the string.  By default this will
+    // always return the sentence containing the location but optionally can contain a number of previous and
+    // following sentences as well
+    sentencesAround: function (value: any, location: number = 0, precedingSentences: number = 0, followingSentences: number = 0) {
+        if (location < 0) location = 0;
+
+        // Capture forward sentences
+        let forwardContent = value.substr(location).split(".").slice(0, followingSentences + 1).join(".");
+        let precedingContent = value.substr(0, location).split("").reverse().join("").split(".").slice(0, precedingSentences + 1).join(".").split("").reverse().join("");
+
+        return precedingContent + forwardContent;
+
     },
 
     hash: function (value: any) {
@@ -109,7 +132,12 @@ let StringFormatters = {
     },
 
     htmlToText: function (value: any, escapeCharacters: string = "") {
-        return value.replace(/<[^>]*>/g, '');
+        return value ? value.replace(/<[^>]*>/g, '') : '';
+    },
+
+    highlightSubstring: function (value: any, substring: string, wrapper: string = "<b>match</b>") {
+        let regexp = new RegExp("(" + substring + ")", "ig");
+        return value.replaceAll(regexp, wrapper.replace("match", "$1"));
     },
 
     toJSON: function (value: any) {

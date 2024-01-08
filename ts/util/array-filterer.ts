@@ -184,10 +184,10 @@ export default class ArrayFilterer {
                             match = (memberValue != filterValue);
                             break;
                         case "like":
-                            match = memberValue && memberValue.toLowerCase().indexOf(filterValue.toLowerCase()) >= 0;
+                            match = memberValue && memberValue.toLowerCase && memberValue.toLowerCase().indexOf(filterValue.toLowerCase()) >= 0;
                             break;
                         case "startsWith":
-                            match = memberValue && memberValue.toLowerCase().startsWith(filterValue.toLowerCase());
+                            match = memberValue && memberValue.toLowerCase && memberValue.toLowerCase().startsWith(filterValue.toLowerCase());
                             break;
                         case "gte":
                             match = memberValue >= filterValue;
