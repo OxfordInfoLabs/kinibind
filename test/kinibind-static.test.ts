@@ -107,7 +107,7 @@ describe('Kinibind static tests: ', function () {
     it('Should evaluate has attribute clauses correctly', function () {
         let text = '<p><span k-has-disabled="disabled"></span></p>';
         let evaluated = kinibind.parse(text, {disabled: true});
-        expect(evaluated).toEqual('<p><span disabled=""></span></p>');
+        expect(evaluated).toEqual('<p><span disabled></span></p>');
         evaluated = kinibind.parse(text, {disabled: false});
         expect(evaluated).toEqual('<p><span></span></p>')
     });
