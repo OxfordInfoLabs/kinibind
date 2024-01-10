@@ -1,7 +1,7 @@
 
 
 // Matches function
-if (!Element.prototype.matches) {
+if ((<any>window).Element && !Element.prototype.matches) {
     Element.prototype.matches = (<any>Element).prototype['msMatchesSelector'] ||
         Element.prototype['webkitMatchesSelector'];
 }

@@ -86,7 +86,7 @@ let ArrayFormatters = {
     },
 
     // Get distinct items in an array
-    distinct: function (value: any, compareMember = null) {
+    distinct: function (value: any, compareMember: any = null) {
         if (ArrayFormatters.__checkArray(value)) {
 
             let compareValues: any = [];
