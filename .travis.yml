@@ -5,7 +5,7 @@ addons:
     update: true
 
 language: node_js
-node_js: 14.16
+node_js: 20
 
 install:
   - npm i
