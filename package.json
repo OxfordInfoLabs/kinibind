@@ -1,7 +1,7 @@
 {
   "name": "kinibind",
   "description": "Data binding framework building upon Tinybind",
-  "version": "0.0.117",
+  "version": "0.0.119",
   "author": "Oxford Information Labs",
   "url": "https://github.com/OxfordInfoLabs/kinibind",
   "main": "./dist/kinibind.bundle.js",
@@ -32,6 +32,7 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
     "uglify-template-string-loader": "^1.1.1",
+    "version-bump-prompt": "^6.1.0",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4",
     "webpack-lowercase-name": "^1.0.4"
