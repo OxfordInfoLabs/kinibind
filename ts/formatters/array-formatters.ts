@@ -21,6 +21,22 @@ let ArrayFormatters = {
         }
     },
 
+    first: function (value: any) {
+        if (ArrayFormatters.__checkArray(value)) {
+            return value.shift() ?? null;
+        } else {
+            return value;
+        }
+    },
+
+    last: function (value: any) {
+        if (ArrayFormatters.__checkArray(value)) {
+            return value.pop() ?? null;
+        } else {
+            return value;
+        }
+    },
+
     // Join an array to produce a string using the join string argument
     join: function (value: any, joinString: any) {
         if (ArrayFormatters.__checkArray(value)) {
