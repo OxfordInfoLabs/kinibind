@@ -1,4 +1,5 @@
 import ArrayFormatters from "../../ts/formatters/array-formatters";
+import ArrayPivoter from "../../ts/util/array-pivoter";
 
 describe('Array formatter tests', function () {
 
@@ -577,6 +578,68 @@ describe('Array formatter tests', function () {
 
         });
 
+
+    });
+
+
+    it('Should be able to pivot array of objects by supplying grouping, pivot and value columns', () => {
+
+
+        let data = [
+            {
+                "group": "Group 1",
+                "label": "Colour",
+                "altLabel": "Blend",
+                "value": "Green"
+            }, {
+                "group": "Group 1",
+                "label": "Shade",
+                "altLabel": "Blend",
+                "value": "Grass"
+            },
+            {
+                "group": "Group 1",
+                "label": "Shape",
+                "altLabel": "Shape",
+                "value": "Square"
+            },
+            {
+                "group": "Group 2",
+                "label": "Colour",
+                "altLabel": "Blend",
+                "value": "Red"
+            },
+            {
+                "group": "Group 2",
+                "label": "Shade",
+                "altLabel": "Blend",
+                "value": "Crimson"
+            },
+            {
+                "group": "Group 2",
+                "label": "Shape",
+                "altLabel": "Shape",
+                "value": "Circle"
+            },
+            {
+                "group": "Group 3",
+                "label": "Colour",
+                "altLabel": "Blend",
+                "value": "Orange"
+            },
+            {
+                "group": "Group 3",
+                "label": "Shade",
+                "altLabel": "Blend",
+                "value": "Burnt"
+            }
+        ];
+
+
+        let pivoter = new ArrayPivoter();
+        expect(ArrayFormatters.pivot(data, "group", "label", "value")).toEqual(
+            pivoter.pivotArray(data, ["group"], "label", "value")
+        );
 
     });
 

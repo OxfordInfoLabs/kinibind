@@ -4,6 +4,7 @@
 import ArrayFilterer from "../util/array-filterer";
 import ArrayProxy from "../proxy/array-proxy";
 import ArrayGrouper from "../util/array-grouper";
+import ArrayPivoter from "../util/array-pivoter";
 
 let ArrayFormatters = {
 
@@ -216,6 +217,18 @@ let ArrayFormatters = {
         let grouper = new ArrayGrouper();
         return grouper.groupArray(value, arg, true);
     },
+
+
+    // Pivot the data according to one or more grouping columns, a pivot and values column.
+    pivot: function (value: any, groupingColumns: string, pivotColumn: string, valuesColumn: string) {
+        if (ArrayFormatters.__checkArray(value)) {
+            let pivoter = new ArrayPivoter();
+            return pivoter.pivotArray(value, groupingColumns.split(","), pivotColumn, valuesColumn);
+        } else {
+            return [];
+        }
+    },
+
 
     // Get all values of an array (designed for when a proxy)
     values: function (value: any) {
