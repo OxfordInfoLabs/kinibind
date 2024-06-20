@@ -34,11 +34,15 @@ let StringFormatters = {
 
     substringIndex: function (value: any, substring: string, caseSensitive = false) {
         // If not case sensitive, ensure this is conformed to
-        if (!caseSensitive) {
-            value = value.toLowerCase();
-            substring = substring.toLowerCase();
+        if (value) {
+            if (!caseSensitive) {
+                value = value.toLowerCase();
+                substring = substring.toLowerCase();
+            }
+            return value.indexOf(substring);
+        } else {
+            return '';
         }
-        return value ? value.indexOf(substring) : '';
     },
 
     uppercase: function (value: any) {
@@ -132,7 +136,7 @@ let StringFormatters = {
     },
 
     htmlToText: function (value: any, escapeCharacters: string = "") {
-        return value ? value.replace(/<[^>]*>/g, '') : '';
+        return value ? String(value).replace(/<[^>]*>/g, '') : '';
     },
 
     highlightSubstring: function (value: any, substring: string, wrapper: string = "<b>match</b>") {
