@@ -1,6 +1,6 @@
 import StringFormatters from "../../ts/formatters/string-formatters";
 import {sha256} from "js-sha256";
-import * as md5 from "js-md5";
+import {md5} from "js-md5";
 
 describe('String formatter tests', function () {
 

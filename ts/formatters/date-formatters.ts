@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
+
 dayjs.extend(<any>advancedFormat)
 
 let DateFormatters = {
@@ -34,8 +35,8 @@ let DateFormatters = {
 
 
     date: function (value: string, format: string) {
-
-        return (<any>dayjs)(value).format(format);
+        if (dayjs)
+            return (<any>dayjs)(value).format(format);
     },
 
     // Subtract the number of periods from a date value
