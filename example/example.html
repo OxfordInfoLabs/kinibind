@@ -8,6 +8,20 @@
     <h1>{title}</h1>
 
 
+
+
+    <div kb-each-bloglist="blog">
+        {bloglist.title} | {bloglist.owner}
+    </div>
+
+    <span kb-each-blogitem="blog">
+        <template kb-setcontext-owner="blogitem"
+              kb-set-owner="blogitem.category | contains 'Maths' | ternary 'Mathsy' 'Not Mathsy'"></template>
+
+        <input kb-value="blogitem.owner" />
+
+    </span>
+
     <ul>
         <li kb-each-key="items | keys">
             <b>{key}</b>: {items | member key | member 'Fruit'} - {items | member key | member 'Text' | member
@@ -184,6 +198,10 @@
         </p>
 
     </div>
+
+
+
+
 
 
     <script type="text/javascript" src="../dist/kinibind.js"></script>

@@ -61,6 +61,7 @@ let DefaultAdapter = {
 
         }
 
+
         // Ensure we set up parent object structure for firing parent events when children change or are added.
         if (typeof (obj[keypath]) === 'object' && !(obj[keypath] instanceof Array) && obj[keypath] !== null) {
 
@@ -78,6 +79,7 @@ let DefaultAdapter = {
         }
 
         (<any>this).observeArray(obj[keypath], obj.__rv, keypath);
+
 
     },
     observeObject: function (object: any, observer: any) {
@@ -124,7 +126,10 @@ let DefaultAdapter = {
             });
         }
 
+        this.runParentCallbacks(object, observer, processed);
 
+    },
+    runParentCallbacks(object: any, observer: any, processed: any = []) {
         // Call parent updates
         let parentData = observer.weakReference(object);
         if (parentData.parentObject) {
@@ -132,8 +137,6 @@ let DefaultAdapter = {
                 observer.runCallbacks(parentData.parentObject, parentData.keypath, observer, processed);
             }
         }
-
-
     }
 };
 

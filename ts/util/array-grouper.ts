@@ -19,9 +19,11 @@ export default class ArrayGrouper {
         let grouped: any = {};
         let allGroupedItemIds: any = {};
 
+
+
         groupingMembers.forEach((groupingMember: any) => {
 
-            // Check to see if we need to split the data on a delimiter
+           // Check to see if we need to split the data on a delimiter
             let splitMember = groupingMember.split(" SPLIT ");
             let delimiter: any = null;
             if (splitMember.length > 1) {
@@ -44,6 +46,7 @@ export default class ArrayGrouper {
                     keys = [arrayItem];
                     splitMember.forEach((memberPath: any) => {
                         let newItems: any = [];
+
                         keys.forEach((currentItem: any, index: number) => {
                             if (currentItem[memberPath]) {
                                 let subItems = currentItem[memberPath];
@@ -76,6 +79,7 @@ export default class ArrayGrouper {
 
             });
         });
+
 
 
         return grouped;
