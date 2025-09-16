@@ -18,11 +18,11 @@ export default class ArrayPivoter {
 
         let pivotItems: any = {};
 
-        let groupingValuesCounts = {};
+        let groupingValuesCounts: any = {};
         array.forEach(item => {
 
             // Create a grouping hash and grab
-            let groupingValues = {};
+            let groupingValues: any = {};
             let groupingValuesString = "";
             groupingColumns.forEach(groupingColumn => {
                 groupingValues[groupingColumn] = item[groupingColumn];

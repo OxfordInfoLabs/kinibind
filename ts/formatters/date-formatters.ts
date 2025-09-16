@@ -35,6 +35,11 @@ let DateFormatters = {
 
 
     date: function (value: string, format: string) {
+
+        // Handle the special case of now for current date
+        if (String(value).toLowerCase() === "now")
+            value = <any>undefined;
+
         if (dayjs)
             return (<any>dayjs)(value).format(format);
     },
@@ -79,7 +84,6 @@ let DateFormatters = {
         return expressions.join(" ");
 
     }
-
 
 };
 
